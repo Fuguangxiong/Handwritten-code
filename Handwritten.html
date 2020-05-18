@@ -1,0 +1,4234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  .container {
+    overflow: hidden;
+  }
+
+  .middle,
+  .left,
+  .right {
+    float: left;
+    height: 100px;
+  }
+
+  .left {
+    width: 100px;
+    background: red;
+    margin-left: -100%;
+  }
+
+  .right {
+    width: 100px;
+    background: blue;
+    margin-left: -100px;
+  }
+
+  .middle {
+    width: 100%;
+    background: aqua;
+  }
+
+  .inner {
+    margin: 0 100px;
+  }
+
+  img {
+
+    background: #F1F1FA;
+
+    width: 400px;
+
+    height: 300px;
+
+    display: block;
+
+    margin: 10px auto;
+
+    border: 0;
+
+  }
+</style>
+
+<body>
+  <!-- 圣杯布局 -->
+  <div class="container">
+    <div class="middle">
+      <div class="inner">middle</div>
+    </div>
+    <div class="left">left</div>
+    <div class="right">right</div>
+  </div>
+  <!-- 手写图片的懒加载 -->
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image1.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image2.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image3.jpg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image2.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image3.jpg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image4.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image5.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image6.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image7.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image8.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image9.jpeg?tr=w-400,h-300" />
+
+  <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image10.jpeg?tr=w-400,h-300" />
+  <script>
+    //手写图片懒加载
+    //图片出现在视窗内的情况： offsetTop < clientHeight + scrollTop
+    //element.getBoundingClientRect().top < clientHeight
+    // h5的IntersectionObserver方式
+    // intersectionRatio：目标元素的可见比例，即 intersectionRect 占 boundingClientRect 的比例，完全可见时为 1 ，完全不可见时小于等于 0
+    // function lazyload() {
+    //   let imgs = document.querySelectorAll("img.lazy")  //伪数组
+    //   let clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    //   let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    //   for (let i = 0; i < imgs.length; i++) {
+    //     if (imgs[i].offsetTop < clientHeight + scrollTop) {
+    //       imgs[i].setAttribute('src', imgs[i].dataset.src)
+    //     }
+    //   }
+    // }
+    // document.addEventListener("scroll", lazyload);
+
+    // window.addEventListener("resize", lazyload);
+
+    // window.addEventListener("orientationChange", lazyload);
+    // function lazyload() {
+    //   let imgs = document.querySelectorAll("img.lazy")  //伪数组
+    //   let clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    //   // let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    //   for (let i = 0; i < imgs.length; i++) {
+    //    // console.log(i,imgs[i].getBoundingClientRect().top)
+    //     if (imgs[i].getBoundingClientRect().top < clientHeight) {
+    //       imgs[i].setAttribute('src', imgs[i].dataset.src)
+    //     }
+    //   }
+    // }
+    //  document.addEventListener("scroll", lazyload);
+
+    // window.addEventListener("resize", lazyload);
+
+    // window.addEventListener("orientationChange", lazyload);
+    function lazyload() {
+      let imgs = document.querySelectorAll("img.lazy") //伪数组
+      let io = new IntersectionObserver(function (changes) {
+        // console.log(changes,'IntersectionObserver')
+        changes.forEach(function (change) {
+          if (change.intersectionRatio > 0) {
+            let img = change.target;
+            img.src = img.dataset.src;
+            io.unobserve(img);
+          }
+        })
+      })
+      for (let i = 0; i < imgs.length; i++) {
+        io.observe(imgs[i])
+      }
+    }
+    //优点:不需要绑定window事件  自带防抖  可以反向懒加载  缺点:兼容性
+    lazyload()
+    //手写call,apply,bind
+    Function.prototype.myCall = function () {
+      let obj = Array.from(arguments)[0]
+      let args = Array.from(arguments).slice(1)
+      let symbol = new Symbol()
+      if (obj === undefined || obj === null) {
+        obj = window
+      } else {
+        obj[symbol] = this
+      }
+      let result = obj[symbol](...arg)
+      delete result[symbol]
+      return result
+    }
+    Function.prototype.myApply = function () {
+      let obj = Array.from(arguments)[0]
+      let args = Array.from(arguments).slice(1)
+      let symbol = new Symbol()
+      if (obj === null || obj === null) {
+        obj = window
+      } else {
+        obj[symbol] = this
+      }
+      let result = obj[symbol](args)
+      delete obj[symbol]
+      return result
+    }
+    Function.prototype.myBind = function () {
+      let obj = Array.from(arguments)[0]
+      let args = Array.from(arguments).slice(1)
+      if (obj === null || obj === undefined) {
+        obj = window
+      }
+      let self = this
+      return function () {
+        let newArgs = Array.from(arguments)
+        self.apply(obj, args.concat(newArgs))
+      }
+    }
+
+    //promise封装ajax
+    function Ajax(url, method, data) {
+      return new Promise(function (resolve, reject) {
+        let xhr = new XMLHttpRequest() || window.ActiveXObject
+        xhr.open(method, url)
+        xhr.send(data)
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            resolve(xhr.responseText)
+          } else {
+            reject(xhr.status)
+          }
+        }
+      })
+    }
+
+    //图片的异步加载
+    function loadImageAsync(url) {
+      return new Promise(function (resolve, reject) {
+        let image = new Image()
+        image.src = src
+        image.onload = function () {
+          resolve(image)
+        }
+        image.onerror = function () {
+          reject(new Error('此路径' + url + '的图片加载失败'))
+        }
+      })
+    }
+
+    //防抖
+    function debounce(fn, delay) {
+      let timer
+      return function () {
+        clearTimeout(timer)
+        timer = setInterval(() => {
+          fn.apply(this, arguments)
+        }, delay);
+      }
+    }
+
+    //节流
+    function throttle(fn, delay) {
+      let canRun = true
+      return function () {
+        if (!canRun) return
+        canRun = false
+        setTimeout(() => {
+          fn.apply(this, arguments)
+          canRun = true
+        }, delay);
+      }
+    }
+
+    //原型链继承
+    function SupType(val) {
+      this.name = {
+        name: val,
+        sex: '男'
+      }
+    }
+
+    function SubType() {
+      this.sex = '女'
+    }
+
+    SubType.prototype = new SupType()
+    // console.log(new SubType().name.name='徐娟')  原型链继承的缺点 引用类型会被不同的实例共享 不能向父类中传参数
+    // console.log(new SubType().name)
+    //call实现继承
+    function Animal(name) {
+      this.name = name
+    }
+
+    function Cat() {
+      this.sex = '老鼠'
+      Animal.call(this, '大象')
+    }
+
+    // console.log(new Cat().name)   优点: 可以向超类中传递参数   解决了原型中的引用类型被所有实例共享的问题
+    //缺点:在超类的原型中的方法对子类来说是不可见的  方法都放在构造函数中复用无从谈起
+    //组合继承
+    function SuperType() {
+      this.name = 'zc'
+      this.colors = ['pink', 'blue', 'green'];
+    }
+
+    function SubType() {
+      SuperType.call(this)
+    }
+
+    SubType.prototype = new SuperType()
+    SubType.prototype.constructor = SubType
+    let a = new SubType()
+    let b = new SubType()
+    //用原型链实现对原型属性和方法的继承，
+    //通过借用构造函数来实现对实例属性的继承，
+    //既通过在原型上定义方法来实现了函数复用，又保证了每个实例都有自己的属性。
+    //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
+    //原型式集成
+    function object(o) {
+      function F() { }
+
+      F.prototype = o
+      return new F()
+    }
+
+    //ECMAScript5通过新增 Object.create()方法规范了原型式继承。
+    //这个方法接收两个参数：一个用作新对象原型的对象和（可选的）一个为新对象定义额外属性的对象(可以覆盖原型对象上的同名属性)，
+    //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
+    //寄生式集成
+    function object(o) {
+      function F() { }
+
+      F.prototype = o
+      return new F()
+    }
+
+    function createAnother(original) {
+      let clone = object(original)
+      clone.sayHi = function () { }
+      return clone
+    }
+
+    //基于 person 返回了一个新对象 -—— person2，
+    //新对象不仅具有 person 的所有属性和方法，而且还有自己的 sayHi() 方法。
+    //在考虑对象而不是自定义类型和构造函数的情况下，寄生式继承也是一种有用的模式。
+    //使用寄生式继承来为对象添加函数，会由于不能做到函数复用而效率低下。
+    //同原型链实现继承一样，包含引用类型值的属性会被所有实例共享。
+    //寄生组合式集成
+    function inheritPrototype(subType, superType) {
+      var prototype = object(superType.prototype); //创建对象
+      prototype.constructor = subType; //增强对象
+      subType.prototype = prototype; //指定对象
+    }
+
+    function SuperType(name) {
+      this.name = name;
+      this.colors = ['pink', 'blue', 'green'];
+    }
+
+    function subType(name, age) {
+      SuperType.call(this, name);
+      this.age = age;
+    }
+
+    inheritPrototype(subType, SuperType);
+
+    //手写new
+    function _new(fn, ...args) {
+      let obj = {}
+      fn.apply(obj, args)
+      fn.prototype.constructor = fn
+      obj._proto_ = fn.prototype
+      return obj
+    }
+
+    fn = function (val) {
+      this.name = '付光雄'
+      this.sex = '男'
+      this.eat = val
+    }
+    // console.log(_new(fn,'大便'))
+    //手写用递归实现一个深拷贝
+    function checkedType(target) {
+      return Object.prototype.toString.call(target).slice(8, -1)
+    }
+
+    function clone(target) {
+      let targetType = checkedType(target)
+      let result
+      if (targetType === 'Array') {
+        result = []
+      } else if (targetType === 'Object') {
+        result = {}
+      } else {
+        return target
+      }
+      for (const key in target) {
+        if (target.hasOwnProperty(key)) {
+          const element = target[key];
+          if (checkedType(element) === 'Array' || checkedType(element) === 'Object') {
+            result[key] = clone(element)
+          } else {
+            result[key] = element
+          }
+        }
+      }
+      return result
+    }
+
+    //手写一个柯里化
+    // function curry(fn, args) {
+    //     var length = fn.length; // 函数参数的长度
+    //     // 闭包保存参数列表
+    //     args = args || [];
+    //     return function () {
+    //         // 获取参数列表。
+    //         var _args = args.slice(0);
+    //         Array.prototype.push.apply(_args, Array.prototype.slice.call(arguments))
+    //         if (_args.length < length) {
+    //             // 如果传入的参数列表长度还没有超过函数定义时的参数长度，就 push 新的参数到参数列表中保存起来。
+    //             // 自己调用自己，将保存的参数传递到下一个柯里化函数。
+    //             return curry.call(this, fn, _args);
+    //         } else {
+    //             // 如果传入的参数列表长度已经超过函数定义时的参数长度，就执行。
+    //             return fn.apply(this, _args);
+    //         }
+    //     }
+    // }
+    function curry(fn, ...args) {
+      if (fn.length > args.length) {
+        return function () {
+          return curry.call(this, fn, ...args, ...arguments)
+        }
+      } else {
+        fn(...args)
+        //fn.call(this,...args)
+      }
+    }
+
+    const add = curry(function (a, b, c) {
+      console.log([a, b, c].reduce((a, b) => a + b))
+    })
+    // add(1, 2, 3)
+    // add(1, 2)(3)
+    // add(1)(2)(3)
+    // add(1)(2, 3)
+    //手写一个双向绑定
+    let vm = {} //想象成vue的实例
+    let obj = { //想象成vue的data
+      name: 'zc',
+      age: '123'
+    }
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        Object.defineProperty(vm, key, {
+          get: function () {
+            return obj[key]
+          },
+          set: function (val) {
+            obj[key] = val
+          }
+        })
+      }
+    }
+    obj.age = '30'
+    vm.age = '112221' //触发set
+    vm.age //触发get
+    //手写一个双向绑定这个proxy版本
+    let vm1 = new Proxy(obj, {
+      get: function (target, propKey, receiver) {
+        // console.log(target, propKey, receiver, '...............1')
+        // console.log(Reflect.get(target, propKey, receiver), '..............11')    //112221
+      },
+      set: function (target, propKey, value, receiver) {
+        // console.log(target, propKey, value, receiver, '...............2')
+        // console.log(Reflect.set(target, propKey, value, receiver), '.............22')  //true   它采用Reflect.set方法将值赋值给对象的属性，确保完成原有的行为，然后再部署额外的功能。
+      }
+    })
+    vm1.age
+    vm1.age = '30'
+    //观察者模式
+    // 目标者类
+    class Subject {
+      constructor() {
+        this.observers = []; // 观察者列表
+      }
+
+      // 添加
+      add(observer) {
+        this.observers.push(observer);
+      }
+
+      // 删除
+      remove(observer) {
+        let idx = this.observers.findIndex(item => item === observer);
+        idx > -1 && this.observers.splice(idx, 1);
+      }
+
+      // 通知
+      notify() {
+        for (let observer of this.observers) {
+          observer.update();
+        }
+      }
+    }
+
+    // 观察者类
+    class Observer {
+      constructor(name) {
+        this.name = name;
+      }
+
+      // 目标对象更新时触发的回调
+      update() {
+        console.log(`目标者通知我更新了，我是：${this.name}`);
+      }
+    }
+
+    // 实例化目标者
+    let subject = new Subject();
+    // 实例化两个观察者
+    let obs1 = new Observer('前端开发者');
+    let obs2 = new Observer('后端开发者');
+    // 向目标者添加观察者
+    subject.add(obs1);
+    subject.add(obs2);
+    // 目标者通知更新
+    subject.notify();
+    // 输出：
+    // 目标者通知我更新了，我是前端开发者
+    // 目标者通知我更新了，我是后端开发者
+    //发布订阅者模式
+    class Pubsub {
+      list = []
+      // constructor(){
+      //     this.list = {}
+      // }
+      subscribe(event, fn) { //订阅
+        if (!this.list[event]) {
+          this.list[event] = []
+        }
+        this.list[event].push(fn)
+      }
+
+      publish(event, args) { //发布
+        for (let fn of this.list[event]) {
+          // console.log(fn,this)
+          // fn.call(this, args)
+          fn(args)
+        }
+      }
+
+      unSubscribe(event) { //取消订阅
+        this.list[event].length = 0
+      }
+    }
+
+    let pubsub = new Pubsub()
+    pubsub.subscribe('oneat', function (a) {
+      // console.log(a)
+    })
+    pubsub.subscribe('oneat', function (a) {
+      // console.log(a)
+    })
+    pubsub.subscribe('oneat', function (a) {
+      // console.log(a)
+    })
+    pubsub.publish('oneat', '米饭')
+    //js获取路径参数
+    let test =
+      '?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=21331&rsv_pq=b8627e62001efbb9&rsv_t=eef5sqIQ98s66yOwueYH5BWlFUARj0PkHBdCA4ahbSVYQA5qO9MBoZPC0mU&rqlang=cn&rsv_enter=1&rsv_dl=tb&rsv_sug3=5&rsv_sug1=1&rsv_sug7=100&rsv_sug2=0&inputT=509&rsv_sug4=509'
+
+    function f(str) {
+      let str1 = str.slice(1)
+      let arr = str1.split('&')
+      let map = new Map()
+      arr.map(item => {
+        const [key, value] = item.split('=')
+        map.set(key, decodeURIComponent(value))
+      })
+      return map //map可以用for of遍历   遍历出的每一项是数组
+    }
+
+    for (let item of f(test)) {
+      // console.log(item)
+    }
+
+    //冒泡排序最终优化版
+    function bubble(arr) {
+      for (let i = 0; i < arr.length; i++) {
+        let Change = false
+        for (let j = 0; j < arr.length - i; j++) {
+          if (arr[j] > arr[j + 1]) {
+            Change = true
+            arr[j] = arr[j] ^ arr[j + 1]
+            arr[j + 1] = arr[j] ^ arr[j + 1]
+            arr[j] = arr[j + 1] ^ arr[j]
+          }
+        }
+        if (!Change) {
+          return arr
+        }
+      }
+    }
+
+    // console.log(bubble([1, 5, 9, 7, 5, 3, 2, 4]))
+    //选择排序
+    function selectSort(arr) {
+      let minIndex, temp
+      for (let i = 0; i < arr.length; i++) {
+        minIndex = i //假设第一项是值最小的索引
+        for (let j = i; j < arr.length; j++) {
+          if (arr[j] < arr[minIndex]) {
+            minIndex = j
+          }
+        }
+        temp = arr[minIndex]
+        arr[minIndex] = arr[i]
+        arr[i] = temp
+      }
+      return arr
+    }
+
+    // console.log(selectSort([1, 5, 9, 7, 5, 3, 2, 4]))
+    //插入排序
+    function insertSort(arr) {
+      if (arr.length < 2) {
+        return arr
+      }
+      let temp, j
+      for (let i = 1; i < arr.length; i++) {
+        j = i
+        temp = arr[i]
+        // while (j > 0 && arr[j - 1] > temp) {
+        //     arr[j] = arr[j - 1]
+        //     j--
+        // }
+        for (let k = i - 1; k < i && k > -1; k--) {
+          if (temp < arr[k]) {
+            arr[k + 1] = arr[k]
+            arr[k] = temp
+          }
+        }
+      }
+      return arr
+    }
+
+    //希尔排序 (对插入排序的升级)
+    var shellSort = function () {
+      if (this.array === null || this.array.length < 2) return this.array
+      let length = this.array.length
+      //初始化增量
+      var gap = Math.floor(length / 2)
+      // whlie循环
+      while (gap > 1) {
+        for (let i = gap; i < length; i++) {
+          let temp = this.array[i]
+          let j = i
+          while (this.array[j - gap] > temp && j > gap - 1) {
+            this.array[j] = this.array[j - gap]
+            j -= gap
+          }
+          this.array[j] = temp
+        }
+        gap = Math.floor(gap / 2)
+      }
+    }
+
+    // console.log(insertSort([1, 5, 9, 7, 5, 3, 2, 4]))
+    //快速排序
+    //方法一优化版
+    // function quickSort(arr, left, right) { //这个left和right代表分区后“新数组”的区间下标，因为这里没有新开数组，所以需要left/right来确认新数组的位置
+    //     if (left < right) {
+    //         let pos = left - 1 //pos即“被置换的位置”，第一趟为-1
+    //         for (let i = left; i <= right; i++) { //循环遍历数组，置换元素
+    //             let pivot = arr[right] //选取数组最后一位作为基准数，
+    //             if (arr[i] <= pivot) { //若小于等于基准数，pos++，并置换元素, 这里使用小于等于而不是小于, 其实是为了避免因为重复数据而进入死循环
+    //                 pos++
+    //                 let temp = arr[pos]
+    //                 arr[pos] = arr[i]
+    //                 arr[i] = temp
+    //             }
+    //         }
+    //         //一趟排序完成后，pos位置即基准数的位置，以pos的位置分割数组
+    //         quickSort(arr, left, pos - 1)
+    //         quickSort(arr, pos + 1, right)
+    //     }
+    //     return arr //数组只包含1或0个元素时(即left>=right)，递归终止
+    // }
+    // //使用
+    // var arr = [5, 1, 4, 2, 3]
+    // var start = 0;
+    // var end = arr.length - 1;
+    // quickSort(arr, start, end)
+    //方法二普通版
+    // function quickSort(arr) {
+    //   if (arr.length < 2) {
+    //     return arr
+    //   }
+    //   let end = arr.length - 1
+    //   let pivot = arr.splice(Math.floor(end / 2), 1)[0];
+    //   // let base = arr[Math.floor(end / 2)]
+    //   let leftArr = []
+    //   let rightArr = []
+    //   for (let i = 0; i < arr.length; i++) {
+    //     if (arr[i] <= pivot) {
+    //       leftArr.push(arr[i])
+    //     } else {
+    //       rightArr.push(arr[i])
+    //     }
+    //   }
+    //   return quickSort(leftArr).concat([pivot], quickSort(rightArr))
+    // }
+    //方法三while版
+    // var arr = [3, 3, -5, 6, 0, 2, -1, -1, 3];
+    // console.log(arr);
+    // quick_sort(arr, 0, arr.length - 1);
+    // console.log(arr);
+    /**
+    题目：快速排序算法
+    思路：两个哨兵，i,j,j从右边找比基数小的，i从左边找比基数大的，然后交换两个目标元素的位置，直到i=j,然后交换i和基数的位置，递归处理。
+    **/
+    function quickSort(arr, from, to) {
+      var i = from; //哨兵i
+      var j = to; //哨兵j
+      var key = arr[from]; //标准值
+      if (from >= to) { //如果数组只有一个元素
+        return;
+      }
+      while (i < j) {
+        while (arr[j] > key && i < j) { //从右边向左找第一个比key小的数，找到或者两个哨兵相碰，跳出循环
+          j--;
+        }
+        while (arr[i] <= key && i <
+          j) { //从左边向右找第一个比key大的数，找到或者两个哨兵相碰，跳出循环,这里的=号保证在本轮循环结束前，key的位置不变，否则的话跳出循环，交换i和from的位置的时候，from位置的上元素有可能不是key
+          i++;
+        }
+        /**
+          代码执行道这里，1、两个哨兵到找到了目标值。2、j哨兵找到了目标值。3、两个哨兵都没找到(key是当前数组最小值)
+        **/
+        if (i < j) { //交换两个元素的位置
+          var temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+
+        }
+      }
+      arr[from] = arr[i] //将基数与下标为 i 的元素原地交换，从而实现划分；
+      arr[i] = key;
+      quickSort(arr, from, i - 1);
+      quickSort(arr, i + 1, to);
+    }
+
+    // arr = [2, 1, 5, 8, 3, 7, 4, 6, 9];
+    // console.log(quickSort(arr)); //[1, 2, 3, 4, 5, 6, 7, 8, 9]
+    //手写迭代器
+    var it = makeIterator(["a", "b"]);
+
+    function makeIterator(arr) {
+      nowIndex = 0
+      return {
+        next: function () {
+          if (nowIndex < arr.length) {
+            return {
+              value: arr[nowIndex++],
+              done: false
+            }
+          } else {
+            return {
+              value: undefined,
+              done: true
+            }
+          }
+        }
+      }
+    }
+
+    //求数组的最大子序列和
+    // dp方程 dp[n] = Math.max(dp[n - 1], 0) + a[n]
+
+    // 解释：
+
+    // dp[n] 表示 n 个元素里面，出现连续元素相加和的最大值。
+    // dp[n - 1] 只可能有两种结果 要么大于等于 0，要么小于 0，小于择舍弃，取 a[n]。
+    // /**
+    //  * @param {number[]} nums
+    //  * @return {number}
+    //  */
+
+    // // dp[n] n 个元素里面 出现连续元素相加和的最大值
+    // // dp 方程 dp[n] = Math.max(dp[n-1], 0) + a[n]
+    // // dp[n-1] 只可能有两种结果 要么大于等于 0，要么小于 0，小于择舍弃，取 a[n]
+    var maxSubArray = function (nums) {
+      const dp = [nums[0]]
+      for (let i = 1; i < nums.length; i++) {
+        dp[i] = Math.max(dp[i - 1], 0) + nums[i]
+      }
+      return Math.max(...dp)
+    }
+
+    let arr = [1, -5, 8, 3, -4, 15, -8]
+
+    function getNum(arr) {
+      let num = arr[0]
+      let max = arr[0]
+      for (let i = 1; i < arr.length; i++) {
+        num = (num > 0) ? arr[i] + num : arr[i]
+        max = (num > max) ? num : max
+        // console.log(num, max)
+      }
+      return max
+    }
+
+    function contMax(array) {
+      if (array.length == 0)
+        return 0
+      var sum = array[0] //保存每组的和
+      var maxSum = array[0] //连续子数组最大和
+      for (var i = 1; i < array.length; i++) {
+        sum = Math.max(sum + array[i], array[i]);
+        maxSum = Math.max(sum, maxSum)
+      }
+      return maxSum
+    }
+
+    getNum(arr)
+
+    //乘积最大子数组(连续)
+    // dp 方程 dp[n] = Math.max(dp[n - 1] * nums[n], nums[n])
+
+    // 解释
+
+    // dp[n] 表示 n 个元素里面，出现连续元素相乘的最大乘积。
+    // 该题的技巧，是注意乘积会出现 负负得正的 case ，存储上次乘积的结果 dp[n - 1] 的最大值和最小值。
+    // /**
+    //  * 需要考虑 负负得正的 case，需要存储存储最大值和最小值
+    //  * dp[n] = Math.max(dp[n-1]*nums[n], nums[n])
+    //  */
+
+    var maxProduct = function (nums) {
+      if (!nums.length) return null
+      let state = [], max = nums[0];
+      for (let i = 0; i < nums.length; i++) {
+        state[i] = [0, 0];
+      }
+
+      state[0][0] = nums[0]; // 从 0 至 0 处的最大值
+      state[0][1] = nums[0]; // 从 0 至 0 处的最小值
+
+      for (let i = 1; i < nums.length; i++) {
+        if (nums[i] >= 0) {
+          state[i][0] = Math.max(state[i - 1][0] * nums[i], nums[i]);
+          state[i][1] = Math.min(state[i - 1][1] * nums[i], nums[i]);
+        } else {
+          state[i][0] = Math.max(state[i - 1][1] * nums[i], nums[i]);
+          state[i][1] = Math.min(state[i - 1][0] * nums[i], nums[i]);
+        }
+        if (max < state[i][0]) {
+          max = state[i][0]
+        }
+      };
+      return max
+    }
+
+
+    //实现一个EventListener类，包含on，off，emit方法
+    class EventListener {
+      constructor() {
+        this.list = {}
+      }
+
+      on(key, fn) {
+        if (!this.list[key]) {
+          this.list[key] = []
+        }
+        this.list[key].push(fn)
+      }
+
+      emit(key, ...args) {
+        for (let fn of this.list[key]) {
+          fn.apply(this, args)
+        }
+      }
+
+      off(key, fn) {
+        let fnlist = this.list[key]
+        if (!fnlist) return
+        if (!fn) {
+          fnlist.length = 0
+        } else {
+          fnlist.forEach((item, index) => {
+            if (item === fn) {
+              fnlist.splice(index, 1)
+            }
+          })
+        }
+      }
+    }
+
+    let obj1 = new EventListener()
+    obj1.on('work', value => {
+      console.log(`我是${value}啊`)
+    })
+    obj1.on('eat', value => {
+      console.log(`我在${value}啊`)
+    })
+    obj1.emit('work', 'zc')
+    obj1.off('eat')
+    obj1.emit('eat', '吃西瓜')
+
+    //手写一个sleep函数
+    function sleep(ms) {
+      return new Promise(function (resolve, reject) {
+        setTimeout(() => {
+          resolve('徐娟')
+        }, ms);
+      })
+    }
+
+    // sleep(10000).then((data) => {
+    //     console.log(data)
+    // })
+    async function init() {
+      await sleep(2000)
+      // console.log('徐娟')
+    }
+
+    init()
+    //手写斐波那契数列
+    //递归版本
+    // function getNumx(n) {
+    //     if (n <= 1) {
+    //         return 1
+    //     }
+    //     return getNumx(n - 1) + getNumx(n - 2)
+    // }
+    // console.log(getNumx(8))
+    //动态规划版本
+    function getNumx(n) {
+      if (n === 1 || n === 2) {
+        return 1
+      } else {
+        var arr = []
+        arr[0] = 1
+        arr[1] = 1
+        for (let i = 2; i < n + 1; i++) {
+          arr[i] = arr[i - 1] + arr[i - 2]
+        }
+        return arr[n - 1]
+      }
+    }
+
+    // console.log(getNumx(8))
+    //求一个数组的最小子元素和
+    //[1, -5, 8, 3, -4, 15, -8]
+    function mostMin(arr) {
+      let sum, min;
+      sum = arr[0],
+        min = arr[0]
+      for (let i = 1; i < arr.length; i++) {
+        sum = Math.min(arr[i], sum + arr[i])
+        min = Math.min(sum, min)
+      }
+      // console.log(min)
+    }
+
+    mostMin([1, -5, -5, 8, 3, -4, 15, -8])
+    //删除字符串中的所有相邻重复项
+    // 输入："abbaca"   运用了栈的思想
+    // 输出："ca"
+    function removeDuplicates(str = 'abbaca') {
+      let arr = [];
+      for (let i = 0; i < str.length; i++) {
+        if (i === 0) {
+          arr.push(str.charAt(i))
+        } else {
+          if (arr[arr.length - 1] === str.charAt(i)) {
+            arr.pop()
+          } else {
+            arr.push(str.charAt(i))
+          }
+        }
+      }
+      return arr.join(',')
+    }
+
+    removeDuplicates('abbaca')
+    // 只包含'(', ')', '[', ']', '{', '}' 的字符串，判断是否有效。
+    var isValid = function (s) {
+      var rightSymbols = [];
+      for (var i = 0; i < s.length; i++) {
+        if (s[i] == "(") {
+          rightSymbols.push(")");
+        } else if (s[i] == "{") {
+          rightSymbols.push("}");
+        } else if (s[i] == "[") {
+          rightSymbols.push("]");
+        } else if (rightSymbols.pop() != s[i]) {
+          return false;
+        }
+      }
+      return !rightSymbols.length;
+    };
+    //数组中只出现一次的数字
+    // let arr = [1, 2, 3, 4, 3, 2, 1]
+    // const p = arr.reduce((a, b) => {
+    //     return a ^ b
+    // })
+    //求数组的最大深度
+    let dep = 1
+    // function getDep(arr = [         这种方法不可取  因为不知道深度较深的子数组是不是排在前面
+    //     [1], 1, [1, [3], 2], 2, 3, 4
+    // ]) {
+    //     let indexArr = []
+    //     if (Array.isArray(arr)) {
+    //         indexArr.push(dep++)
+    //     }
+    //     for (const item of arr) {
+    //         if (Array.isArray(item)) {
+    //             // dep++
+    //             return getDep(item)
+    //         }
+    //     }
+    // }
+    // getDep()
+    // console.log(dep)
+    function getDep(arr = [
+      [1], 1, [1, [3], 2], 2, 3, 4
+    ]) {
+      let hasChildArr = false
+      hasChildArr = arr.some(function (item) {
+        return Array.isArray(item)
+      })
+      if (hasChildArr) {
+        dep++
+        getDep(arr.flat())
+      } else {
+        return dep
+      }
+    }
+
+    getDep()
+    //数组拉平
+    // function flat(arr = [
+    //     [1], 1, [1, [3], 2], 2, 3, 4
+    // ]) {
+    //     let flatArr = [];
+    //     let hasChildArr = false;
+    //     for (let a of arr) {
+    //         if (Array.isArray(a)) {
+    //             hasChildArr = true
+    //             flatArr.push(...a)
+    //         } else {
+    //             flatArr.push(a)
+    //         }
+    //     }
+    //     if (!hasChildArr) {
+    //         console.log(flatArr)
+    //     } else {
+    //         flat(flatArr)
+    //     }
+    // }
+    // function flat(arr = [1, 2, [3, 4, 5, [6, 7, 8], 9], 10, [11, 12]]) {
+    //     let flatArr = []
+    //     arr.forEach(item => {
+    //         if (Array.isArray(item)) {
+    //             flatArr.concat(flat(item))
+    //         } else {
+    //             flatArr.push(item)
+    //         }
+    //     })
+    //     console.log(flatArr)
+    // }
+    function flat(arr = [1, 2, [3, 4, 5, [6, 7, 8], 9], 10, [11, 12]]) {
+      return arr.reduce(function (prev, cur, index, arr) {
+        return Array.isArray(cur) ? prev.concat(flat(cur)) : [...prev, cur]
+      }, [])
+    }
+
+    // console.log(flat())
+    let arr1 = [1, 2, [3, 4, 5, [6, 7, 8], 9], 10, [11, 12]].toString().split(',').map((val) => {
+      return parseInt(val)
+    })
+
+    //单例模式的两种实现
+    function SingleTon() {
+      if (SingleTon.instance) {
+        return SingleTon.instance
+      }
+      this.name = '徐娟'
+      console.log(this)
+      SingleTon.instance = this
+    }
+    class SingletonApple {
+      constructor(name, creator, products) {
+        this.name = name;
+        this.creator = creator;
+        this.products = products;
+      }
+      //静态方法
+      static getInstance(name, creator, products) {
+        if (!this.instance) {
+          this.instance = new SingletonApple(name, creator, products);
+        }
+        return this.instance;
+      }
+    }
+
+    // let appleCompany = SingletonApple.getInstance('苹果公司', '乔布斯', ['iPhone', 'iMac', 'iPad', 'iPod']);
+    // let copyApple = SingletonApple.getInstance('苹果公司', '阿辉', ['iPhone', 'iMac', 'iPad', 'iPod'])
+
+    // console.log(appleCompany === copyApple); //true
+    // console.log(new SingleTon() === new SingleTon())
+    let single = (function single() {
+      let instance
+
+      function Single() { }
+
+      return function () {
+        if (instance) {
+          return instance
+        }
+        instance = new Single()
+        return instance
+      }
+    })()
+    // console.log(single() === single())
+    //命令模式
+    class Receiver { // 接收者类
+      execute() {
+        console.log('接收者执行请求');
+      }
+    }
+
+    class Command { // 命令对象类
+      constructor(receiver) {
+        this.receiver = receiver;
+      }
+
+      execute() { // 调用接收者对应接口执行
+        console.log('命令对象->接收者->对应接口执行');
+        this.receiver.execute();
+      }
+    }
+
+    class Invoker { // 发布者类
+      constructor(command) {
+        this.command = command;
+      }
+
+      invoke() { // 发布请求，调用命令对象
+        console.log('发布者发布请求');
+        this.command.execute();
+      }
+    }
+
+    const warehouse = new Receiver(); // 仓库
+    const order = new Command(warehouse); // 订单
+    const client = new Invoker(order); // 客户
+    client.invoke();
+    //手写promise
+    let MyPromise = (function () {
+      function resolve(res) {
+        //如果存在状态就直接return
+        if (this['[[PromiseStatus]]'] !== 'pending') return
+        this['[[PromiseStatus]]'] = 'resolved'
+        this['[[PromiseValue]]'] = res
+        if (this.callBacks.length > 0) {
+          let timer = setTimeout(() => {
+            this.callBacks.forEach(
+              //   {
+              //   onFulfilled
+              // } => {
+              //   onFulfilled(res)  //报错箭头函数的参数不能用解构???
+              // }
+              value => {
+                // console.log(value,'value1')
+                value.onFulfilled(res)
+              }
+            );
+            clearTimeout(timer)
+          }, 0);
+        }
+      }
+
+      function reject(res) {
+        if (this['[[PromiseStatus]]'] !== 'pending') return
+        this['[[PromiseStatus]]'] = 'rejected'
+        this['[[PromiseValue]]'] = res
+        if (this.callBacks.length > 0) {
+          let timer = setTimeout(() => {
+            this.callBacks.forEach(value => {
+              // console.log(value,'value2')
+              value.onRejected(res)
+            })
+            clearTimeout(timer)
+          }, 0);
+        }
+      }
+
+      return function (fn) {
+        this['[[PromiseStatus]]'] = 'pending'
+        this['[[PromiseValue]]'] = undefined
+        this.callBacks = [] // 每个元素的结构：{ onFulfilled(){}, onRejected(){}}
+        try { //立刻同步执行 如果执行器抛出异常，promise对象变为 rejected 状态
+          fn(resolve.bind(this), reject.bind(this))
+        } catch (e) {
+          // console.log(e, 'eeeeeeeeeeee')
+          reject.bind(this)(e)
+        }
+      }
+    })()
+    MyPromise.prototype.then = function (onFulfilled, onRejected) {
+      // console.log(onFulfilled, onRejected, 'fulfilled&&rejected0')
+      onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value =>
+        value //当then里面的函数不传的时候  为下一个then能接受到参数准备的
+      onRejected = typeof onRejected === 'function' ? onRejected : err => { //就是为了防止callbacks调用foreach报错
+        throw err
+      }
+      // console.log(onFulfilled, onRejected, 'fulfilled&&rejected1')
+      let that = this
+      return new MyPromise(function (resolve, reject) {
+        //1. 如果抛出异常，return 的promise就会失败，reason 就是 error
+        //2. 如果回调函数返回的不是promise，return的promise就会成功，value就是返回的值
+        //3.如果回调函数返回的是promise，return的promise的结果就是这个promise的结果
+        function handle(callback) { //处理上一个then的返回值
+          try {
+            const result = callback(that['[[PromiseValue]]'])
+            if (result instanceof MyPromise) {
+              result.then(
+                value => resolve(value), //当result成功时，让return的promise也成功
+                reason => reject(reason) //当result失败时，让return的promise也失败
+              )
+              // result.then(resolve, reject)
+            } else {
+              resolve(result)
+            }
+          } catch (error) {
+            // 如果抛出异常，return 的promise就会失败，reason 就是 error
+            reject(error)
+          }
+        }
+
+        if (that['[[PromiseStatus]]'] === 'pending') {
+          that.callBacks.push({
+            onFulfilled(value) {
+              handle(onFulfilled) //修改promise的状态为onFulfilled状态
+            },
+            onRejected(reason) {
+              handle(onRejected) //修改promise的状态为onRejected状态
+            }
+          })
+        } else if (that['[[PromiseStatus]]'] === 'resolved') {
+          setTimeout(() => {
+            handle(onFulfilled)
+          }, 0);
+        } else {
+          setTimeout(() => {
+            handle(onRejected)
+          }, 0);
+        }
+      })
+    }
+    MyPromise.prototype.catch = function (onRejected) {
+      return this.then(undefined, onRejected)
+    }
+    MyPromise.prototype.finally = function (callback) {
+      let P = this.constructor;
+      return this.then(
+        value => P.resolve(callback()).then(() => value),
+        reason => P.resolve(callback()).then(() => {
+          throw reason
+        })
+      );
+    };
+    MyPromise.resolve = function (result) {
+      return new MyPromise(function (resolve, reject) {
+        resolve(result)
+      })
+    }
+    MyPromise.reject = function (result) {
+      return new MyPromise(function (resolve, reject) {
+        reject(result)
+      })
+    }
+    MyPromise.all = function (promiseArr = []) {
+      return new Promise((resolve, reject) => {
+        let index = 0;
+        let arr = []
+        for (let i = 0; i < promiseArr.length; i++) {
+          promiseArr[i].then(result => {
+            index++
+            arr[i] = result
+            if (index === promiseArr.length) {
+              resolve(arr)
+            }
+          }, reason => {
+            reject(reason)
+          })
+        }
+      })
+    }
+    // Promise.race = function (promises) {
+    //   if (!Array.isArray(promises)) {
+    //     throw new TypeError('You must pass array')
+    //   }
+
+    //   return new Promise(function (resolve, reject) {
+    //     function resolver(value) {
+    //       resolve(value)
+    //     }
+
+    //     function rejecter(reason) {
+    //       reject(reason)
+    //     }
+
+    //     for (var i = 0; i < promises.length; i++) {
+    //       promises[i].then(resolver, rejecter)
+    //     }
+    //   })
+    // }
+
+    MyPromise.race = function (promises) {
+      return new Promise((resolve, reject) => {
+        for (let i = 0; i < promises.length; i++) {
+          promises[i].then(resolve, reject)
+        };
+      })
+    }
+    let p = new MyPromise(function (resolve, reject) {
+      resolve(1)
+    }).then(() => {
+      return 6 //识别到是个数字就改变了PromiseValue
+    }).finally(() => {
+      console.log('finally1')
+    }).then().then(res => {
+      console.log(res, 'res')
+    }).catch(e => {
+      console.log(e, 'error')
+    }).finally(() => {
+      console.log('finally2')
+    })
+
+    //手写instanceOf
+    function instance(left, right) {
+      // if (left._proto_ = right.prototype) {
+      //     return true
+      // }
+      left = left._proto_;
+      right = right.prototype;
+      while (true) {
+        if (left === null) {
+          return false
+        }
+        if (left === right) {
+          return true
+        }
+        left = left._proto_
+      }
+    }
+
+    //二叉树相关
+    //构造一个二叉树
+    function BinaryTree() {
+      function Node(val) {
+        this.value = val
+        this.left = null
+        this.right = null
+      }
+
+      this.root = null
+      this.append = function (val) {
+        function insertNode(val, root) {
+          if (val > root.value) {
+            if (root.right === null) {
+              root.right = new Node(val)
+            } else {
+              insertNode(val, root.right)
+            }
+          }
+          // else {                   //相同数值的节点能插进去
+          //     if (root.left === null) {
+          //         root.left = new Node(val)
+          //     } else {
+          //         insertNode(val, root.left)
+          //     }
+          // }
+          if (val < root.value) { //相同的数值的节点不能插进去
+            if (root.left === null) {
+              root.left = new Node(val)
+            } else {
+              insertNode(val, root.left)
+            }
+          }
+        }
+
+        if (this.root === null) {
+          this.root = new Node(val)
+        } else {
+          insertNode(val, this.root)
+        }
+      }
+    }
+
+    let Binary = new BinaryTree()
+    Binary.append(8)
+    Binary.append(6)
+    Binary.append(7)
+    Binary.append(9)
+    Binary.append(4)
+    Binary.append(2)
+    Binary.append(10)
+    Binary.append(11)
+    Binary.append(5)
+    Binary.append(4)
+    Binary.append(4)
+    Binary.append(4)
+    Binary.append(4)
+    Binary.append(4)
+    Binary.append(4)
+    Binary.append(4)
+    Binary.append(4)
+    console.log(Binary.root, '二叉树')
+    //求二叉树的节点数
+    // let nodeNum = 0
+    // function getNodenum(root) {
+    //     if (root === null) return
+    //     nodeNum++
+    //     getNodenum(root.right)
+    //     getNodenum(root.left)
+    //     return nodeNum
+    // }
+    function getNodenum(root) {
+      if (root === null) {
+        return 0
+      }
+      let leftNum = getNodenum(root.left)
+      let rightNum = getNodenum(root.right)
+      return leftNum + rightNum + 1
+    }
+
+    console.log(getNodenum(Binary.root), '二叉树的节点数')
+
+    //求二叉树的最大深度
+    function maxDepth(root) {
+      if (root === null) {
+        return 0
+      }
+      let leftDepth = maxDepth(root.left)
+      let rightDepth = maxDepth(root.right)
+      return Math.max(leftDepth, rightDepth) + 1
+    }
+
+    console.log(maxDepth(Binary.root), '二叉树最大深度')
+    //二叉树的最小深度
+    // 1.如果根节点为空，则最小深度为0
+    // 2.如果只有一个根节点(根节点的左右子树为空)，则最小深度为1
+    // 3.如果左子树为空，右子树不为空，最小深度为1+右子树的最小深度
+    // 4.如果右子树为空，左子树不为空，最小深度为1+左子树的最小深度
+    // 5.如果左右子树都不为空，则最小深度为1+左右子树最小深度中的较小值
+    var minDepth = function (root) {
+      if (!root) {
+        return 0;
+      }
+      if (!root.left) {
+        return minDepth(root.right) + 1;
+      }
+      if (!root.right) {
+        return minDepth(root.left) + 1;
+      }
+      return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
+    };
+    console.log(minDepth(Binary.root), '二叉树最小深度')
+
+    //二叉树的前中后序遍历
+    function preTraverse(root) {
+      if (root === null) {
+        return
+      }
+      console.log(root.value, '前序遍历')
+      preTraverse(root.left)
+      preTraverse(root.right)
+    }
+
+    preTraverse(Binary.root)
+
+    function middleTraverse(root) {
+      if (root === null) {
+        return
+      }
+      middleTraverse(root.left)
+      console.log(root.value, '中序遍历')
+      middleTraverse(root.right)
+    }
+
+    middleTraverse(Binary.root)
+
+    function lastTraverse(root) {
+      if (root === null) {
+        return
+      }
+      lastTraverse(root.left)
+      lastTraverse(root.right)
+      console.log(root.value, '后序遍历')
+    }
+
+    lastTraverse(Binary.root)
+
+    //分层遍历（非递归）  有待进一步研究
+    function bfs(root) {
+      let queue = [],
+        result = []
+      if (root !== null) {
+        queue.push(root)
+      }
+      let pointer = 0
+      while (pointer < queue.length) {
+        let temp = queue[pointer++]
+        result.push(temp.value)
+        temp.left && queue.push(temp.left)
+        temp.right && queue.push(temp.right)
+      }
+      return result
+    }
+
+    console.log(bfs(Binary.root), '分层遍历')
+
+    //二叉树的第k层的节点数
+    function getknum(root, k) {
+      if (root === null) {
+        return 0
+      }
+      if (root !== null && k === 1) {
+        return 1
+      }
+      return getknum(root.left, k - 1) + getknum(root.right, k - 1)
+    }
+
+    console.log(getknum(Binary.root, 3), '第k层的节点数')
+
+    //求二叉树第K层的叶子节点个数
+    function getksonnum(root, k) {
+      if (root === null) {
+        return 0
+      }
+      if (root !== null && k === 1) {
+        if (root.left === null && root.right === null) {
+          return 1
+        } else {
+          return 0
+        }
+      }
+      return getksonnum(root.left, k - 1) + getksonnum(root.right, k - 1)
+    }
+
+    console.log(getksonnum(Binary.root, 3), '第k层的叶子节点数')
+
+    //反转二叉树
+    function reverseRoot(root) {
+      if (root === null) {
+        return
+      }
+      let temp
+      temp = root.left
+      root.left = root.right
+      root.right = temp
+      reverseRoot(root.right)
+      reverseRoot(root.left)
+    }
+
+    //求二叉树的直径<<转化为求左子树的最大深度与右子树的最大深度和>>
+    function longerlength(root) {
+      let path = 0
+      getlongerlength(root)
+      return path
+
+      function getlongerlength(root) {
+        if (root == null) {
+          return
+        }
+        let left = longerlength(root.left)
+        let right = longerlength(root.right)
+        path = Math.max(path, left + right)
+        return Math.max(left, right) + 1
+      }
+    }
+
+    //给定一棵二叉搜索树，请找出其中的第k小的结点。(中序遍历+ k小)
+    // 二叉树中和为某一值的路径
+    // function getPath(root, target) {
+    //     let result = []
+    //     if (root) {
+    //         findPath(root, target, [], 0, result)
+    //     }
+    //     return result
+    //     function findPath(root, target, stack, sum, result) {
+    //         stack.push(root.key)
+    //         sum += root.key
+    //         if (!root.left && !root.right && sum === target) {
+    //             result.push(stack.slice(0))
+    //         }
+    //         if (root.left) {
+    //             findPath(root.left, target, stack, sum, result)
+    //         }
+    //         if (root.right) {
+    //             findPath(root.right, target, stack, sum, result)
+    //         }
+    //         stack.pop()
+    //     }
+    // }
+    function FindPath(root, expectNumber) {
+      // write code here
+      if (root === null) {
+        return [];
+      }
+      let res = []
+      traversalTree(root, [], 0, res, expectNumber);
+      return res.sort(function (a, b) {
+        return b.length - a.length
+      });
+    }
+
+    function traversalTree(root, path, sum, res, expectNumber) {
+      if (root === null && expectNumber === sum) {
+        res.push(path);
+        return;
+      } else if (root === null) {
+        return;
+      }
+      let newPath = path.concat(root.value);
+      sum += root.value;
+      if (root.left === null && root.right === null && expectNumber === sum) {
+        res.push(newPath);
+        return;
+      }
+      traversalTree(root.left, newPath, sum, res, expectNumber);
+      traversalTree(root.right, newPath, sum, res, expectNumber);
+    }
+
+    console.log(FindPath(Binary.root, 21), '二叉树的路径')
+
+    //查找二叉树的最小值
+    function findMin(root) {
+      if (root === null) {
+        return
+      }
+      if (root.left === null) {
+        return root.value
+      }
+      return findMin(root.left)
+    }
+
+    console.log(findMin(Binary.root), '二叉树的最小值')
+
+    //查找二叉树的最大值
+    function findMax(root) {
+      if (root === null) {
+        return
+      }
+      if (root.right === null) {
+        return root.value
+      }
+      return findMax(root.right)
+    }
+
+    console.log(findMax(Binary.root), '二叉树的最大值')
+
+    //实现一个链表
+    function LinkList() {
+      function Node(value) {
+        this.value = value
+        this.next = null
+      }
+
+      this.head = null
+      this.length = 0
+      LinkList.prototype.append = function (data) {
+        if (this.head === null) {
+          this.head = new Node(data)
+        } else {
+          let current = this.head
+          while (current.next) {
+            current = current.next
+          }
+          current.next = new Node(data)
+        }
+        this.length++
+      }
+      LinkList.prototype.find = function (data) {
+        let current = this.head
+        do {
+          if (current.value === data) {
+            return current
+          }
+          current = current.next
+        } while (current);
+      }
+      LinkList.prototype.fixed = function (data, newdata) {
+        let current = this.find(data)
+        current.data = newdata
+      }
+      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.delete = function (data) {
+        if (data === this.head.value) {
+          this.head = this.head.next
+        } else {
+          let current = this.head
+          while (current) {
+            if (current.next.value === data) {
+              current.next = current.next.next
+              break
+            }
+            current = current.next
+          }
+        }
+      }
+      LinkList.prototype.toString = function () {
+        let result = ''
+        let current = this.head
+        if (this.head === null) {
+          return result
+        } else {
+          while (current) {
+            result += current.value + '=>'
+            current = current.next
+          }
+          result = result + 'null'
+          return result
+        }
+      }
+    }
+
+    let link = new LinkList()
+    link.append(1)
+    link.append(3)
+    link.append('a')
+    link.append(6)
+    link.append('b')
+    link.append('7')
+    link.append(1)
+    // link.delete('a')
+    // link.delete(1)
+    // link.delete(1)
+    console.log(link.toString(), '链表的打印')
+    console.log(link.find('a'), '链表的查找')
+
+    // console.log(intersection([4, 9, 5], [9, 4, 9, 8, 4], [8, 4]))
+    //合并两个有序链表
+    // 将两个升序链表合并为一个新的升序链表并返回。 新链表是通过拼接给定的两个链表的所有节点组成的。
+    // 示例：
+    // 输入： 1 - > 2 - > 4, 1 - > 3 - > 4
+    // 输出： 1 - > 1 - > 2 - > 3 - > 4 - > 4
+    function mergeTwoLists(l1, l2) {
+      if (l1 === null) {
+        return l2
+      }
+      if (l2 === null) {
+        return l1
+      }
+      if (l1.val <= l2.val) {
+        l1.next = mergeTwoLists(l1.next, l2)
+        return l1
+      } else {
+        l2.next = mergeTwoLists(l2.next, l1)
+        return l2
+      }
+    }
+
+    //判断一个单链表是否有环
+    //标记法
+    // let hasCycle = function (head) {
+    //     while (head) {
+    //         if (head.flag) return true
+    //         head.flag = true
+    //         head = head.next
+    //     }
+    //     return false
+    // };
+    //利用 JSON.stringify() 不能序列化含有循环引用的结构
+    // let hasCycle = function (head) {
+    //     let flag = false
+    //     try {
+    //         JSON.stringify(head)
+    //     } catch (error) {
+    //         flag = true
+    //     }
+    //     return flag
+    // };
+    // 解法三： 快慢指针（ 双指针法）
+    // 设置快慢两个指针， 遍历单链表， 快指针一次走两步， 慢指针一次走一步， 如果单链表中存在环， 则快慢指针终会指向同一个节点， 否则直到快指针指向 null 时， 快慢指针都不可能相遇
+    let hasCycle = function (head) {
+      if (!head || !head.next) {
+        return false
+      }
+      let fast = head.next.next,
+        slow = head.next
+      while (fast !== slow) {
+        if (!fast || !fast.next) return false
+        fast = fast.next.next
+        slow = slow.next
+      }
+      return true
+    };
+    //反转链表
+    // 输入: 1 - > 2 - > 3 - > 4 - > 5 - > NULL
+    // 输出: 5 - > 4 - > 3 - > 2 - > 1 - > NULL
+    // var reverseList = function (head) {
+    //     if (!head || !head.next) return head
+    //     var next = head.next
+    //     // 递归反转
+    //     var reverseHead = reverseList(next)
+    //     // 变更指针
+    //     next.next = head
+    //     head.next = null
+    //     return reverseHead
+    // };
+    var reverseList = function (head) {
+      let prev = null;
+      let curr = head;
+      while (curr != null) {
+        let next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+      }
+      return prev;
+    };
+    // var reverseList = function (head) {
+    //     let reverse = (prev, curr) => {
+    //         if (!curr) return prev;
+    //         let next = curr.next;
+    //         curr.next = prev;
+    //         return reverse(curr, next);
+    //     }
+    //     return reverse(null, head);
+    // };
+    // console.log(reverseList(link).toString(), '链表的反转')
+    //求链表的中间结点
+    //遍历将节点放在数组中， 然后取中间值
+    var middleNode = function (head) {
+      if (!head) return []
+      var arr = []
+      while (head) {
+        arr.push(head)
+        head = head.next
+      }
+      return arr[Math.ceil((arr.length - 1) / 2)]
+    };
+    // 利用双指针，快指针走两步，慢指针走一步，快指针走完，慢指针则为中间值
+    // const getMiddleNode = function (head) {
+    // if (!head) return null;
+    // let fast = head.next.next,
+    // slow = head.next;
+    // while (fast && fast.next) {
+    // fast = fast.next.next;
+    // slow = slow.next;
+    // }
+    // return slow;
+    // };
+    //删除链表倒数第 n 个结点
+    // 这道题要用双指针来实现。先用first指针前进n，然后让second从head开始和first一起前进，直到first到了末尾，
+    // 此时second的下一个节点就是要删除的节点。（另外，若first一开始前进n就已经不在链表中了，说明要删除的节点正是head节点，
+    // 那么直接返回head的下一个节点接口。）
+    var removeNthFromEnd = function (head, n) {
+      let first = head,
+        second = head;
+      while (n > 0) {
+        first = first.next
+        n--
+      }
+      if (!first) return head.next; // 删除的是头节点
+      while (first.next) {
+        first = first.next;
+        second = second.next;
+      }
+      second.next = second.next.next;
+      return head
+    };
+    //编写一个程序，找到两个单链表相交的起始节点
+    // 两次遍历， 先遍历一个链表， 给链表中的每个节点都增加一个标志位， 然后遍历另外一个链表， 遍历到第一个已被标志过的节点为两链表相交的起始节点。
+    // 若遍历完都没有发现已被标志过的节点， 则两链表不相交， 返回 null
+    var getIntersectionNode = function (headA, headB) {
+      while (headA) {
+        headA.flag = true
+        headA = headA.next
+      }
+      while (headB) {
+        if (headB.flag) return headB
+        headB = headB.next
+      }
+      return null
+    };
+    //双指针法
+    // var getIntersectionNode = function (headA, headB) {
+    //     // 清除高度差
+    //     let pA = headA,
+    //         pB = headB
+    //     while (pA || pB) {
+    //         if (pA === pB) return pA
+    //         pA = pA === null ? headB : pA.next
+    //         pB = pB === null ? headA : pB.next
+    //     }
+    //     return null
+    // };
+
+    //哈希表
+    function HashTable() {
+      this.table = []
+      let loseHashCode = function (key) {
+        let hash = 0
+        for (let i = 0; i < key.length; i++) {
+          hash += key.charCodeAt(i)
+        }
+        return hash % 37
+      }
+      this.put = function (key, value) {
+        this.table[loseHashCode(key), value]
+      }
+      this.get = function (key) {
+        return this.table[loseHashCode[key]]
+      }
+      this.remove = function (key) {
+        this.table[loseHashCode[key]] = undefined
+      }
+    }
+
+    //图
+    function Queue() {
+      //栈中的属性
+      this.items = []
+      //1.压入栈push()
+      Queue.prototype.enqueue = function (...element) {
+        this.items.push(...element)
+      }
+      //2.从队列中删除前端元素
+      Queue.prototype.dequeue = function () {
+        return this.items.shift()
+      }
+      //3.查看一下前端元素
+      Queue.prototype.front = function () {
+        return this.items[0]
+      }
+      //4.判断栈是否为空
+      Queue.prototype.isEmpty = function () {
+        return this.items.length === 0
+      }
+      //5.获取栈中元素的个数
+      Queue.prototype.size = function () {
+        return this.items.length
+      }
+      //6.toString方法
+      Queue.prototype.toString = function () {
+        return this.items.toString().split(',').join(' ')
+      }
+    }
+
+    function Graph() {
+      //属性： 顶点（数组）/边（字典）
+      this.vertexes = [] //顶点
+      this.edges = new Map() //边
+      //方法
+      //增加对应顶点的方法
+      Graph.prototype.addVertex = function (v) {
+        this.vertexes.push(v)
+        this.edges.set(v, [])
+      }
+      Graph.prototype.addEdge = function (v1, v2) {
+        this.edges.get(v1).push(v2)
+        this.edges.get(v2).push(v1)
+      }
+      //实现toString 方法
+      Graph.prototype.toString = function () {
+        //定义字符转，保存最终的结构
+        let resultString = ""
+        for (let i = 0; i < this.vertexes.length; i++) {
+          resultString += this.vertexes[i] + '->'
+          let vEdges = this.edges.get(this.vertexes[i])
+          for (let j = 0; j < vEdges.length; j++) {
+            resultString += vEdges[j] + ' '
+          }
+          resultString += "\n"
+        }
+        return resultString
+      }
+      //图的遍历
+      //初始化状态颜色
+      Graph.prototype.initializeColor = function () {
+        let colors = []
+        for (let i = 0; i < this.vertexes.length; i++) {
+          colors[this.vertexes[i]] = 'white'
+        }
+        return colors
+      }
+      //广度优先搜索算法(BFS)  基于队列完成
+      Graph.prototype.bfs = function (initV, handler) {
+        //1.初始化颜色
+        let colors = this.initializeColor()
+        //2.创建队列
+        let queue = new Queue()
+        //3.将顶点加入队列中
+        queue.enqueue(initV)
+        //4.循环从队列中取出元素
+        while (!queue.isEmpty()) {
+          // 4.1从队列取出一个顶点
+          let v = queue.dequeue()
+          //4.2 获取和顶点相连的另外顶点
+          let vList = this.edges.get(v)
+          //4.3 将v的颜色设置为灰色
+          colors[v] = 'gray'
+          //4.4  遍历所有的顶点，并且加入到队列中
+          for (let i = 0; i < vList.length; i++) {
+            let e = vList[i]
+            if (colors[e] == 'white') {
+              colors[e] = 'gray'
+              queue.enqueue(e)
+            }
+          }
+          //4.5 访问顶点
+          handler(v)
+          //4.6 将顶点设置为黑色
+          colors[v] = 'black'
+        }
+      }
+      //广度优先搜索算法（DFS）
+      Graph.prototype.dfs = function (initV, handler) {
+        let colors = this.initializeColor()
+        //递归访问
+        this.dfsVisit(initV, colors, handler)
+      }
+      Graph.prototype.dfsVisit = function (v, colors, handler) {
+        //1.将颜色设置为灰色
+        colors[v] = 'gray'
+        //2.处理V节点
+        handler(v)
+        //3.访问v相连的顶点
+        let vList = this.edges.get(v)
+        for (let i = 0; i < vList.length; i++) {
+          let e = vList[i]
+          if (colors[e] === 'white') {
+            this.dfsVisit(e, colors, handler)
+          }
+        }
+        //4.将v设置为黑色
+        colors[v] = 'black'
+      }
+    }
+
+    //封装jsonp
+    function jsonp(url, params, callback, outTime) {
+      let body = document.body
+      let fnName = "_jsonpFn" + Math.random().toString().replace('.', '')
+      let script = document.createElement('script')
+      window[fnName] = function (data) {
+        callback(data)
+        delete window[fnName]
+        body.removeChild(script)
+      }
+      let str = ''
+      for (const key of params) {
+        str += key + "=" + params[key] + "&"
+      }
+      str += 'callback=' + fnName
+      script.src = url + '?' + str
+      body.insertBefore(script, document.body.firstChild)
+      if (outTime) {
+        let timer = window.setTimeout(() => {
+          body.removeChild(script)
+          clearTimeout(timer)
+        }, outTime)
+      }
+    }
+
+    function jsonpromise(url) {
+      let json;
+      let s = document.createElement('script');
+      s.src = url + '?callback=fn';
+      window.fn = function (data) {
+        json = data;
+      }
+      //当script被插入文档中时，src中的资源就会开始加载
+      document.body.appendChild(s);
+
+      return new Promise((resolve, reject) => {
+        /* throw('err in promise'); */
+        s.onload = function (e) {
+          resolve(json);
+        }
+        s.onerror = function () {
+          reject(json);
+        }
+      });
+    }
+    jsonpromise('http://localhost:8082').then(data => {
+      console.log(data);
+      throw ('err before then');
+    }).catch(err => {
+      //可以捕捉到then里的err befor then也可以捕捉到new Promise里的err in promise。
+      console.log(err)
+    })
+
+    //JS 实现两个大数相加？
+    // let a = "9007199254740991";
+    // let b = "1234567899999999999";
+    function addBigNum(a, b) {
+      //取两个数字的最大长度
+      let maxLength = Math.max(a.length, b.length);
+      //用0去补齐长度
+      a = a.padStart(maxLength, 0); //"0009007199254740991"
+      b = b.padStart(maxLength, 0); //"1234567899999999999"
+      //定义加法过程中需要用到的变量
+      let t = 0;
+      let f = 0; //"进位"
+      let sum = "";
+      for (let i = maxLength - 1; i >= 0; i--) {
+        t = parseInt(a[i]) + parseInt(b[i]) + f;
+        f = Math.floor(t / 10);
+        sum = t % 10 + sum;
+      }
+      if (f == 1) {
+        sum = "1" + sum;
+      }
+      return sum;
+    }
+
+    //合并两个有序数组
+    function Merger(a, b) {
+      let len1 = a && a.length //a ?.length //链判断运算符
+      let len2 = b && b.length //b ?.length
+      let index1 = 0
+      let index2 = 0
+      let arr = []
+      while (index1 < len1 && index2 < len2) { //保证有一个有序数组已经遍历完
+        if (a[index1] > b[index2]) {
+          arr.push(b[index2++])
+        } else {
+          arr.push(a[index1++])
+        }
+      }
+      while (index1 < len1) {
+        arr.push(a[index1++])
+      }
+      while (index2 < len2) {
+        arr.push(b[index2++])
+      }
+      return arr
+    }
+
+    // console.log(Merger([2, 5, 9],[1,6,8,11]))  无序数组为什么不能用这个方法??
+    //归并排序
+    function mergeSort(arr = [1, 9, 7, 5, 6, 4, 9, 8, 1, 3]) {
+      if (arr.length === 1) {
+        return arr
+      }
+      let mid = Math.floor(arr.length / 2)
+      let left = arr.slice(0, mid)
+      let right = arr.slice(mid)
+      // return mergeSort(left).concat(mergeSort(right))
+      return Merger(mergeSort(left), mergeSort(right))
+    }
+
+    // console.log(mergeSort(),'归并排序')
+    //判断回文字符串
+    // function palindrome(str) {
+    //     return str === str.split('').reverse().join('')
+    // }
+    // function palindRome(str) {
+    //     var len = str.length;
+    //     var str1 = "";
+    //     for (var i = len - 1; i >= 0; i--) {
+    //         str1 += str[i];
+    //     }
+    //     console.log(str1 == str)
+    // }
+    // palindRome("abcba"); //true
+    // palindRome("abcbac"); //false
+    function palindrome(str) {
+      if (str === '') {
+        return true
+      }
+      if (str.length === 1) {
+        return true
+      }
+      if (str[str.length - 1] === str[0]) {
+        return palindrome(str.slice(1, str.length - 1))
+      } else {
+        return false
+      }
+    }
+
+    // console.log(palindrome('abfba'), '回文字符串')
+    //生成随机长度的字符串
+    function randomString(n) {
+      var str = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      var tmp = '';
+      for (var i = 0; i < n; i++) {
+        tmp += str.charAt(Math.round(Math.random() * str.length));
+      }
+      return tmp;
+    }
+
+    //统计字符串中次数最多字母
+    // var str = 'aaabbbccck';
+    // var arr = str.split(''); // 转换为数组
+    // arr.sort(); // 对数组进行排序
+    // str = arr.join(''); // 转换为字符串
+    // var re = /(\w)\1+/g; // 将相同的内容分割为一组
+    // var value = '';
+    // var num = 0;
+    // str.replace(re, function ($0, $1) { // replace 字符串替换  re规定字符串要替换的模式  $0父级，$1 第一个孩子
+    //     if ($0.length > num) {
+    //         num = $0.length;
+    //         value = $1;
+    //     }
+    // });
+    // alert('最多的字符:' + value + ',个数:' + num);
+    function findMaxDuplicateChar(str) {
+      if (str.length == 1) {
+        return str;
+      }
+      var charObj = {};
+      for (var i = 0; i < str.length; i++) {
+        if (!charObj[str.charAt(i)]) {
+          charObj[str.charAt(i)] = 1;
+        } else {
+          charObj[str.charAt(i)] += 1;
+        }
+      }
+      var maxChar = '',
+        maxValue = 1;
+      for (var k in charObj) {
+        if (charObj[k] >= maxValue) {
+          maxChar = k;
+          maxValue = charObj[k];
+        }
+      }
+      return maxChar + '：' + maxValue;
+    }
+
+    //二分查找
+    //递归实现
+    function binary_search2(arr = [1, 2, 3, 4, 5, 6, 7, 8, 9], low, high, key = 7) {
+      if (low > high) return -1;
+      let mid = Math.floor((low + high) / 2)
+      if (arr[mid] === key) {
+        return mid
+      } else if (key < arr[mid]) {
+        return binary_search2(arr, low, mid - 1, key)
+      } else {
+        return binary_search2(arr, mid + 1, high, key)
+      }
+    }
+
+    //非递归实现
+    function binary_search(arr, key) {
+      var low = 0,
+        high = arr.length - 1;
+      while (low <= high) {
+        var mid = parseInt((high + low) / 2);
+        if (key == arr[mid]) {
+          return mid;
+        } else if (key > arr[mid]) {
+          low = mid + 1;
+        } else if (key < arr[mid]) {
+          high = mid - 1;
+        }
+      }
+      return -1;
+    }
+
+    //console.log(binary_search2([1, 2, 3, 4, 5, 6, 7, 8, 9], 0, 8, 7), '二分法查找')
+    // 解析 URL Params 为对象
+    // let url = 'http://www.domain.com/?user=anonymous&id=123&id=456&city=%E5%8C%97%E4%BA%AC&enabled';
+    // parseParam(url)
+    /* 结果
+    { user: 'anonymous',
+      id: [ 123, 456 ], // 重复出现的 key 要组装成数组，能被转成数字的就转成数字类型
+      city: '北京', // 中文需解码
+      enabled: true, // 未指定值得 key 约定为 true
+    }
+    */
+    function parseParam(url) {
+      const paramsStr = /.+\?(.+)$/.exec(url)[1]; // 将 ? 后面的字符串取出来
+      const paramsArr = paramsStr.split('&'); // 将字符串以 & 分割后存到数组中
+      let paramsObj = {};
+      // 将 params 存到对象中
+      paramsArr.forEach(param => {
+        if (/=/.test(param)) { // 处理有 value 的参数
+          let [key, val] = param.split('='); // 分割 key 和 value
+          val = decodeURIComponent(val); // 解码
+          val = /^\d+$/.test(val) ? parseFloat(val) : val; // 判断是否转为数字
+          if (paramsObj.hasOwnProperty(key)) { // 如果对象有 key，则添加一个值
+            paramsObj[key] = [].concat(paramsObj[key], val);
+          } else { // 如果对象没有这个 key，创建 key 并设置值
+            paramsObj[key] = val;
+          }
+        } else { // 处理没有 value 的参数
+          paramsObj[param] = true;
+        }
+      })
+      return paramsObj;
+    }
+
+    //实现一个简单的模板渲染
+    let template = '我是{{name}}，年龄{{age}}，性别{{sex}}';
+    let data = {
+      name: '姓名',
+      age: 18
+    }
+    console.log(render(template, data)); // 我是姓名，年龄18，性别undefined
+    // function render(template, data) {
+    //     let reg = /\{\{(\w+)\}\}/
+    //     if (reg.test(template)) { //表示有没有替换的模板
+    //         let name = reg.exec(template)[1]
+    //         template = template.replace(reg, data[name])
+    //         render(template, data)
+    //     } else {
+    //         return template
+    //     }
+    // }
+    function render(template, data) {
+      return template.replace(new RegExp('{{(.*?)}}', 'g'), ($0, $1) => {
+        console.log($0, $1)
+        data[$1.trim()]
+      });
+    }
+
+    //请使用最基本的遍历来实现判断字符串 a 是否被包含在字符串 b 中，并返回第一次出现的位置（找不到返回 -1）
+    // a = '34';
+    // b = '1234567'; // 返回 2
+    // a = '35';
+    // b = '1234567'; // 返回 -1
+    // a = '355';
+    // b = '12354355'; // 返回 5
+    // isContain(a, b);
+    function isContain(a, b) {
+      let len1 = a.length
+      let len2 = b.length
+      for (let i = 0; i < b.length; i++) {
+        if (b.slice(i, i + len1) === a) {
+          return i
+        }
+      }
+      return -1
+    }
+
+    // console.log(isContain('355','12354355'),'字符串的位置')
+    //实现千分位
+    // 保留三位小数
+    // parseToMoney(1234.56); // return '1,234.56'
+    // parseToMoney(123456789); // return '123,456,789'
+    // parseToMoney(1087654.321); // return '1,087,654.321'
+    // 12.(pattern)： 匹配 pattern 并获取这一匹配。 所获取的匹配可以从产生的 Matches 集合得到， 在VBScript 中使用 SubMatches 集合， 在JScript 中则使用 0… 0… 9 属性。 要匹配圆括号字符， 请使用 '('
+    // 或 ')'。
+    // 13.( ? : pattern)： 匹配 pattern 但不获取匹配结果， 也就是说这是一个非获取匹配， 不进行存储供以后使用。 这在使用 "或"
+    // 字符( | ) 来组合一个模式的各个部分是很有用。 例如， 'industr(?:y|ies) 就是一个比 '
+    // industry | industries ' 更简略的表达式。
+    // 14.( ? =
+    //     pattern)： 正向预查， 在任何匹配 pattern 的字符串开始处匹配查找字符串。 这是一个非获取匹配， 也就是说， 该匹配不需要获取供以后使用。 例如， 'Windows (?=95|98|NT|2000)'
+    // 能匹配 "Windows 2000"
+    // 中的 "Windows"，
+    // 但不能匹配 "Windows 3.1"
+    // 中的 "Windows"。
+    // 预查不消耗字符， 也就是说， 在一个匹配发生后， 在最后一次匹配之后立即开始下一次匹配的搜索， 而不是从包含预查的字符之后开始。
+    // 15.( ? !
+    //     pattern)： 负向预查， 在任何不匹配 pattern 的字符串开始处匹配查找字符串。 这是一个非获取匹配， 也就是说， 该匹配不需要获取供以后使用。 例如 'Windows (?!95|98|NT|2000)'
+    // 能匹配 "Windows 3.1"
+    // 中的 "Windows"，
+    // 但不能匹配 "Windows 2000"
+    // 中的 "Windows"。
+    // 预查不消耗字符， 也就是说， 在一个匹配发生后， 在最后一次匹配之后立即开始下一次匹配的搜索， 而不是从包含预查的字符之后开始
+    function parseToMoney(num) {
+      num = parseFloat(num.toFixed(3));
+      let [integer, decimal] = String.prototype.split.call(num, '.');
+      integer = integer.replace(/\d{1,3}(?=(\d{3})+$)/g, '$&,');
+      return integer + '.' + (decimal ? decimal : '');
+    }
+
+    //无重复字符的最长子串长度
+    var lengthOfLongestSubstring = function (s = 'pwwkew') {
+      let max = 0 //记录子串的最大长度
+      let str = '' //记录子串的滑动窗口
+      for (let j = 0; j < s.length; j++) {
+        if (str.indexOf(s.charAt(j)) === -1) {
+          str += s.charAt(j)
+          max = Math.max(max, str.length)
+        } else {
+          // console.log(str)  //这里特殊处理能求出最长的子串是那个
+          str = str.slice(str.indexOf(s.charAt(j)) + 1) + s.charAt(j)
+        }
+      }
+      return max
+    }
+    //console.log(lengthOfLongestSubstring(), '无重复字符的最长子串')
+    //字节&leetcode155：最小栈（包含getMin函数的栈）
+    // 设计一个支持 push， pop， top 操作， 并能在常数时间内检索到最小元素的栈。
+    // push(x)—— 将元素 x 推入栈中。
+    // pop()—— 删除栈顶的元素。
+    // top()—— 获取栈顶元素。
+    // getMin()—— 检索栈中的最小元素。
+    var MinStack = function () {
+      this.items = []
+      this.min = null
+    };
+    // 进栈
+    MinStack.prototype.push = function (x) {
+      if (!this.items.length) this.min = x
+      this.min = Math.min(x, this.min)
+      this.items.push(x)
+    };
+    // 出栈
+    MinStack.prototype.pop = function () {
+      let num = this.items.pop()
+      this.min = Math.min(...this.items)
+      return num
+    };
+    // 获取栈顶元素
+    MinStack.prototype.top = function () {
+      if (!this.items.length) return null
+      return this.items[this.items.length - 1]
+    };
+    // 检索栈中的最小元素
+    MinStack.prototype.getMin = function () {
+      return this.min
+    };
+    //两数之和
+    // 给定一个整数数组 nums 和一个目标值 target， 请你在该数组中找出和为目标值的那 两个 整数， 并返回他们的数组下标。
+    // 你可以假设每种输入只会对应一个答案。 但是， 你不能重复利用这个数组中同样的元素。
+    // 示例:
+    //     给定 nums = [2, 7, 11, 15], target = 9
+    // 因为 nums[0] + nums[1] = 2 + 7 = 9
+    // 所以返回[0, 1]
+    function getSumIndex(nums, target) {
+      let map = new Map()
+      for (let i = 0; i < nums.length; i++) {
+        let a = target - nums[i]
+        if (map.has(a)) {
+          return [map.get(a), i]
+        } else {
+          map.set(nums[i], i)
+        }
+      }
+    }
+
+    // console.log(getSumIndex([2, 7, 11, 15], 9), '两数之和')
+    //阿里算法题：编写一个函数计算多个数组的交集
+    function intersection() {
+      let arr = Array.from(arguments)
+      // accumulator 正如翻译的那样，它是 reduce 方法多次执行的累积结果，accumulator 的初始值分两种情况：
+      // 若有提供 initialValue 初始值，第一次循环时 accumulator 的值便为 initialValue，后续循环时 accumulator 为上次循环的返回值。
+      // 若未提供initialValue，第一次循环时 accumulator 的值为数组第一项arr[0]，后续循环时为上次循环的返回值。
+      // 3.currentValue [ˈkɜːrənt] [ˈvæljuː] 当前值
+      // 这个应该不难理解，数组循环当前处理的值。currentValue 的初始值也受到initialValue的影响：
+      // 若有提供 initialValue 初始值，第一次循环currentValue 的值为数组第一项arr[0]，后续变化随索引递增变化。
+      // 若未提供initialValue，第一次循环由于arr[0]成了accumulator 的值，所以currentValue 只能从arr[1]开始，后续变化随索引递增。
+      return arr.reduce(function (total, cur, index, arr) {
+        console.log(total, cur, '.....')
+        return cur.filter(function (item) {
+          return total.includes(item)
+        })
+      })
+    }
+
+
+    //最长公共前缀
+    //常规方法 第一个与第二个比较 得到一个公共前缀 再依次跟后面的比较
+    // function lengthOfLongestSubstrings (strs) {
+    //   if (strs.length === 0 || !strs) {
+    //     return ''
+    //   }
+    //   let prev = strs[0]
+    //   for (let i = 1; i < strs.length; i++) {
+    //     let j = 0
+    //     for (; j < strs[i].length; j++) {
+    //       if (strs[i][j] !== prev[j]) {
+    //         break
+    //       }
+    //     }
+    //     prev = prev.substring(0, j)
+    //   }
+    //   return prev
+    // }
+    //最小字符串跟最大字符串的差异就是公共前缀
+    function lengthOfLongestSubstrings(strs) {
+      let min = strs[0],
+        max = strs[0] //最小字符串 最大字符串
+      for (let i = 0; i < strs.length; i++) {
+        if (strs[i] < min) {
+          min = strs[i]
+        }
+      }
+      for (let i = 0; i < strs.length; i++) {
+        if (strs[i] > max) {
+          max = strs[i]
+        }
+      }
+      for (let i = 0; i < min.length; i++) {
+        if (min[i] !== max[i]) {
+          return min.substring(0, i)
+        }
+      }
+    }
+
+    //归并分治的思想  有点类似于归并排序
+    // var longestCommonPrefix = function (strs) {
+    //   if (strs.length === 0 || strs[0].length === 0) {
+    //     return "";
+    //   }
+    //   return divide(strs, 0, strs.length - 1);
+    // }
+    //
+    // function divide (strs, l, r) {
+    //   if (l === r) {
+    //     return strs[l];
+    //   } else {
+    //     let mid = Math.floor((l + r) / 2);
+    //     let leftPre = divide(strs, l, mid),
+    //       rightPre = divide(strs, mid + 1, r);
+    //     return compare(leftPre, rightPre);
+    //   }
+    // }
+    //
+    // function compare (left, right) {
+    //   let min = Math.min(left.length, right.length);
+    //   for (let i = 0; i < min; i++) {
+    //     if (left.charAt(i) !== right.charAt(i)) {
+    //       return left.substring(0, i);
+    //     }
+    //   }
+    //   return left.substring(0, min);
+    // }
+    // console.log(lengthOfLongestSubstrings(['abshfkshfkhs', 'abcsdkfhkshfk', 'abeifgsgfs']), '最长公共前缀');
+    //最长公共子序列
+    var longestCommonSubsequence = function (text1, text2) {
+      let n = text1.length;
+      let m = text2.length;
+      // Array.from(obj, mapFn)
+      // obj指的是数组对象、类似数组对象或者是set对象，map指的是对数组中的元素进行处理的方法。
+      let dp = Array.from(new Array(n + 1), () => new Array(m + 1).fill(0));
+      for (let i = 1; i <= n; i++) {
+        for (let j = 1; j <= m; j++) {
+          if (text1[i - 1] === text2[j - 1]) { //末尾字符相同则最长公共子序列一定有这个数
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]); //末尾字符不相同则可能最长公共子序列可能有这个数
+          }
+        }
+      }
+      return dp[n][m];
+    };
+    // console.log(longestCommonSubsequence('abcdefg', 'bcdg'), '公共子序列');
+
+    // 打印出最长公共子序列
+    function lcs(str1, str2) {
+      var len1 = str1.length,
+        len2 = str2.length;
+      var dp = [];
+      for (var i = 0; i <= len1; i++) {
+        dp[i] = [];
+        for (var j = 0; j <= len2; j++) {
+          if (i == 0 || j == 0) {
+            dp[i][j] = 0;
+            continue;
+          }
+          if (str1[i - 1] == str2[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+          }
+        }
+      }
+      var result = printLCS(dp, str1, str2, len1, len2);
+      return result;
+    }
+    // 打印公共子序列
+    function printLCS(dp, str1, str2, i, j) {
+      if (i == 0 || j == 0) {
+        return "";
+      }
+      if (str1[i - 1] == str2[j - 1]) {
+        return printLCS(dp, str1, str2, i - 1, j - 1) + str1[i - 1];
+      } else if (dp[i][j - 1] > dp[i - 1][j]) {
+        return printLCS(dp, str1, str2, i, j - 1);
+      } else {
+        return printLCS(dp, str1, str2, i - 1, j);
+      }
+    }
+    console.log(lcs('abcda', 'bcdda')); // bcda
+
+    //手写map
+    Array.prototype.myMap = function (fn) {
+      let arr = []
+      for (let i = 0; i < this.length; i++) {
+        arr.push(this[i], i, this)
+      }
+      return arr
+    }
+
+    //手写reduce
+    Array.prototype.myReduce = function (fn, init) {
+      let res = init ? init : 0;
+      for (let i = init ? 1 : 0; i < this.length; i++) {
+        res = fn(res, this[i], i, this)
+      }
+      return res
+    }
+
+    //手写一个filter
+    Array.prototype.filter = function (fn) {
+      let arr = []
+      for (let i = 0; i < this.length; i++) {
+        if (fn(this[i])) {
+          arr.push(this[i], i, this)
+        }
+      }
+      return arr
+    }
+
+    //判断是否为平衡二叉树
+    //所谓的平衡二叉树，就是指数中任一结点的左右子树深度相差不超过1。
+    var isBalanced = function (root) {
+      function getHeight(node) {
+        if (node === null) return 0;
+        return Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+      }
+
+      if (root === null) return true;
+      return isBalanced(root.left) && isBalanced(root.right) &&
+        Math.abs(getHeight(root.left) - getHeight(root.right)) < 2;
+    };
+
+    //15. 三数之和
+    // 给你一个包含 n 个整数的数组 nums， 判断 nums 中是否存在三个元素 a， b， c，
+    // 使得 a + b + c = 0？ 请你找出所有满足条件且不重复的三元组。
+    // 注意： 答案中不可以包含重复的三元组。
+    // 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+    // 满足要求的三元组集合为：
+    //     [
+    //         [-1, 0, 1],
+    //         [-1, -1, 2]
+    //     ]
+    var threeSum = function (nums) {
+      const result = [];
+      nums.sort((a, b) => a - b);
+      for (let i = 0; i < nums.length; i++) {
+        // 跳过重复数字
+        if (i && nums[i] === nums[i - 1]) {
+          continue;
+        }
+        let left = i + 1;
+        let right = nums.length - 1;
+        while (left < right) {
+          const sum = nums[i] + nums[left] + nums[right];
+          if (sum > 0) {
+            right--;
+          } else if (sum < 0) {
+            left++;
+          } else {
+            result.push([nums[i], nums[left++], nums[right--]]);
+            // 跳过重复数字
+            while (nums[left] === nums[left - 1]) {
+              left++;
+            }
+            // 跳过重复数字
+            while (nums[right] === nums[right + 1]) {
+              right--;
+            }
+          }
+        }
+      }
+      return result;
+    }
+
+    // 输入一个正整数数组， 把数组里所有数字拼接起来排成一个数，
+    // 打印能拼接出的所有数字中最小的一个。 例如输入数组 {
+    //   3， 32， 321
+    // }，
+    // 则打印出这三个数字能排成的最小数字为321323。
+    function PrintMinNumber(numbers) {
+      var result = "";
+      for (let i = 0; i < numbers.length; i++) {
+        for (let j = i + 1; j < numbers.length; j++) {
+          let s1 = numbers[i] + '' + numbers[j]
+          let s2 = numbers[j] + '' + numbers[i]
+          if (s1 > s2) {
+            let temp = numbers[i]
+            numbers[i] = numbers[j]
+            numbers[j] = temp
+          }
+        }
+      }
+      for (let m = 0; m < numbers.length; m++) {
+        result = result + numbers[m];
+      }
+      return result;
+    }
+
+    // function PrintMinNumber(numbers) {
+    //   if (!numbers || numbers.length === 0) {
+    //     return "";
+    //   }
+    //   return numbers.sort(compare).join('');
+    // }
+
+    // function compare(a, b) {
+    //   const front = "" + a + b;
+    //   const behind = "" + b + a;
+    //   return front - behind;
+    // }
+
+    // 在一个字符串(0<=字符串长度<=10000，全部由字母组成)中找到第一个只出现一次的字符,并返回它的位置, 如果没有则返回-1（需要区分大小写）。
+    // function FirstNotRepeatingChar(str) {
+    //   if (!str) {
+    //     return -1;
+    //   }
+    //   let countMap = {};
+    //   const array = str.split('');
+    //   const length = str.length;
+    //   for (let i = 0; i < length; i++) {
+    //     const current = array[i];
+    //     let count = countMap[current];
+    //     if (count) {
+    //       countMap[current] = count + 1;
+    //     } else {
+    //       countMap[current] = 1;
+    //     }
+    //   }
+    //   for (let i = 0; i < length; i++) {
+    //     if (countMap[array[i]] === 1) {
+    //       return i;
+    //     }
+    //   }
+    //   return -1;
+    // }
+    function FirstNotRepeatingChar(str) {
+      // write code here
+      for (var i = 0; i < str.length; i++) {
+        if (str.indexOf(str[i]) == str.lastIndexOf(str[i])) {
+          return i;
+        }
+      }
+      return -1;
+    }
+    //输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有的奇数位于数组的前半部分，所有的偶数位于数组的后半部分
+    function reOrderArray(array) {
+      if (Array.isArray(array)) {
+        let start = 0;
+        let end = array.length - 1;
+        while (start < end) {
+          while (array[start] % 2 === 1) {
+            start++;
+          }
+          while (array[end] % 2 === 0) {
+            end--;
+          }
+          if (start < end) {
+            [array[start], array[end]] = [array[end], array[start]]
+          }
+        }
+      }
+      return array;
+    }
+    // 和为S的连续正数序列——js
+    // 假设序列的开始数字为a,结束数字为a+i，那么有(a+i-a+1)*(a+a+i)/2=sum
+
+    // 也就是(i+1)(2a+i)=2*sum
+
+    // 那么我们只需要找出这样的a和i就行了，最后再根据a和i得出序列。
+    // function FindContinuousSequence(sum) {
+    //             let half = sum >> 1
+    //             let start = 0 //连续子序列的起始值
+    //             while (half--) {
+    //                 start++
+    //                 let i = 1  //连续子序列的个数
+    //                 while ((start + start + i - 1) * i / 2 < sum) {
+    //                     i++
+    //                 }
+    //                 if ((start + start + i - 1) * i / 2 === sum) {
+    //                     console.log(start, i)  //找出了起始值及个数 
+    //                 }
+    //             }
+    //         }
+    function FindContinuousSequence(sum) {
+      let a = 0,
+        half = sum >> 1;
+      const res = [];
+      while (half--) {
+        a++;
+        let i = 1;
+        while ((i + 1) * (2 * a + i) < 2 * sum) {
+          i++;
+        }
+        if ((i + 1) * (2 * a + i) === 2 * sum) {
+          const tmp = [];
+          tmp.push(a);
+          tmp.push(i);
+          res.push(tmp);
+        }
+      }
+      for (let i = 0; i < res.length; i++) {
+        let num = res[i][1],
+          k = 1;
+        const tmp = [];
+        tmp.push(res[i][0]);
+        while (num--) {
+          tmp.push(res[i][0] + k);
+          k++;
+        }
+        res[i] = tmp;
+      }
+      return res;
+    }
+
+    //输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的
+    //看了题目了，很像leetcode的第一题【两数之和】，但是题目中有一个明显不同的条件就是数组是有序的，可以使用使用大小指针求解，不断逼近结果，最后取得最终值。
+    function FindNumbersWithSum(array, sum) {
+      if (array && array.length > 0) {
+        let left = 0;
+        let right = array.length - 1;
+        while (left < right) {
+          const s = array[left] + array[right];
+          if (s > sum) {
+            right--;
+          } else if (s < sum) {
+            left++;
+          } else {
+            return [array[left], array[right]]
+          }
+        }
+      }
+      return [];
+    }
+
+    //在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。
+    var reversePairs = function (nums) {
+      if (nums.length < 1) return 0
+      let total = 0
+      /*
+        合并排序函数
+      */
+      let merge = function (left, right) {
+        let l_index = 0,
+          r_index = 0
+        let res = []
+        while (l_index < left.length && r_index < right.length) { // 两个数组 元素两两对比, 把小的依次加入res  直到其中有数组的元素全部加入到res
+          if (left[l_index] > right[r_index]) { // 右边小, 把右边的加入res
+            res.push(right[r_index])
+            r_index++
+            total += left.length - l_index // --------------比并归排序多了这行---------------------------
+          } else { // 左边小或等, 把左边的加入res
+            res.push(left[l_index])
+            l_index++
+          }
+        }
+        while (l_index < left.length) { // 把剩下的继续加入res
+          res.push(left[l_index++])
+        }
+        while (r_index < right.length) {
+          res.push(right[r_index++])
+          total += left.length - l_index // ----------------比并归排序多了这行-----------------------------
+        }
+        return res
+      }
+      /*
+        分割的递归函数, 把数组都分割成 单个元素的  再返回合并后的排序函数
+      */
+      let arrSplit = function (arr) {
+        if (arr.length === 1) return arr
+        let middle = ~~(arr.length / 2)
+        let left = arr.slice(0, middle)
+        let right = arr.slice(middle)
+        return merge(arrSplit(left), arrSplit(right))
+      }
+      arrSplit(nums)
+      return [total, nums, arrSplit(nums)]
+    };
+    // console.log(reversePairs([1, 6, 4, 9, 2]), '找出数组的逆序对')
+    // console.log(reversePairs([1, 4, 6, 9, 2]), '找出数组的逆序对')
+    // console.log(reversePairs([1, 6, 4]), '找出数组的逆序对')
+
+    // 给定一个包含 n 个整数的数组nums，判断 nums 中是否存在四个元素a，b，c，d ，使得 a + b + c + d = 0 ？找出所有满足条件且不重复的四元组。
+
+    // 注意：答案中不可以包含重复的四元组。
+    // 给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+
+    // 满足要求的四元组集合为：
+    // [
+    //   [-1, 0, 0, 1],
+    //   [-2, -1, 1, 2],
+    //   [-2, 0, 0, 2]
+    // ]
+    var fourSum = function (nums, target) {
+      if (nums.length < 4) {
+        return [];
+      }
+      nums.sort((a, b) => a - b);
+      const result = [];
+      for (let i = 0; i < nums.length - 3; i++) {
+        if (i > 0 && nums[i] === nums[i - 1]) {
+          continue;
+        }
+        if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) {
+          break;
+        }
+        for (let j = i + 1; j < nums.length - 2; j++) {
+          if (j > i + 1 && nums[j] === nums[j - 1]) {
+            continue;
+          }
+          let left = j + 1,
+            right = nums.length - 1;
+          while (left < right) {
+            const sum = nums[i] + nums[j] + nums[left] + nums[right];
+            if (sum === target) {
+              result.push([nums[i], nums[j], nums[left], nums[right]]);
+            }
+            if (sum <= target) {
+              while (nums[left] === nums[++left]);
+            } else {
+              while (nums[right] === nums[--right]);
+            }
+          }
+        }
+      }
+      return result;
+    };
+
+    //堆排序
+
+    function headSort(arr) {
+      buildHeap(arr); //构建堆
+      var len = arr.length;
+      for (var i = len - 1; i > 0; i--) {
+        swap(arr, 0, i); //交换堆的第一个元素和最后一个元素
+        heapify(arr, i); //调整堆
+      }
+      return arr;
+    }
+
+    function buildHeap(arr) {
+      var len = arr.length;
+      if (len == 0)
+        return;
+      for (var i = Math.floor(len / 2); i > 0; i--) {
+        heapify(arr, i);
+      }
+    }
+
+    function heapify(arr, i) {
+      var left = 2 * i + 1;
+      var right = 2 * i + 2;
+      var largest = i;
+      var len = arr.length;
+      if (left < len && arr[left] > arr[largest]) { //先判断左节点还否超出
+        largest = left;
+      }
+      if (right < len && arr[right] > largest) { //有节点是否超出 找出最大的子节点
+        largest = right;
+      }
+      if (largest != i) {
+        swap(arr, i, largest); //交换 largrst为i
+        heapify(arr, largest); //递归调整
+      }
+    }
+
+    function swap(arr, i, j) {
+      var temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+
+    //函数组合
+    function compose(...fns) {
+      return subArgs => {
+        return fns.reverse().reduce((total, func, index) => {
+          return func(total);
+        }, subArgs);
+      }
+    }
+
+    //实现json.parse
+    // var json = '{"name":"cxk", "age":25}';
+    // var obj = eval("(" + json + ")");
+
+    //计数二进制子串
+    // 给定一个字符串 s， 计算具有相同数量0和1的非空(连续) 子字符串的数量， 并且这些子字符串中的所有0和所有1都是组合在一起的。
+
+    // 重复出现的子串要计算它们出现的次数。
+    // 输入: "00110011"
+    // 输出: 6
+    // 解释: 有6个子串具有相同数量的连续1和0：“ 0011”，“ 01”，“ 1100”，“ 10”，“ 0011” 和“ 01”。
+
+    // 请注意， 一些重复出现的子串要计算它们出现的次数。
+
+    // 另外，“ 00110011” 不是有效的子串， 因为所有的0（ 和1） 没有组合在一起。
+    // 输入: "10101"
+    // 输出: 4
+    // 解释: 有4个子串：“ 10”，“ 01”，“ 10”，“ 01”， 它们具有相同数量的连续1和0。
+    // export default (str) => {
+    //   // 建立数据结构，堆栈，保存数据
+    //   let r = []
+    //   // 给定任意子输入都返回第一个符合条件的子串
+    //   let match = (str) => {
+    //     let j = str.match(/^(0+|1+)/)[0]
+    //     let o = (j[0] ^ 1).toString().repeat(j.length)
+    //     let reg = new RegExp(`^(${j}${o})`)
+    //     if (reg.test(str)) {
+    //       return RegExp.$1
+    //     } else {
+    //       return ''
+    //     }
+    //   }
+    //   // 通过for循环控制程序运行的流程
+    //   for (let i = 0, len = str.length - 1; i < len; i++) {
+    //     let sub = match(str.slice(i))
+    //     if (sub) {
+    //       r.push(sub)
+    //     }
+    //   }
+    //   return r
+    // }
+    let countBinarySubstrings = function (s) {
+      let n = 0,
+        arr = s.match(/([1]+)|([0]+)/g)
+      for (let i = 0; i < arr.length - 1; i++) {
+        n += Math.min(arr[i].length, arr[i + 1].length)
+      }
+      return n
+    }
+
+    //电话号码排列组合
+    // 给定一个仅包含数字 2 - 9 的字符串， 返回所有它能表示的字母组合。
+    // 给出数字到字母的映射如下（ 与电话按键相同）。 注意 1 不对应任何字母。
+    // 示例:
+    //   输入： "23"
+    // 输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+    //回溯法求排列组合
+    var letterCombinations = function (digits) {
+      if (!digits) {
+        return [];
+      }
+      var len = digits.length;
+      var map = new Map();
+      map.set('2', 'abc');
+      map.set('3', 'def');
+      map.set('4', 'ghi');
+      map.set('5', 'jkl');
+      map.set('6', 'mno');
+      map.set('7', 'pqrs');
+      map.set('8', 'tuv');
+      map.set('9', 'wxyz');
+      var result = [];
+
+      function _generate(i, str) {
+        // terminator
+        if (i == len) {
+          result.push(str);
+          return;
+        }
+        // process
+        // drill down
+        var tmp = map.get(digits[i]);
+        for (var r = 0; r < tmp.length; r++) {
+          _generate(i + 1, str + tmp[r]);
+        }
+      }
+      _generate(0, '');
+      return result;
+    };
+    // console.log(letterCombinations('456'),'回溯法求排列组合')
+    //组合总和
+    // 给定一个无重复元素的数组 candidates 和一个目标数 target， 找出 candidates 中所有可以使数字和为 target 的组合。
+
+    // candidates 中的数字可以无限制重复被选取。
+
+    // 说明：
+
+    // 所有数字（ 包括 target） 都是正整数。
+    // 解集不能包含重复的组合。
+    // 示例 1:
+
+    //   输入: candidates = [2, 3, 6, 7], target = 7,
+    //   所求解集为: [
+    //     [7],
+    //     [2, 2, 3]
+    //   ]
+    // 示例 2:
+
+    //   输入: candidates = [2, 3, 5], target = 8,
+    //   所求解集为: [
+    //     [2, 2, 2, 2],
+    //     [2, 3, 3],
+    //     [3, 5]
+    //   ]
+    var combinationSum = function (candidates, target) { //回溯算法的应用
+      let res = [] //存放输出结果
+      let temp = [] //存放临时结果
+      function backTrack(temp, target, index) {
+        if (target === temp.reduce(function (a, b) {
+          return a + b
+        }, 0)) {
+          res.push(temp)
+        }
+        if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
+          return a + b
+        }, 0)) {
+          return
+        }
+        for (let i = index; i < candidates.length; i++) {
+          temp.push(candidates[i])
+          backTrack(temp.slice(), target, i) //slice对于一维基本类型数组是深拷贝
+          temp.pop()
+        }
+      }
+      backTrack(temp, target, 0)
+      return res
+    };
+    //console.log(combinationSum([2, 3, 5], 8),'回溯算法求组合')
+
+    //验证一个数是否是素数
+    //质数又称素数。一个大于1的自然数，除了1和它自身外，不能被其他自然数整除的数叫做质数；否则称为合数。
+    // 如果这个数是 2 或 3，一定是素数；
+    // 如果是偶数，一定不是素数；
+    // 如果这个数不能被3~它的平方根中的任一数整除，m必定是素数。而且除数可以每次递增2（排除偶数）
+    function isPrime(num) {
+      // 不是数字或者数字小于2
+      if (typeof num !== "number" || !Number.isInteger(num)) { // Number.isInterget 判断是否为整数
+        return false;
+      }
+
+      if (num === 2 || num === 3) {
+        return true;
+      };
+      if (num % 2 === 0) {
+        return false;
+      };
+      //依次判断是否能被奇数整除，最大循环为数值的开方
+      var squareRoot = Math.sqrt(num);
+      //因为2已经验证过，所以从3开始；且已经排除偶数，所以每次加2
+      for (var i = 3; i <= squareRoot; i += 2) {
+        if (num % i === 0) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    //求最大公约数
+    function greatestCommonDivisor(a, b) {
+      let divisor = 2,
+        res = 1;
+      if (a < 2 || b < 2) {
+        return 1;
+      };
+      while (a >= divisor && b >= divisor) {
+        if (a % divisor === 0 && b % divisor === 0) {
+          res = divisor;
+        }
+        divisor++;
+      }
+      return res;
+    };
+
+    //加油站
+    // 在一条环路上有 N 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
+
+    // 你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i + 1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。
+
+    // 如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 - 1。
+
+    // 说明:
+
+    // 如果题目有解，该答案即为唯一答案。
+    // 输入数组均为非空数组，且长度相同。
+    // 输入数组中的元素均为非负数。
+    // 输入:
+    // gas = [1, 2, 3, 4, 5]
+    // cost = [3, 4, 5, 1, 2]
+
+    // 输出: 3
+
+    // 解释:
+    // 从 3 号加油站(索引为 3 处)出发，可获得 4 升汽油。此时油箱有 = 0 + 4 = 4 升汽油
+    // 开往 4 号加油站，此时油箱有 4 - 1 + 5 = 8 升汽油
+    // 开往 0 号加油站，此时油箱有 8 - 2 + 1 = 7 升汽油
+    // 开往 1 号加油站，此时油箱有 7 - 3 + 2 = 6 升汽油
+    // 开往 2 号加油站，此时油箱有 6 - 4 + 3 = 5 升汽油
+    // 开往 3 号加油站，你需要消耗 5 升汽油，正好足够你返回到 3 号加油站。
+    // 因此，3 可为起始索引。
+    // 示例 2:
+
+    // 输入:
+    // gas = [2, 3, 4]
+    // cost = [3, 4, 3]
+
+    // 输出: -1
+
+    // 解释:
+    // 你不能从 0 号或 1 号加油站出发，因为没有足够的汽油可以让你行驶到下一个加油站。
+    // 我们从 2 号加油站出发，可以获得 4 升汽油。 此时油箱有 = 0 + 4 = 4 升汽油
+    // 开往 0 号加油站，此时油箱有 4 - 3 + 2 = 3 升汽油
+    // 开往 1 号加油站，此时油箱有 3 - 3 + 3 = 3 升汽油
+    // 你无法返回 2 号加油站，因为返程需要消耗 4 升汽油，但是你的油箱只有 3 升汽油。
+    // 因此，无论怎样，你都不可能绕环路行驶一周。
+
+    var canCompleteCircuit = function (gas, cost) {
+      //思路：贪心算法，每个加油站我都把加油站的油加到车里；
+      //首先找到所有能作为起点的加油站（也就是当前加油站存储的油量支持我走到下一站 gas[i] >= cost[i]），位置放到originalingStation中
+      //遍历每个起点加油站，看它作为起点是否能走一圈，storage存储量，consumption消耗量，while循环，存储量要一直大于等于消耗量，而且最多走一圈（不然会出现死循环）
+      //等到条件不满足退出while时，判断当前是否安稳走了一圈，若是直接返回位置即可，若不是找下一个出发点
+      //若出发点都不满足（for循环走到头），则返回-1
+      let originalingStation = [];
+      const len = gas.length;
+      for (let i = 0; i < len; i++) {
+        if (gas[i] >= cost[i]) originalingStation.push(i);
+      }
+
+      const originalLen = originalingStation.length;
+      if (!originalingStation.length) return -1;
+      for (let i = 0; i < originalLen; i++) {
+        let x = originalingStation[i];
+        let storage = gas[x], //存储量
+          consumption = cost[x]; //消耗量
+        let j = (x >= len - 1) ? 0 : x + 1;
+        while (storage >= consumption && j !== x) {
+          storage += gas[j];
+          consumption += cost[j];
+          j = (j >= len - 1) ? 0 : j + 1;
+        }
+        if (j === x && storage >= consumption) return j;
+      }
+      return -1;
+    };
+
+    //Object.create的基本原理
+    function create(obj) {
+      function F() {
+
+      }
+      F.prototype = obj
+      return new F()
+    }
+
+    //实现一个基本的 Event Bus
+    // 组件通信，一个触发与监听的过程
+    class EventEmitter {
+      constructor() {
+        // 存储事件
+        this.events = this.events || new Map()
+      }
+      // 监听事件
+      addListener(type, fn) {
+        if (!this.events.get(type)) {
+          this.events.set(type, fn)
+        }
+      }
+      // 触发事件
+      emit(type) {
+        let handle = this.events.get(type)
+        handle.apply(this, [...arguments].slice(1))
+      }
+    }
+
+    // // 测试
+    // let emitter = new EventEmitter()
+    // // 监听事件
+    // emitter.addListener('ages', age => {
+    //   console.log(age)
+    // })
+    // // 触发事件
+    // emitter.emit('ages', 18)  // 18
+
+    //rem 基本设置
+    // 提前执行，初始化 resize 事件不会执行
+    setRem()
+    // 原始配置
+    function setRem() {
+      let doc = document.documentElement
+      let width = doc.getBoundingClientRect().width
+      let rem = width / 75 //75是设计图宽度
+      doc.style.fontSize = rem + 'px'
+    }
+    // 监听窗口变化
+    addEventListener("resize", setRem)
+
+    //实现一个简单的路由
+    // <a id="black" href="#/black">black</a>
+    // <a id="red" href="#/red">red</a>
+    // <a id="yellow" href="#/yellow">yellow</a>
+    function Router() {
+      this.route = {};
+      this.currentUlr = '';
+      this.init();
+    }
+    Router.prototype.router = function (path, cb) {
+      this.route[path] = cb || function () { };
+    }
+
+    Router.prototype.freshRoute = function () {
+      this.currentUlr = window.location.hash.slice(1);
+      this.route[this.currentUlr] && this.route[this.currentUlr]();
+    }
+
+    Router.prototype.init = function () {
+      window.addEventListener('load', this.freshRoute.bind(this), false);
+      window.addEventListener('hashchange', this.freshRoute.bind(this), false);
+    }
+
+    var router = new Router();
+    router.router('/black', function () {
+      document.querySelector('body').style.backgroundColor = 'black';
+    })
+    router.router('/red', function () {
+      document.querySelector('body').style.backgroundColor = 'red';
+    })
+    router.router('/yellow', function () {
+      document.querySelector('body').style.backgroundColor = 'yellow';
+    })
+
+    //打乱数组 leetcode
+    var Solution = function (nums) {
+      this.nums = nums;
+    };
+    Solution.prototype.reset = function () {
+      return this.nums;
+    };
+    Solution.prototype.shuffle = function () {
+      let num = this.nums.slice();
+      //数组里面为非数字  不能用sort
+      for (let i = 0; i < num.length; i++) {
+        let index = Math.floor((i + 1) * Math.random());
+        [num[index], num[i]] = [num[i], num[index]]
+
+      }
+      return num;
+    };
+    //arr是无序不重复的数组1到1000个数,从中随机取出一个数X,随机放入其中.请使用最快的方法找出这个数是多少?用代码表达
+    // 需要了解的知识点： 异或。 同为0， 不同为该非0数， 即1 ^ 1 = 0, 5 ^ 0 = 5;
+
+    // （
+    // 三种解决方案）
+
+    // 第一种
+
+    // 0 ^ 1 ^ 2 ^ x ^ …… ^ 99 ^ 0 ^ 1………… 99 = x
+
+    // 核心代码段
+
+    // for（ int i = 1;
+    // i < arr.length;
+    // i++）
+
+    // arr[0] = arr[0] ^ arr[i] //此时从arr[0]被重新赋值
+
+    // for (int i = 0; i < arr.length - 1; i++)
+
+    //   arr[0] = arr[0] ^ i //此时得到重复的值
+
+    // 第二种
+
+    // for(int i=0;i<arr.length;i++)
+
+    //     for(int j=i+1;j<arr.length;j++)
+
+    //             if(arr[i]==arr[j])
+
+    //                     return arr[i];
+
+    //     第三种
+
+    //     由于0到99加起来是一个固定的值。所以可以用数组的和减去这个固定的值，得到重复值
+
+    //     int sum = 0;
+
+    //     for(int i=0;i<99;i++)
+
+    //        sum = sum+i; //累加0到99
+
+    //     for(int i =1;i<arr.length-1;i++)
+
+    //         arr[0] = arr[0]+arr[i];//得到数组中所有数字的和
+
+
+    //     两者相减，得到异常值
+
+    //         int muti = arr[0] - sum;
+
+    // muti 即为所找出的异常值
+
+    //用原生方法实现拖动一个红色矩形方块
+    // let dragDom = document.getElementById('drag');
+    // let disX1, disX2, disY1, disY2
+    // dragDom.onmousedown = function (e) {
+    //     console.log(e, window.event, '兼容性')
+    //     let ev = e || window.event
+    //     //console.log(e, 'mousedown')
+    //     // console.log(e.clientX,'点击的位置在视口中的横坐标')
+    //     // console.log(e.clientY,'点击的位置在视口中的纵坐标')
+    //     // console.log(dragDom.offsetLeft,'dom的位置在视口中的横坐标')
+    //     // console.log(dragDom.offsetTop,'dom的位置在视口中的纵坐标')
+    //     disX1 = ev.clientX - dragDom.offsetLeft;  //点击位置相对于dom的坐标
+    //     disY1 = ev.clientY - dragDom.offsetTop;
+    //     dragDom.onmousemove = function (e) {
+    //         // console.log(e,'onmousemove')
+    //         let ev = e || window.event
+    //         disX2 = ev.clientX - dragDom.offsetLeft;  //点击位置相对于dom的坐标
+    //         disY2 = ev.clientY - dragDom.offsetTop;
+    //         dragDom.style.top = dragDom.offsetTop + disY2 - disY1 + 'px'
+    //         dragDom.style.left = dragDom.offsetLeft + disX2 - disX1 + 'px'
+    //     }
+    // }
+
+    // document.onmouseup = function () {
+    //     dragDom.onmousemove = null;
+    //     dragDom.onmouseup = null;
+    // }
+
+
+    //拖拽元素的时候，被拖拽元素会触发以下事件dragstart,drag,dragend
+    //当拖拽的元素拖到一个目标元素上时，目标元素会触发以下事件dragenter,dragover,dragleave,drop
+    // let dragDom = document.getElementById('drag');
+    // let disX1, disX2, disY1, disY2
+    // dragDom.ondragstart = function (e) {
+    //   let ev = e || window.event
+    //   // console.log(e.clientX,'点击的位置在视口中的横坐标')
+    //   // console.log(e.clientY,'点击的位置在视口中的纵坐标')
+    //   // console.log(dragDom.offsetLeft,'dom的位置在视口中的横坐标')
+    //   // console.log(dragDom.offsetTop,'dom的位置在视口中的纵坐标')
+    //   disX1 = ev.clientX - dragDom.offsetLeft;  //点击位置相对于dom的坐标
+    //   disY1 = ev.clientY - dragDom.offsetTop;
+    //   // console.log(e,'ondragstart')
+    // }
+    // dragDom.ondrag = function (e) {
+    //   let ev = e || window.event
+    //   console.log(e, 'drag')
+    // }
+    // dragDom.ondragend = function (e) {
+    //   let ev = e || window.event
+    //   disX2 = ev.clientX - dragDom.offsetLeft;  //点击位置相对于dom的坐标
+    //   disY2 = ev.clientY - dragDom.offsetTop;
+    //   dragDom.style.top = dragDom.offsetTop + disY2 - disY1 + 'px'
+    //   dragDom.style.left = dragDom.offsetLeft + disX2 - disX1 + 'px'
+    //   // console.log(e,'ondragend')
+    // }
+
+    // dom.style.left    初始空值，必须在html行内样式定义值才有值，在css样式定义仍为空值
+    // 可读写，是字符串，读写是必须加px，否则无效
+    // js设置之后，有值
+    // 设置非整数值，会保持原样，例如 style.left = 8.22px, 输出style.left，仍然为8.22px
+    // dom.offsetLeft  初始有值，只读，不可写，是数字
+    // 通过style.left设置的非整数值，会四舍五入，例如 style.left = 8.22px, 属性offsetLeft, 会为 8
+    // 包括 content, padding, border的完整盒子宽度，使用时要注意
+    // 转换 dom.style.left = dom.offsetLeft + 'px'
+
+    //最长回文子串
+    //1.动态规划法
+    // 状态定义
+    // dp[i, j]：字符串s从索引i到j的子串是否是回文串
+    // true： s[i, j] 是回文串
+    // false：s[i, j] 不是回文串
+    // 转移方程
+    // dp[i][j] = dp[i + 1][j - 1] && s[i] == s[j]
+    // s[i] == s[j]：说明当前中心可以继续扩张，进而有可能扩大回文串的长度
+    // dp[i + 1][j - 1]：true
+    // 说明s[i, j]的 ** 子串s[i + 1][j - 1] ** 也是回文串
+    // 说明，i是从最大值开始遍历的，j是从最小值开始遍历的
+    // 特殊情况
+    // j - i < 2：意即子串是一个长度为0或1的回文串
+    // 总结
+    // dp[i][j] = s[i] == s[j] && (dp[i + 1][j - 1] || j - i < 2)
+
+    function longestPalindrome(s) {
+      let n = s.length;
+      let res1 = ''
+      let res2 = ''
+      //dynamic planning
+      // let dp = Array.from(new Array(n), value => {
+      //     return new Array(n).fill(0)
+      // }) 
+      let dp1 = Array.from(new Array(n), value =>
+        new Array(n).fill(0)
+      )
+      let dp2 = Array.from(new Array(n), value =>
+        new Array(n).fill(0)
+      )
+      //错误遍历
+      for (let i = 0; i < n; i++) {
+        for (let j = i; j < n; j++) {
+          if (i === 7 && j === 10) {
+            console.log(s[i], s[j], dp1[i + 1][j - 1],
+              '..........................') //此时dp1[i + 1][j - 1]为0 所以i要从大到小 j要从小到大
+          }
+          dp1[i][j] = s[i] == s[j] && (j - i < 2 || dp1[i + 1][j - 1]);
+          if (dp1[i][j] && j - i + 1 > res1.length) {
+            res1 = s.substring(i, j + 1);
+            console.log(res1, i, j, 'res1')
+          }
+        }
+      }
+      //正确遍历
+      for (let i = n - 1; i >= 0; i--) {
+        for (let j = i; j < n; j++) {
+          dp2[i][j] = s[i] == s[j] && (j - i < 2 || dp2[i + 1][j - 1]);
+          if (dp2[i][j] && j - i + 1 > res2.length) {
+            res2 = s.substring(i, j + 1);
+            console.log(res2, i, j, 'res2')
+          }
+        }
+      }
+      console.log(dp1, dp2, res1, res2, 'dp')
+
+    }
+
+    //2.中心扩展法
+    //       思路
+    // 回文串一定是对称的
+    // 每次选择一个中心，进行中心向两边扩展比较左右字符是否相等
+    // 中心点的选取有两种
+    // aba，中心点是b
+    // aa，中心点是两个a之间
+    // 所以共有两种组合可能
+    // left：i，right：i
+    // left：i，right：i+1
+    var longestPalindrome = function (s) {
+      if (!s || s.length < 2) {
+        return s;
+      }
+      let start = 0,
+        end = 0;
+      let n = s.length;
+      // 中心扩展法
+      let centerExpend = (left, right) => {
+        while (left >= 0 && right < n && s[left] == s[right]) {
+          left--;
+          right++;
+        }
+        return right - left - 1;
+      }
+      for (let i = 0; i < n; i++) {
+        let len1 = centerExpend(i, i);
+        let len2 = centerExpend(i, i + 1);
+        // 两种组合取最大回文串的长度
+        let maxLen = Math.max(len1, len2);
+        if (maxLen > end - start) {
+          // 更新最大回文串的首尾字符索引
+          start = i - ((maxLen - 1) >> 1); //相当于/2然后Math.floor
+          end = i + (maxLen >> 1);
+        }
+      }
+      return s.substring(start, end + 1);
+    };
+
+
+    //     实现LRU算法:LRU 是 Least Recently Used 的缩写，即最近最少使用，是一种常用的页面置换算法，选择内存中最近最久未使用的页面予以淘汰。
+    // 使用案例
+    // vue 2.6 keep - alive的实现原理和缓存策略法
+    // 多点登录，限制一个账号允许登录 5 个端，那么第 6 个端登录时，就需要挤掉最早登录的那个端。
+    // 实现一个LRU过期算法的KV cache, 所有KV过期间隔相同, 满足如下性质:
+
+    // 最多存储n对KV;
+    // 如果大于n个, 则随意剔除一个已经过期的KV;
+    // 如果没有过期的KV, 则按照LRU的规则剔除一个KV;
+    // 查询时如果已经过期, 则返回空;
+    //1.es5实现的简单LRU算法
+    // var LRUCache = function (capacity) {
+    //   this.cache = new Map();
+    //   this.capacity = capacity;
+    // };
+
+    // LRUCache.prototype.get = function (key) {
+    //   if (this.cache.has(key)) {
+    //     // 存在即更新
+    //     let temp = this.cache.get(key);
+    //     this.cache.delete(key);
+    //     this.cache.set(key, temp);
+    //     return temp;
+    //   }
+    //   return -1;
+    // };
+
+    // LRUCache.prototype.put = function (key, value) {
+    //   if (this.cache.has(key)) {
+    //     // 存在即更新（删除后加入）
+    //     this.cache.delete(key);
+    //   } else if (this.cache.size >= this.capacity) {
+    //     // 不存在即加入
+    //     // 缓存超过最大值，则移除最近没有使用的
+    //     this.cache.delete(this.cache.keys().next().value);
+    //   }
+    //   this.cache.set(key, value);
+    // };
+    //2.es6实现的LRU算法
+    class LRUCache {
+      constructor(capacity, intervalTime) {
+        this.cache = new Map();
+        this.capacity = capacity;
+        this.intervalTime = intervalTime;
+      }
+      get(key) {
+        if (!this.cache.has(key)) {
+          return null
+        }
+        const tempValue = this.cache.get(key)
+        this.cache.delete(key);
+        if (Date.now() - tempValue.time > this.intervalTime) {
+          return null
+        }
+        this.cache.set(key, {
+          value: tempValue.value,
+          time: Date.now()
+        })
+        return tempValue.value
+      }
+      put(key, value) {
+        if (this.cache.has(key)) {
+          this.cache.delete(key)
+        }
+        if (this.cache.size >= capacity) { //满了
+          const keys = this.cache.keys()
+          this.cache.delete(keys.next().value)
+        }
+        this.cache.set(key, {
+          value,
+          time: Date.now()
+        })
+      }
+    }
+    //复制代码巧妙地利用了Map结构的key是有序的这个特点。普通Object的key是无序的。
+
+    // 如何监控网页崩溃？
+    // 基于 Service Worker 的崩溃统计方案
+    // 随着 PWA 概念的流行，大家对 Service Worker 也逐渐熟悉起来。基于以下原因，我们可以使用 Service Worker 来实现网页崩溃的监控：
+
+    // Service Worker 有自己独立的工作线程，与网页区分开，网页崩溃了，Service Worker 一般情况下不会崩溃；
+    // Service Worker 生命周期一般要比网页还要长，可以用来监控网页的状态；
+    // 网页可以通过navigator.serviceWorker.controller.postMessage API 向掌管自己的 SW 发送消息。
+
+    // 基于以上几点，我们可以实现一种基于心跳检测的监控方案：
+
+    // p1：网页加载后，通过postMessageAPI 每5s给 sw 发送一个心跳，表示自己的在线，sw 将在线的网页登记下来，更新登记时间；
+    // p2：网页在beforeunload时，通过postMessageAPI 告知自己已经正常关闭，sw 将登记的网页清除；
+    // p3：如果网页在运行的过程中 crash 了，sw 中的running状态将不会被清除，更新时间停留在奔溃前的最后一次心跳；
+    // sw：Service Worker 每10s查看一遍登记中的网页，发现登记时间已经超出了一定时间（比如 15s）即可判定该网页 crash 了。
+
+    // 6.求代码输出，并说出为什么
+    // var obj = {
+    //     '2':3,
+    //     '3':4,
+    //     'length':2,
+    //     'splice':Array.prototype.splice,
+    //     'push':Array.prototype.push
+    // }
+    // obj.push(1)
+    // obj.push(2)
+    // obj.push(3)
+    // console.log(obj)
+    // obj有长度，相当于类数组，调用数组的push，
+    // 会在数组的最后加一项，第一次调用，相当于长度变为3，
+    // 那么下标为2的那一项被赋值为1，下标是2，当其作为对象的key值的时候，
+    // 会隐式调用toString方法转为字符串2，则和obj本来有的key '2'相同，
+    // 原来的key为2的value就被覆盖了。以此类推后面的2个push。
+
+    //PresentationRequest
+
+    //最长回文子序列
+    //给定一个字符串s，找到其中最长的回文子序列。可以假设s的最大长度为1000。
+    var longestPalindromeSubseq = function (s) {
+      const dp = Array.from(new Array(s.length), () => new Array(s.length).fill(0))
+      const len = s.length
+      for (let i = len - 1; i >= 0; i--) {
+        for (let j = i; j < len; j++) {
+          if (i == j) {
+            dp[j][j] = 1
+            continue
+          }
+          if (s[i] == s[j]) {
+            dp[i][j] = dp[i + 1][j - 1] + 2
+          } else {
+            dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1])
+          }
+        }
+      }
+      return dp[0][len - 1]
+    };
+
+    //写一个正则，根据name取cookie中的值。
+    function get(name) {
+      var reg = new RegExp(name + '=([^;]*)?(;|$)');
+      //var reg = new RegExp(name + '=[^;]*;');   我认为正则这么写
+      var res = reg.exec(document.cookie);
+      if (!res || !res[1]) return '';
+      try {
+        if (/(%[0-9A-F]{2}){2,}/.test(res)) { //utf8编码
+          return decodeURIComponent(res);
+        } else { //unicode编码
+          return unescape(res);
+        }
+      } catch (e) {
+        return unescape(res);
+      }
+    }
+
+    // function getCookie(cookieName) {
+    //     var allcookies = document.cookie;
+    //     var cookiePos = allcookies.indexOf(cookieName); //索引的长度
+    //     if (cookiePos != -1) {
+    //         // 把cookie_pos放在值的开始，只要给值加1即可。
+    //         cookiePos += cookieName.length + 1;
+    //         var cookieEnd = allcookies.indexOf(";", cookiePos);
+
+    //         if (cookieEnd == -1) {
+    //             cookieEnd = allcookies.length;
+    //         }
+    //         var value = decodeURI(allcookies.substring(cookiePos, cookieEnd));
+    //     }
+    //     return value;
+    // }
+
+    //杨辉三角
+    // 输入: 5
+    // 输出:
+    // [
+    //      [1],
+    //     [1,1],
+    //    [1,2,1],
+    //   [1,3,3,1],
+    //  [1,4,6,4,1]
+    // ]
+    var generate = function (numRows) {
+      let res = []
+      for (let i = 1; i <= numRows; i++) {
+        let temp = []
+        for (let j = 0; j < i; j++) {
+          if (j === 0 || j === i - 1) {
+            temp.push(1)
+          } else {
+            temp.push(res[i - 2][j - 1] + res[i - 2][j])
+          }
+        }
+        res.push(temp)
+      }
+      return res
+    }
+    // console.log(generate(6), '杨辉三角')
+
+    // 给定两个数组，编写一个函数来计算它们的交集。
+
+    // 示例 1:
+
+    // 输入: nums1 = [1, 2, 2, 1], nums2 = [2, 2]
+    // 输出: [2, 2]
+    // 示例 2:
+
+    // 输入: nums1 = [4, 9, 5], nums2 = [9, 4, 9, 8, 4]
+    // 输出: [4, 9]
+    // 说明：
+
+    // 输出结果中每个元素出现的次数，应与元素在两个数组中出现的次数一致。
+    // 我们可以不考虑输出结果的顺序。
+    // 进阶:
+
+    // 如果给定的数组已经排好序呢？你将如何优化你的算法？
+    // 如果 nums1 的大小比 nums2 小很多，哪种方法更优？
+    // 如果 nums2 的元素存储在磁盘上，磁盘内存是有限的，并且你不能一次加载所有的元素到内存中，你该怎么办？
+    //双指针法
+    var intersect = function (nums1, nums2) {
+      nums1 = nums1.sort((a, b) => a - b);
+      nums2 = nums2.sort((a, b) => a - b);
+      let i = 0;
+      let j = 0;
+      let res = [];
+      while (i < nums1.length && j < nums2.length) {
+        if (nums1[i] < nums2[j]) {
+          i++;
+        } else if (nums1[i] > nums2[j]) {
+          j++;
+        } else {
+          res.push(nums1[i]);
+          i++;
+          j++;
+        }
+      }
+      return res;
+    };
+    //哈希表
+    var intersect = function (nums1, nums2) {
+      let hash = new Map()
+      let res = []
+      for (let i = 0; i < nums1.length; i++) {
+        if (hash.has(nums1[i])) {
+          hash.set(nums1[i], hash.get(nums1[i]) + 1)
+        } else {
+          hash.set(nums1[i], 1)
+        }
+      }
+
+      for (let i = 0; i < nums2.length; i++) {
+        let temp = nums2[i]
+        let hashKey = hash.get(temp)
+        if (hash.has(temp)) {
+          res.push(temp)
+          if (hashKey > 1) {
+            hash.set(temp, hashKey - 1)
+          } else {
+            hash.delete(temp)
+          }
+        }
+      }
+
+      return res
+    };
+
+    //判断一个链表是否为回文链表
+    var isPalindrome = function (head) {
+      if (head === null || head.next === null) return true;
+      let mid = head;
+      let pre = null;
+      let reversed = null;
+      // end每次走两格，这个循环的时间复杂度为O(n/2)
+      while (head !== null && head.next !== null) {
+        // 这个赋值要在mid被修改前提前
+        pre = mid
+        // 遍历链表
+        mid = mid.next
+        head = head.next.next
+        // 反转前面部分的节点，并用reversed保存
+        pre.next = reversed
+        reversed = pre
+      }
+      // 奇数mid往后走一位
+      if (head) mid = mid.next
+      while (mid) {
+        if (reversed.val !== mid.val) return false
+        reversed = reversed.next
+        mid = mid.next
+      }
+      return true
+    };
+
+    //排序链表
+    var sortList = function (head) {
+      function ListNode(val) {
+        this.next = null
+        this.val = val
+      }
+      // function merge(left, right) {  //方法1:合并两个有序链表
+      //   let res = new ListNode(0);
+      //   let pre = res;   //因为pre一直跟着链表移动所以需要 用一个res记录链表的起点
+      //   while (left && right) {
+      //     if (left.val <= right.val) {
+      //       pre.next = left;
+      //       left = left.next;
+      //     } else {
+      //       pre.next = right;
+      //       right = right.next;
+      //     }
+      //     pre = pre.next;
+      //   }
+      //   pre.next = left ? left : right;
+      //   return res.next;
+      // }
+
+      function merge(l1, l2) {   //方法2:合并两个有序链表
+        if (l1 === null) {
+          return l2
+        }
+        if (l2 === null) {
+          return l1
+        }
+        if (l1.val <= l2.val) {
+          l1.next = merge(l1.next, l2)
+          return l1
+        }
+        if (l1.val > l2.val) {
+          l2.next = merge(l1, l2.next)
+          return l2
+        }
+      }
+      function mergeSort(head) {
+        if (!head || !head.next) {
+          return head
+        }
+        let left //链表的中点前一部分
+        let right //链表中点后一部分
+        //  let mid //中间点
+        //慢指针走一步  快指针走两步  快指针到达中点时 慢指针的位置就是我们认为的中点
+        let fast = head //开始快慢指针均位于起点  
+        let slow = head
+        while (fast.next && fast.next.next) {
+          slow = slow.next
+          fast = fast.next.next
+        }
+        //slow即是中间点
+        right = slow.next
+        slow.next = null
+        left = head  //不能写left = slow因为slow一直在移动
+        return merge(mergeSort(left), mergeSort(right))
+      }
+      return mergeSort(head)
+    }
+
+    //有效三角形的个数
+    // 给定一个包含非负整数的数组， 你的任务是统计其中可以组成三角形三条边的三元组个数。
+
+    // 示例 1:
+
+    //   输入: [2, 2, 3, 4]
+    // 输出: 3
+    // 解释:
+    //   有效的组合是:
+    //   2, 3, 4(使用第一个 2)
+    // 2, 3, 4(使用第二个 2)
+    // 2, 2, 3
+    // 注意:
+
+    //   数组长度不超过1000。
+    // 数组里整数的范围为[0, 1000]。
+    var triangleNumber = function (nums) {
+      nums.sort((a, b) => a - b);
+      let value = 0;
+      for (let i = nums.length; i > 0; i--) {
+        let left = 0;
+        let right = i - 1;
+        while (left < right) {
+          if (nums[left] + nums[right] > nums[i]) {
+            value = value + (right - left);
+            right = right - 1;
+          } else {
+            left = left + 1;
+          }
+        }
+      }
+      return value;
+    };
+
+    //两种以上方式实现已知或者未知宽度的垂直水平居中。
+    // // 1
+    // .wraper {
+    //   position: relative;
+    //   .box {
+    //     position: absolute;
+    //     top: 50 % ;
+    //     left: 50 % ;
+    //     width: 100 px;
+    //     height: 100 px;
+    //     margin: -50 px 0 0 - 50 px;
+    //   }
+    // }
+    // // 2
+    // .wraper {
+    //   position: relative;
+    //   .box {
+    //     position: absolute;
+    //     top: 50 % ;
+    //     left: 50 % ;
+    //     transform: translate(-50 % , -50 % );
+    //   }
+    // }
+    // // 3
+    // .wrapper{
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // }
+    // // 4
+    // .wraper {
+    //   display: table;
+    //   .box {
+    //     display: table - cell;
+    //     vertical - align: middle;
+    //   }
+    // }
+
+    //给定一个升序整型数组[0,1,2,4,5,7,13,15,16],找出其中连续出现的数字区间，输出为["0->2","4->5","7","13","15->16"]
+    function summaryRanges(arr) {
+      let res = []
+      let left = arr[0]
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i + 1] - arr[i] !== 1) {
+          if (left === arr[i]) {
+            res.push(left + '')
+          } else {
+            res.push(left + '->' + arr[i])
+          }
+          left = arr[i + 1]
+        }
+      }
+      return res
+    }
+    // console.log(summaryRanges([0,1,2,4,5,7,13,15,16]))
+
+    //数组中的第K个最大元素
+    // 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+
+    // 示例 1:
+
+    // 输入: [3,2,1,5,6,4] 和 k = 2
+    // 输出: 5
+    // 示例 2:
+
+    // 输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+    // 输出: 4
+    // 说明:
+
+    // 你可以假设 k 总是有效的，且 1 ≤ k ≤ 数组的长度。
+    // 方法1冒泡排序冒泡k轮
+    //var findKthLargest_bubbleSort = function (nums, k) {
+    //   let len = nums.length
+    //   for (let i = len - 1; i > len - k - 1; i--) {
+    //     for (let j = 0; j < i; j++) {
+    //       if (nums[j] > nums[j + 1]) {
+    //         let temp = nums[j]
+    //         nums[j] = nums[j + 1]
+    //         nums[j + 1] = temp
+    //       }
+    //     }
+    //   }
+    //   return nums[len - k]
+    // };
+    // 方法2参考快排序的快速查找
+    var findKthLargest = function (nums, k) {
+      let to = 0,
+        from = nums.length - 1,
+        key = nums[to]; //确定一个基准值
+      //运用了快速排序思想 但是不都排完
+      function sort(to, from) {
+        let i = to,
+          j = from;
+        while (i < j) {
+          while (nums[i] > key && i < j) { //找到第一个比key小的值
+            i++
+          }
+          while (nums[j] <= key && i < j) { //找到第一个比key大的值
+            j--
+          }
+          [nums[i], nums[j]] = [nums[j], nums[i]] //比key大的数放在左边  比key小的数放在右边
+        }
+        [nums[to], nums[j]] = [nums[j], nums[to]] //把key放在中间
+        if (j === k - 1) { //j左边的始终比结果大 右边的始终比结果小
+          return nums[j]
+        }
+        if (j > k - 1) {
+          return sort(to, j - 1)
+        } else {
+          return sort(j + 1, from)
+        }
+      }
+      return sort(to, from)
+    };
+
+    //方法3js构造大顶堆 - 堆排序
+    var findKthLargest = function (nums, k) {
+      function swap(arr, i, j) {
+        var temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+      }
+
+      function heapify(arr, x, length) {
+        var l = 2 * x + 1;
+        var r = 2 * x + 2;
+        var largest = x;
+        if (l < length && arr[l] > arr[largest]) {
+          largest = l;
+        }
+        if (r < length && arr[r] > arr[largest]) {
+          largest = r;
+        }
+        if (largest != x) {
+          swap(arr, x, largest);
+          // 递归交换以下的是否也建好堆.
+          heapify(arr, largest, length);
+        }
+      }
+      var size = nums.length;
+      // 建立堆
+      for (var i = parseInt(size / 2) + 1; i >= 0; i--) {
+        heapify(nums, i, size);
+      }
+      // 排序
+      for (var j = size - 1; j >= size - k; j--) {
+        // 得到本次的最大，将最大的与最后一个交换位子
+        swap(nums, 0, j);
+        heapify(nums, 0, j);
+      }
+      return nums[size - k];
+    }
+
+    //最大间距
+    // 给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
+
+    // 如果数组元素个数小于 2，则返回 0。
+
+    // 示例 1:
+
+    // 输入: [3,6,9,1]
+    // 输出: 3
+    // 解释: 排序后的数组是 [1,3,6,9], 其中相邻元素 (3,6) 和 (6,9) 之间都存在最大差值 3。
+    // 示例 2:
+
+    // 输入: [10]
+    // 输出: 0
+    // 解释: 数组元素个数小于 2，因此返回 0。
+    //解法二：桶 + 鸽笼原理
+    var maximumGap = function (nums) {
+      let n = nums.length;
+      if (n < 2) return 0;
+      let min = Math.min(...nums);
+      let max = Math.max(...nums);
+      if (max - min == 0) return 0;
+      let gap = Math.ceil((max - min) / (n - 1));
+      let bucketsMin = new Array(n - 1).fill(Number.MAX_SAFE_INTEGER);
+      let bucketsMax = new Array(n - 1).fill(-1);
+      for (let i = 0; i < nums.length; i++) {
+        if (nums[i] == min || nums[i] == max) continue;
+        let idx = parseInt((nums[i] - min) / gap);
+        bucketsMin[idx] = Math.min(nums[i], bucketsMin[idx]);
+        bucketsMax[idx] = Math.max(nums[i], bucketsMax[idx]);
+      }
+      let maxGap = 0;
+      let pre = min;
+      for (let i = 0; i < n - 1; i++) {
+        if (bucketsMax[i] == -1) continue;
+        maxGap = Math.max(maxGap, bucketsMin[i] - pre);
+        pre = bucketsMax[i];
+      }
+      maxGap = Math.max(maxGap, max - pre);
+      return maxGap;
+    };
+    //解法三：基数排序
+    var maximumGap = function (nums) {
+      let n = nums.length;
+      if (n < 2) return 0;
+      let maxDigit = Math.max(...nums).toString().length;
+      let radixSort = (arr, maxDigit) => {
+        let digit = 1;
+        let mod = 10;
+        let bucket = new Array(10);
+        for (let i = 0; i < maxDigit; i++) {
+          for (let j = 0; j < arr.length; j++) {
+            let index = Math.floor(arr[j] / digit) % mod;
+            if (bucket[index] == null) bucket[index] = [];
+            bucket[index].push(arr[j]);
+          }
+          let pos = 0;
+          for (let r = 0; r < bucket.length; r++) {
+            let val = null;
+            if (bucket[r]) {
+              while ((val = bucket[r].shift()) != null) {
+                arr[pos++] = val;
+              }
+            }
+          }
+          digit *= 10;
+        }
+      }
+      radixSort(nums, maxDigit);
+      let max = -1;
+      for (let j = 1; j < n; j++) {
+        let val = nums[j] - nums[j - 1];
+        if (val > max) {
+          max = val;
+        }
+      }
+      return max;
+    };
+
+
+    //慕课网
+    // 第1章 课程导学
+    // 1-1 课程导学 (08:55)
+    // 1-2 学习姿势 (09:11)
+    // 1-3 说明与承诺 (10:57)
+    // 第2章 基础算法之“字符串类”
+    // 2-1 环境搭建 (17:29)
+    // 2-2 反转单词原理讲解 (22:59)
+    // 2-3 反转单词代码演示 (05:23)
+    // 2-4 计算子串原理讲解 (18:31)
+    // 2-5 计算子串代码演示 (20:47)
+    // 第3章 基础算法之“数组类”
+    // 3-1 数组题目介绍 (02:01)
+    // 3-2 电话号码组合-原理讲解 (13:11)
+    // 3-3 电话号码组合-代码演示 (22:05)
+    // 3-4 卡牌分组-原理讲解 (10:59)
+    // 3-5 卡牌分组-代码演示 (15:28)
+    // 3-6 种花问题-原理讲解 (18:25)
+    // 3-7 种花问题-代码演示 (02:43)
+    // 3-8 格雷编码-原理讲解 (03:39)
+    // 3-9 格雷编码-代码演示 (15:41)
+    // 第4章 基础算法之“正则类”
+    // 4-1 重复的子串-原理讲解 (08:02)
+    // 4-2 重复的子串-代码演示 (05:42)
+    // 4-3 正则表达式匹配-原理讲解 (15:28)
+    // 4-4 正则表达式匹配-代码演示 (14:17)
+    // 第5章 基础算法之“排序类”
+    // 5-1 冒泡排序 (20:55)
+    // 5-2 选择排序 (12:58)
+    // 5-3 奇偶排序 (13:36)
+    // 5-4 第K个最大值（1） (04:49)
+    // 5-5 第K个最大值（2） (12:43)
+    // 5-6 最大区间（1） (12:30)
+    // 5-7 最大区间（2） (14:39)
+    // 5-8 缺失的第一个正数（1） (23:38)
+    // 5-9 缺失的第一个正数（2） (11:08)
+    // 5-10 快速排序-基础算法 (10:44)
+    // 5-11 快速排序-高级算法 (23:52)
+    // 第6章 基础算法之“递归类”
+    // 6-1 复原IP地址-原理讲解 (14:01)
+    // 6-2 复原IP地址-代码演示 (15:52)
+    // 6-3 关联字符串-原理讲解 (06:50)
+    // 6-4 关联字符串-代码演示 (10:05)
+    // 第7章 数据结构之“栈”
+    // 7-1 棒球比赛-原理讲解 (11:11)
+    // 7-2 棒球比赛-代码实操 (11:45)
+    // 7-3 最大矩形-原理讲解 (07:53)
+    // 7-4 最大矩阵-代码实操（1） (21:26)
+    // 7-5 最大矩阵-代码实操（2） (12:59)
+    // 第8章 数据结构之“队列”
+    // 8-1 循环队列-原理讲解 (07:26)
+    // 8-2 循环队列-代码实操 (18:18)
+    // 8-3 任务队列-原理讲解 (11:10)
+    // 8-4 任务队列-代码实操 (17:25)
+    // 第9章 数据结构之“链表”
+    // 9-1 排序链表-原理讲解 (14:53)
+    // 9-2 排序链表-代码实操 (25:21)
+    // 9-3 环形链表-原理讲解 (06:41)
+    // 9-4 环形链表-代码实操 (09:38)
+    // 第10章 数据结构之“矩阵”
+    // 10-1 螺旋矩阵-原理讲解 (09:28)
+    // 10-2 螺旋矩阵-代码实操 (10:59)
+    // 10-3 旋转图像-原理讲解 (09:09)
+    // 10-4 旋转图像-代码实操 (11:41)
+    // 第11章 数据结构之“二叉树”
+    // 11-1 对称二叉树-原理讲解 (11:45)
+    // 11-2 对称二叉树-代码实操 (28:10)
+    // 11-3 验证二叉搜索树-原理讲解 (05:56)
+    // 11-4 验证二叉搜索树-代码实操 (17:58)
+    // 第12章 数据结构之“堆”
+    // 12-1 堆排序-原理讲解 (16:45)
+    // 12-2 堆排序-代码演示（1） (23:43)
+    // 12-3 堆排序-代码演示（2） (16:00)
+    // 12-4 超级丑数-原理讲解 (10:05)
+    // 12-5 超级丑数-代码演示（1) (28:58)
+    // 12-6 超级丑数-代码演示（2） (10:18)
+    // 第13章 进阶算法之“贪婪算法”
+    // 13-1 进阶算法介绍 (01:49)
+    // 13-2 买卖股票最佳时机-原理讲解 (11:30)
+    // 13-3 买卖股票最佳时机-代码实操 (09:59)
+    // 13-4 柠檬水找零-原理讲解 (17:05)
+    // 13-5 柠檬水找零-代码实操 (04:12)
+    // 第14章 进阶算法之“动态规划”
+    // 14-1 不同路径II-原理讲解 (18:46)
+    // 14-2 不同路径II-代码实操 (11:48)
+    // 14-3 k站中转站-原理讲解 (09:17)
+    // 14-4 k站中转站-代码实操 (12:52)
+    // 14-5 课程总结 (08:32)
+    // 第15章 直播视频《前端人的危机如何破解》
+    // 15-1 内容安排 (11:26)
+    // 15-2 如何学习（入门级） (13:46)
+    // 15-3 如何面试（入门级） (20:35)
+    // 15-4 如何晋升（入门级） (09:29)
+    // 15-5 如何学习（中高级） (10:47)
+    // 15-6 如何晋升 一（中高级） (12:28)
+    // 15-7 如何晋升 二（中高级） (06:21)
+  </script>
+</body>
+
+</html>
