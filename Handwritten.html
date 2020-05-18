@@ -1633,6 +1633,19 @@
 
     console.log(findMax(Binary.root), '二叉树的最大值')
 
+    //判断是否为平衡二叉树
+    //所谓的平衡二叉树，就是指数中任一结点的左右子树深度相差不超过1。
+    var isBalanced = function (root) {
+      function getHeight(node) {
+        if (node === null) return 0;
+        return Math.max(getHeight(node.left), getHeight(node.right)) + 1;
+      }
+
+      if (root === null) return true;
+      return isBalanced(root.left) && isBalanced(root.right) &&
+        Math.abs(getHeight(root.left) - getHeight(root.right)) < 2;
+    };
+
     //实现一个链表
     function LinkList() {
       function Node(value) {
@@ -1870,6 +1883,95 @@
     //     }
     //     return null
     // };
+
+ //判断一个链表是否为回文链表
+ var isPalindrome = function (head) {
+      if (head === null || head.next === null) return true;
+      let mid = head;
+      let pre = null;
+      let reversed = null;
+      // end每次走两格，这个循环的时间复杂度为O(n/2)
+      while (head !== null && head.next !== null) {
+        // 这个赋值要在mid被修改前提前
+        pre = mid
+        // 遍历链表
+        mid = mid.next
+        head = head.next.next
+        // 反转前面部分的节点，并用reversed保存
+        pre.next = reversed
+        reversed = pre
+      }
+      // 奇数mid往后走一位
+      if (head) mid = mid.next
+      while (mid) {
+        if (reversed.val !== mid.val) return false
+        reversed = reversed.next
+        mid = mid.next
+      }
+      return true
+    };
+
+    //排序链表
+    var sortList = function (head) {
+      function ListNode(val) {
+        this.next = null
+        this.val = val
+      }
+      // function merge(left, right) {  //方法1:合并两个有序链表
+      //   let res = new ListNode(0);
+      //   let pre = res;   //因为pre一直跟着链表移动所以需要 用一个res记录链表的起点
+      //   while (left && right) {
+      //     if (left.val <= right.val) {
+      //       pre.next = left;
+      //       left = left.next;
+      //     } else {
+      //       pre.next = right;
+      //       right = right.next;
+      //     }
+      //     pre = pre.next;
+      //   }
+      //   pre.next = left ? left : right;
+      //   return res.next;
+      // }
+
+      function merge(l1, l2) {   //方法2:合并两个有序链表
+        if (l1 === null) {
+          return l2
+        }
+        if (l2 === null) {
+          return l1
+        }
+        if (l1.val <= l2.val) {
+          l1.next = merge(l1.next, l2)
+          return l1
+        }
+        if (l1.val > l2.val) {
+          l2.next = merge(l1, l2.next)
+          return l2
+        }
+      }
+      function mergeSort(head) {
+        if (!head || !head.next) {
+          return head
+        }
+        let left //链表的中点前一部分
+        let right //链表中点后一部分
+        //  let mid //中间点
+        //慢指针走一步  快指针走两步  快指针到达中点时 慢指针的位置就是我们认为的中点
+        let fast = head //开始快慢指针均位于起点  
+        let slow = head
+        while (fast.next && fast.next.next) {
+          slow = slow.next
+          fast = fast.next.next
+        }
+        //slow即是中间点
+        right = slow.next
+        slow.next = null
+        left = head  //不能写left = slow因为slow一直在移动
+        return merge(mergeSort(left), mergeSort(right))
+      }
+      return mergeSort(head)
+    }
 
     //哈希表
     function HashTable() {
@@ -2583,18 +2685,7 @@
       return arr
     }
 
-    //判断是否为平衡二叉树
-    //所谓的平衡二叉树，就是指数中任一结点的左右子树深度相差不超过1。
-    var isBalanced = function (root) {
-      function getHeight(node) {
-        if (node === null) return 0;
-        return Math.max(getHeight(node.left), getHeight(node.right)) + 1;
-      }
-
-      if (root === null) return true;
-      return isBalanced(root.left) && isBalanced(root.right) &&
-        Math.abs(getHeight(root.left) - getHeight(root.right)) < 2;
-    };
+    
 
     //15. 三数之和
     // 给你一个包含 n 个整数的数组 nums， 判断 nums 中是否存在三个元素 a， b， c，
@@ -3775,95 +3866,6 @@
 
       return res
     };
-
-    //判断一个链表是否为回文链表
-    var isPalindrome = function (head) {
-      if (head === null || head.next === null) return true;
-      let mid = head;
-      let pre = null;
-      let reversed = null;
-      // end每次走两格，这个循环的时间复杂度为O(n/2)
-      while (head !== null && head.next !== null) {
-        // 这个赋值要在mid被修改前提前
-        pre = mid
-        // 遍历链表
-        mid = mid.next
-        head = head.next.next
-        // 反转前面部分的节点，并用reversed保存
-        pre.next = reversed
-        reversed = pre
-      }
-      // 奇数mid往后走一位
-      if (head) mid = mid.next
-      while (mid) {
-        if (reversed.val !== mid.val) return false
-        reversed = reversed.next
-        mid = mid.next
-      }
-      return true
-    };
-
-    //排序链表
-    var sortList = function (head) {
-      function ListNode(val) {
-        this.next = null
-        this.val = val
-      }
-      // function merge(left, right) {  //方法1:合并两个有序链表
-      //   let res = new ListNode(0);
-      //   let pre = res;   //因为pre一直跟着链表移动所以需要 用一个res记录链表的起点
-      //   while (left && right) {
-      //     if (left.val <= right.val) {
-      //       pre.next = left;
-      //       left = left.next;
-      //     } else {
-      //       pre.next = right;
-      //       right = right.next;
-      //     }
-      //     pre = pre.next;
-      //   }
-      //   pre.next = left ? left : right;
-      //   return res.next;
-      // }
-
-      function merge(l1, l2) {   //方法2:合并两个有序链表
-        if (l1 === null) {
-          return l2
-        }
-        if (l2 === null) {
-          return l1
-        }
-        if (l1.val <= l2.val) {
-          l1.next = merge(l1.next, l2)
-          return l1
-        }
-        if (l1.val > l2.val) {
-          l2.next = merge(l1, l2.next)
-          return l2
-        }
-      }
-      function mergeSort(head) {
-        if (!head || !head.next) {
-          return head
-        }
-        let left //链表的中点前一部分
-        let right //链表中点后一部分
-        //  let mid //中间点
-        //慢指针走一步  快指针走两步  快指针到达中点时 慢指针的位置就是我们认为的中点
-        let fast = head //开始快慢指针均位于起点  
-        let slow = head
-        while (fast.next && fast.next.next) {
-          slow = slow.next
-          fast = fast.next.next
-        }
-        //slow即是中间点
-        right = slow.next
-        slow.next = null
-        left = head  //不能写left = slow因为slow一直在移动
-        return merge(mergeSort(left), mergeSort(right))
-      }
-      return mergeSort(head)
-    }
 
     //有效三角形的个数
     // 给定一个包含非负整数的数组， 你的任务是统计其中可以组成三角形三条边的三元组个数。
