@@ -721,6 +721,44 @@
 
     // arr = [2, 1, 5, 8, 3, 7, 4, 6, 9];
     // console.log(quickSort(arr)); //[1, 2, 3, 4, 5, 6, 7, 8, 9]
+    //合并两个有序数组
+    function Merger(a, b) {
+      let len1 = a && a.length //a ?.length //链判断运算符
+      let len2 = b && b.length //b ?.length
+      let index1 = 0
+      let index2 = 0
+      let arr = []
+      while (index1 < len1 && index2 < len2) { //保证有一个有序数组已经遍历完
+        if (a[index1] > b[index2]) {
+          arr.push(b[index2++])
+        } else {
+          arr.push(a[index1++])
+        }
+      }
+      while (index1 < len1) {
+        arr.push(a[index1++])
+      }
+      while (index2 < len2) {
+        arr.push(b[index2++])
+      }
+      return arr
+    }
+
+    // console.log(Merger([2, 5, 9],[1,6,8,11]))  无序数组为什么不能用这个方法??
+    //归并排序
+    function mergeSort(arr = [1, 9, 7, 5, 6, 4, 9, 8, 1, 3]) {
+      if (arr.length === 1) {
+        return arr
+      }
+      let mid = Math.floor(arr.length / 2)
+      let left = arr.slice(0, mid)
+      let right = arr.slice(mid)
+      // return mergeSort(left).concat(mergeSort(right))
+      return Merger(mergeSort(left), mergeSort(right))
+    }
+
+    // console.log(mergeSort(),'归并排序')
+
     //手写迭代器
     var it = makeIterator(["a", "b"]);
 
@@ -1884,8 +1922,8 @@
     //     return null
     // };
 
- //判断一个链表是否为回文链表
- var isPalindrome = function (head) {
+    //判断一个链表是否为回文链表
+    var isPalindrome = function (head) {
       if (head === null || head.next === null) return true;
       let mid = head;
       let pre = null;
@@ -2192,43 +2230,6 @@
       return sum;
     }
 
-    //合并两个有序数组
-    function Merger(a, b) {
-      let len1 = a && a.length //a ?.length //链判断运算符
-      let len2 = b && b.length //b ?.length
-      let index1 = 0
-      let index2 = 0
-      let arr = []
-      while (index1 < len1 && index2 < len2) { //保证有一个有序数组已经遍历完
-        if (a[index1] > b[index2]) {
-          arr.push(b[index2++])
-        } else {
-          arr.push(a[index1++])
-        }
-      }
-      while (index1 < len1) {
-        arr.push(a[index1++])
-      }
-      while (index2 < len2) {
-        arr.push(b[index2++])
-      }
-      return arr
-    }
-
-    // console.log(Merger([2, 5, 9],[1,6,8,11]))  无序数组为什么不能用这个方法??
-    //归并排序
-    function mergeSort(arr = [1, 9, 7, 5, 6, 4, 9, 8, 1, 3]) {
-      if (arr.length === 1) {
-        return arr
-      }
-      let mid = Math.floor(arr.length / 2)
-      let left = arr.slice(0, mid)
-      let right = arr.slice(mid)
-      // return mergeSort(left).concat(mergeSort(right))
-      return Merger(mergeSort(left), mergeSort(right))
-    }
-
-    // console.log(mergeSort(),'归并排序')
     //判断回文字符串
     // function palindrome(str) {
     //     return str === str.split('').reverse().join('')
@@ -2685,7 +2686,7 @@
       return arr
     }
 
-    
+
 
     //15. 三数之和
     // 给你一个包含 n 个整数的数组 nums， 判断 nums 中是否存在三个元素 a， b， c，
