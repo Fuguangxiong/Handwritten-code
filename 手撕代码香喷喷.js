@@ -170,7 +170,7 @@ let b = new SubType()
 //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
 //原型式集成
 function object(o) {
-    function F() {}
+    function F() { }
 
     F.prototype = o
     return new F()
@@ -181,7 +181,7 @@ function object(o) {
 //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
 //寄生式集成
 function object(o) {
-    function F() {}
+    function F() { }
 
     F.prototype = o
     return new F()
@@ -189,7 +189,7 @@ function object(o) {
 
 function createAnother(original) {
     let clone = object(original)
-    clone.sayHi = function () {}
+    clone.sayHi = function () { }
     return clone
 }
 
@@ -637,82 +637,143 @@ function throttle(fn, delay) {
 }
 
 //实现async await
-// 对于 Promise 我们非常熟悉了，进一步延伸到 async await，这是目前开发中非常非常常用的异步处理方式，我们最好是熟悉它的 babel 编译后的源码。
-// 手写 async await 的最简实现（20 行搞定）
 // babel 对于 async await 配合 generator 函数，做的非常巧妙，这里面的思想我们也要去学习，如何递归的处理一个串行的 promise 链？
 // 这个技巧在axios 的源码里也有应用。平常经常用的拦截器，本质上就是一串 promise 的串行执行。
+// 当然，如果你还有余力的话，也可以继续深入的去看 generator 函数的 babel 编译源码。不强制要求，毕竟 generator 函数在开发中已经用的非常少了。
+// const getData = () => new Promise(resolve => setTimeout(() => resolve("data"), 1000))
+// function* testG() {
+//     // await被编译成了yield
+//     const data = yield getData()
+//     console.log('data: ', data);
+//     const data2 = yield getData()
+//     console.log('data2: ', data2);
+//     return 'success'
+// }
+// var gen = testG()
+// var dataPromise = gen.next()
+// console.log(dataPromise,'dataPromise')
+
+// dataPromise.value.then((value1) => {
+//     // data1的value被拿到了 继续调用next并且传递给data
+//     var data2Promise = gen.next(value1)
+//     // console.log('data: ', data);
+//     // 此时就会打印出data
+//     data2Promise.value.then((value2) => {
+//         // data2的value拿到了 继续调用next并且传递value2
+//         gen.next(value2)
+
+//         // console.log('data2: ', data2);
+//         // 此时就会打印出data2
+//     })
+// })
+// const getData = () => new Promise(resolve => setTimeout(() => resolve("data"), 1000))
+// function* testG() {
+//     // await被编译成了yield
+//     const data = yield getData()
+//     console.log('data: ', data);
+//     const data2 = yield getData()
+//     console.log('data2: ', data2);
+//     return 'success'
+// }
+// function asyncToGenerator(generator) {
+//     return function () {
+//         let gen = generator.apply(this, arguments)
+//         return new Promise((resolve, reject) => {
+//             function step(key, arg) {  //key对应generator的next throw方法
+//                 let generatorResult  //储存generator的执行结果
+//                 try {
+//                     generatorResult = gen[key][arg]
+//                 } catch (error) {
+//                     reject(error)
+//                 }
+//                 let { value, done } = generatorResult
+//                 if (!done) {
+//                     return Promise.resolve(value).then(val => {
+//                         step('next', val)
+//                     }, error => {
+//                         step('throw', error)
+//                     })
+//                 } else {
+//                     resolve(value)
+//                 }
+//             }
+//             step('next')
+//         })
+//     }
+// }
+// asyncToGenerator(testG)()
 
 function asyncToGenerator(generatorFunc) {
     // 返回的是一个新的函数
     return function () {
 
-      // 先调用generator函数 生成迭代器
-      // 对应 var gen = testG()
-      const gen = generatorFunc.apply(this, arguments)
+        // 先调用generator函数 生成迭代器
+        // 对应 var gen = testG()
+        const gen = generatorFunc.apply(this, arguments)
 
-      // 返回一个promise 因为外部是用.then的方式 或者await的方式去使用这个函数的返回值的
-      // var test = asyncToGenerator(testG)
-      // test().then(res => console.log(res))
-      return new Promise((resolve, reject) => {
+        // 返回一个promise 因为外部是用.then的方式 或者await的方式去使用这个函数的返回值的
+        // var test = asyncToGenerator(testG)
+        // test().then(res => console.log(res))
+        return new Promise((resolve, reject) => {
 
-        // 内部定义一个step函数 用来一步一步的跨过yield的阻碍
-        // key有next和throw两种取值，分别对应了gen的next和throw方法
-        // arg参数则是用来把promise resolve出来的值交给下一个yield
-        function step(key, arg) {
-          let generatorResult
+            // 内部定义一个step函数 用来一步一步的跨过yield的阻碍
+            // key有next和throw两种取值，分别对应了gen的next和throw方法
+            // arg参数则是用来把promise resolve出来的值交给下一个yield
+            function step(key, arg) {
+                let generatorResult
 
-          // 这个方法需要包裹在try catch中
-          // 如果报错了 就把promise给reject掉 外部通过.catch可以获取到错误
-          try {
-            generatorResult = gen[key](arg)
-          } catch (error) {
-            return reject(error)
-          }
+                // 这个方法需要包裹在try catch中
+                // 如果报错了 就把promise给reject掉 外部通过.catch可以获取到错误
+                try {
+                    generatorResult = gen[key](arg)
+                } catch (error) {
+                    return reject(error)
+                }
 
-          // gen.next() 得到的结果是一个 { value, done } 的结构
-          const {
-            value,
-            done
-          } = generatorResult
+                // gen.next() 得到的结果是一个 { value, done } 的结构
+                const {
+                    value,
+                    done
+                } = generatorResult
 
-          if (done) {
-            // 如果已经完成了 就直接resolve这个promise
-            // 这个done是在最后一次调用next后才会为true
-            // 以本文的例子来说 此时的结果是 { done: true, value: 'success' }
-            // 这个value也就是generator函数最后的返回值
-            return resolve(value)
-          } else {
-            // 除了最后结束的时候外，每次调用gen.next()
-            // 其实是返回 { value: Promise, done: false } 的结构，
-            // 这里要注意的是Promise.resolve可以接受一个promise为参数
-            // 并且这个promise参数被resolve的时候，这个then才会被调用
-            return Promise.resolve(
-              // 这个value对应的是yield后面的promise
-              value
-            ).then(
-              // value这个promise被resove的时候，就会执行next
-              // 并且只要done不是true的时候 就会递归的往下解开promise
-              // 对应gen.next().value.then(value => {
-              //    gen.next(value).value.then(value2 => {
-              //       gen.next() 
-              //
-              //      // 此时done为true了 整个promise被resolve了 
-              //      // 最外部的test().then(res => console.log(res))的then就开始执行了
-              //    })
-              // })
-              function onResolve(val) {
-                step("next", val)
-              },
-              // 如果promise被reject了 就再次进入step函数
-              // 不同的是，这次的try catch中调用的是gen.throw(err)
-              // 那么自然就被catch到 然后把promise给reject掉啦
-              function onReject(err) {
-                step("throw", err)
-              },
-            )
-          }
-        }
-        step("next")
-      })
+                if (done) {
+                    // 如果已经完成了 就直接resolve这个promise
+                    // 这个done是在最后一次调用next后才会为true
+                    // 以本文的例子来说 此时的结果是 { done: true, value: 'success' }
+                    // 这个value也就是generator函数最后的返回值
+                    return resolve(value)
+                } else {
+                    // 除了最后结束的时候外，每次调用gen.next()
+                    // 其实是返回 { value: Promise, done: false } 的结构，
+                    // 这里要注意的是Promise.resolve可以接受一个promise为参数
+                    // 并且这个promise参数被resolve的时候，这个then才会被调用
+                    return Promise.resolve(
+                        // 这个value对应的是yield后面的promise
+                        value
+                    ).then(
+                        // value这个promise被resove的时候，就会执行next
+                        // 并且只要done不是true的时候 就会递归的往下解开promise
+                        // 对应gen.next().value.then(value => {
+                        //    gen.next(value).value.then(value2 => {
+                        //       gen.next() 
+                        //
+                        //      // 此时done为true了 整个promise被resolve了 
+                        //      // 最外部的test().then(res => console.log(res))的then就开始执行了
+                        //    })
+                        // })
+                        function onResolve(val) {
+                            step("next", val)
+                        },
+                        // 如果promise被reject了 就再次进入step函数
+                        // 不同的是，这次的try catch中调用的是gen.throw(err)
+                        // 那么自然就被catch到 然后把promise给reject掉啦
+                        function onReject(err) {
+                            step("throw", err)
+                        },
+                    )
+                }
+            }
+            step("next")
+        })
     }
-  }
+}

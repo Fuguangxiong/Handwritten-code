@@ -317,7 +317,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -328,7 +328,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -336,7 +336,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1153,7 +1153,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1751,7 +1751,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3189,13 +3189,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3385,7 +3385,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -4258,10 +4258,72 @@
     // 缺点： 有的人就是希望全部都写在一起， 即更好的封装性
 
     //实现async await
-    // 对于 Promise 我们非常熟悉了，进一步延伸到 async await，这是目前开发中非常非常常用的异步处理方式，我们最好是熟悉它的 babel 编译后的源码。
-    // 手写 async await 的最简实现（20 行搞定）
     // babel 对于 async await 配合 generator 函数，做的非常巧妙，这里面的思想我们也要去学习，如何递归的处理一个串行的 promise 链？
     // 这个技巧在axios 的源码里也有应用。平常经常用的拦截器，本质上就是一串 promise 的串行执行。
+    // 当然，如果你还有余力的话，也可以继续深入的去看 generator 函数的 babel 编译源码。不强制要求，毕竟 generator 函数在开发中已经用的非常少了。
+    // const getData = () => new Promise(resolve => setTimeout(() => resolve("data"), 1000))
+    // function* testG() {
+    //     // await被编译成了yield
+    //     const data = yield getData()
+    //     console.log('data: ', data);
+    //     const data2 = yield getData()
+    //     console.log('data2: ', data2);
+    //     return 'success'
+    // }
+    // var gen = testG()
+    // var dataPromise = gen.next()
+    // console.log(dataPromise,'dataPromise')
+
+    // dataPromise.value.then((value1) => {
+    //     // data1的value被拿到了 继续调用next并且传递给data
+    //     var data2Promise = gen.next(value1)
+    //     // console.log('data: ', data);
+    //     // 此时就会打印出data
+    //     data2Promise.value.then((value2) => {
+    //         // data2的value拿到了 继续调用next并且传递value2
+    //         gen.next(value2)
+
+    //         // console.log('data2: ', data2);
+    //         // 此时就会打印出data2
+    //     })
+    // })
+    // const getData = () => new Promise(resolve => setTimeout(() => resolve("data"), 1000))
+    // function* testG() {
+    //     // await被编译成了yield
+    //     const data = yield getData()
+    //     console.log('data: ', data);
+    //     const data2 = yield getData()
+    //     console.log('data2: ', data2);
+    //     return 'success'
+    // }
+    // function asyncToGenerator(generator) {
+    //     return function () {
+    //         let gen = generator.apply(this, arguments)
+    //         return new Promise((resolve, reject) => {
+    //             function step(key, arg) {  //key对应generator的next throw方法
+    //                 let generatorResult  //储存generator的执行结果
+    //                 try {
+    //                     generatorResult = gen[key][arg]
+    //                 } catch (error) {
+    //                     reject(error)
+    //                 }
+    //                 let { value, done } = generatorResult
+    //                 if (!done) {
+    //                     return Promise.resolve(value).then(val => {
+    //                         step('next', val)
+    //                     }, error => {
+    //                         step('throw', error)
+    //                     })
+    //                 } else {
+    //                     resolve(value)
+    //                 }
+    //             }
+    //             step('next')
+    //         })
+    //     }
+    // }
+    // asyncToGenerator(testG)()
+
     function asyncToGenerator(generatorFunc) {
       // 返回的是一个新的函数
       return function () {
