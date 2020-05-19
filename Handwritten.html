@@ -4438,10 +4438,105 @@
     }
 
     //Koa的洋葱中间件，Redux的中间件，Axios的拦截器让你迷惑吗？实现一个精简版的就彻底搞懂了。
+    //Axios的拦截器的基本原理:先构造一个对象 存放拦截器
+    axios.interceptors = {
+      request: [],
+      response: []
+    };
+
+    // 注册请求拦截器
+    axios.useRequestInterceptor = (resolved, rejected) => {
+      axios.interceptors.request.push({ resolved, rejected });
+    };
+
+    // 注册响应拦截器
+    axios.useResponseInterceptor = (resolved, rejected) => {
+      axios.interceptors.response.push({ resolved, rejected });
+    };
+
+    // 运行拦截器
+    axios.run = config => {
+      const chain = [
+        {
+          resolved: axios,
+          rejected: undefined
+        }
+      ];
+
+      // 把请求拦截器往数组头部推
+      axios.interceptors.request.forEach(interceptor => {
+        chain.unshift(interceptor);
+      });
+
+      // 把响应拦截器往数组尾部推
+      axios.interceptors.response.forEach(interceptor => {
+        chain.push(interceptor);
+      });
+
+      // 把config也包装成一个promise
+      let promise = Promise.resolve(config);
+
+      // 暴力while循环解忧愁
+      // 利用promise.then的能力递归执行所有的拦截器
+      while (chain.length) {
+        const { resolved, rejected } = chain.shift();
+        promise = promise.then(resolved, rejected);
+      }
+
+      // 最后暴露给用户的就是响应拦截器处理过后的promise
+      return promise;
+    };
+
+    //koa中间件原理
+    class Koa {
+      constructor() {
+        this.middlewares = [];
+      }
+      use(middleware) {
+        this.middlewares.push(middleware);
+      }
+      start({ req }) {
+        const composed = composeMiddlewares(this.middlewares);
+        const ctx = { req, res: undefined };
+        return composed(ctx);
+      }
+    }
+
+    function composeMiddlewares(middlewares) {
+      return function wrapMiddlewares(ctx) {
+        // 记录当前运行的middleware的下标
+        let index = -1;
+        function dispatch(i) {
+          // index向后移动
+          index = i;
+
+          // 找出数组中存放的相应的中间件
+          const fn = middlewares[i];
+
+          // 最后一个中间件调用next 也不会报错
+          if (!fn) {
+            return Promise.resolve();
+          }
+
+          return Promise.resolve(
+            fn(
+              // 继续传递ctx
+              ctx,
+              // next方法，允许进入下一个中间件。
+              () => dispatch(i + 1)
+            )
+          );
+        }
+        // 开始运行第一个中间件
+        return dispatch(0);
+      };
+    }
 
     //二叉树的右视图
 
+
     //享元模式
+    //享元模式把共有的数据和方法提取出来，目的是为了提高程序的执行效率，进一步提升系统的性能。享元模式有助于减少内存消耗，在大型系统开发中应用非常广泛。
   </script>
 </body>
 
