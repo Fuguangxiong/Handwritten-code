@@ -317,7 +317,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -328,7 +328,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -336,7 +336,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -994,7 +994,7 @@
       // let curr = 1
       let [prev, curr] = [0, 1]
       while (true) {
-        yield curr;   //后面必须有分号  不然会把curr和 [prev, curr] = [curr, prev + curr];都当做yeild后面的内容
+        yield curr; //后面必须有分号  不然会把curr和 [prev, curr] = [curr, prev + curr];都当做yeild后面的内容
         // let temp = curr
         // curr = curr + prev
         // prev = temp
@@ -1177,7 +1177,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1775,7 +1775,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3213,13 +3213,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3409,7 +3409,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -4431,7 +4431,10 @@
         yield [propKey, this[propKey]];
       }
     }
-    let jane = { first: 'Jane', last: 'Doe' };
+    let jane = {
+      first: 'Jane',
+      last: 'Doe'
+    };
     jane[Symbol.iterator] = objectEntries;
     for (let [key, value] of jane) {
       console.log(`${key}: ${value}`);
@@ -4446,22 +4449,26 @@
 
     // 注册请求拦截器
     axios.useRequestInterceptor = (resolved, rejected) => {
-      axios.interceptors.request.push({ resolved, rejected });
+      axios.interceptors.request.push({
+        resolved,
+        rejected
+      });
     };
 
     // 注册响应拦截器
     axios.useResponseInterceptor = (resolved, rejected) => {
-      axios.interceptors.response.push({ resolved, rejected });
+      axios.interceptors.response.push({
+        resolved,
+        rejected
+      });
     };
 
     // 运行拦截器
     axios.run = config => {
-      const chain = [
-        {
-          resolved: axios,
-          rejected: undefined
-        }
-      ];
+      const chain = [{
+        resolved: axios,
+        rejected: undefined
+      }];
 
       // 把请求拦截器往数组头部推
       axios.interceptors.request.forEach(interceptor => {
@@ -4479,7 +4486,10 @@
       // 暴力while循环解忧愁
       // 利用promise.then的能力递归执行所有的拦截器
       while (chain.length) {
-        const { resolved, rejected } = chain.shift();
+        const {
+          resolved,
+          rejected
+        } = chain.shift();
         promise = promise.then(resolved, rejected);
       }
 
@@ -4495,9 +4505,14 @@
       use(middleware) {
         this.middlewares.push(middleware);
       }
-      start({ req }) {
+      start({
+        req
+      }) {
         const composed = composeMiddlewares(this.middlewares);
-        const ctx = { req, res: undefined };
+        const ctx = {
+          req,
+          res: undefined
+        };
         return composed(ctx);
       }
     }
@@ -4506,6 +4521,7 @@
       return function wrapMiddlewares(ctx) {
         // 记录当前运行的middleware的下标
         let index = -1;
+
         function dispatch(i) {
           // index向后移动
           index = i;
@@ -4533,7 +4549,40 @@
     }
 
     //二叉树的右视图
+    //深度优先搜索&&广度优先搜索
+    var rightSideView = function (root) {
+      if (!root) return []
+      let arr = []
+      dfs(root, 0, arr)
+      return arr
+    };
 
+    function dfs(root, step, res) {
+      if (root) {
+        if (res.length === step) {
+          res.push(root.val) // 当数组长度等于当前 深度 时, 把当前的值加入数组
+        }
+        // console.log(step, '-------', res)
+        dfs(root.right, step + 1, res) // 先从右边开始, 当右边没了, 再轮到左边
+        dfs(root.left, step + 1, res)
+      }
+    }
+    var rightSideView = function (root) {
+      if (!root) return []
+      let queue = [root] // 队列 把树顶加入队列
+      let arr = [] // 用来存储每层最后个元素值
+      while (queue.length > 0) {
+        let len = queue.length
+        while (len) {
+          let node = queue.shift() // 取出队列第一个元素
+          if (len === 1) arr.push(node.val) // 当是 当前一层的最后一个元素时，把值加入arr
+          if (node.left) queue.push(node.left) // 继续往队列添加元素
+          if (node.right) queue.push(node.right)
+          len--
+        }
+      }
+      return arr
+    };
 
     //享元模式
     //享元模式把共有的数据和方法提取出来，目的是为了提高程序的执行效率，进一步提升系统的性能。享元模式有助于减少内存消耗，在大型系统开发中应用非常广泛。
