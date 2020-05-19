@@ -777,3 +777,52 @@ function asyncToGenerator(generatorFunc) {
         })
     }
 }
+
+//手写斐波那契数列
+    //递归版本
+    // function getNumx(n) {
+    //     if (n <= 1) {
+    //         return 1
+    //     }
+    //     return getNumx(n - 1) + getNumx(n - 2)
+    // }
+    // console.log(getNumx(8))
+    //动态规划版本
+    // function getNumx(n) {
+    //   if (n === 1 || n === 2) {
+    //     return 1
+    //   } else {
+    //     var arr = []
+    //     arr[0] = 1
+    //     arr[1] = 1
+    //     for (let i = 2; i < n + 1; i++) {
+    //       arr[i] = arr[i - 1] + arr[i - 2]
+    //     }
+    //     return arr[n - 1]
+    //   }
+    // }
+    //generator版本
+    function* getNumx() {
+        // let prev = 0;
+        // let curr = 1
+        let [prev, curr] = [0, 1]
+        while (true) {
+          yield curr;   //后面必须有分号  不然会把curr和 [prev, curr] = [curr, prev + curr];都当做yeild后面的内容
+          // let temp = curr
+          // curr = curr + prev
+          // prev = temp
+          [prev, curr] = [curr, prev + curr];
+        }
+        // for (; ;) {
+        //   yield curr
+        //   let temp = curr
+        //   curr = curr + prev
+        //   prev = temp
+        // }
+      }
+      for (let a of getNumx()) {
+        if (a > 1000) {
+          break
+        }
+        console.log(a)
+      }
