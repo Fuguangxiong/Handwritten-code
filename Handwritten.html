@@ -317,7 +317,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -328,7 +328,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -336,7 +336,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1177,7 +1177,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1775,7 +1775,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3213,13 +3213,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3409,7 +3409,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -4554,19 +4554,19 @@
       if (!root) return []
       let arr = []
       dfs(root, 0, arr)
+      function dfs(root, step, res) {
+        if (root) {
+          if (res.length === step) {
+            res.push(root.val) // 当数组长度等于当前 深度 时, 把当前的值加入数组
+          }
+          // console.log(step, '-------', res)
+          dfs(root.right, step + 1, res) // 先从右边开始, 当右边没了, 再轮到左边
+          dfs(root.left, step + 1, res)
+        }
+      }
       return arr
     };
 
-    function dfs(root, step, res) {
-      if (root) {
-        if (res.length === step) {
-          res.push(root.val) // 当数组长度等于当前 深度 时, 把当前的值加入数组
-        }
-        // console.log(step, '-------', res)
-        dfs(root.right, step + 1, res) // 先从右边开始, 当右边没了, 再轮到左边
-        dfs(root.left, step + 1, res)
-      }
-    }
     var rightSideView = function (root) {
       if (!root) return []
       let queue = [root] // 队列 把树顶加入队列
@@ -4586,6 +4586,15 @@
 
     //享元模式
     //享元模式把共有的数据和方法提取出来，目的是为了提高程序的执行效率，进一步提升系统的性能。享元模式有助于减少内存消耗，在大型系统开发中应用非常广泛。
+
+    //对称二叉树
+    //给定一个二叉树，检查它是否是镜像对称的。
+    var isSymmetric = function (root) {
+      while(true){
+        let res= []
+        res.push(root.val)
+      }
+    };
   </script>
 </body>
 

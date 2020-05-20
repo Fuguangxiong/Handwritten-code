@@ -9,14 +9,22 @@
 
 <body>
     <script>
-        function composeMiddlewares(middlewares) {
-            return function wrapMiddlewares(ctx) {
-                let index = -1
-                function dispatch(i) {
-                    let 
-                }
+        //二叉树的右视图
+        var isSymmetric = function (root) {
+            let res = []
+            if (!root) {
+                return res
             }
-        }
+
+            function dfs(node, deep, res) {
+                if (res.length === deep) {
+                    res.push(node.value)
+                }
+                dfs(root.left, deep + 1, res)
+                dfs(root.right, deep + 1, res)
+            }
+            dfs(root, 0, res)
+        };
     </script>
 </body>
 
