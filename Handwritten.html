@@ -4506,7 +4506,7 @@
       return function wrapMiddlewares(ctx) {
         // 记录当前运行的middleware的下标
         let index = -1;
-        function dispatch(i) {
+        function (i) {
           // index向后移动
           index = i;
 
