@@ -4589,12 +4589,79 @@
 
     //对称二叉树
     //给定一个二叉树，检查它是否是镜像对称的。
+    //方法一:层序遍历二叉树，判断每一层的二叉树节点的值是否对称。
     var isSymmetric = function (root) {
-      while(true){
-        let res= []
-        res.push(root.val)
+      if (root === null) return true;
+      let node = root;
+      let queue = [node];
+      function help(arr) {
+        let left = 0, right = arr.length - 1;
+        while (left < right) {
+          if (arr[left] === null || arr[right] === null) {
+            if (arr[left] !== arr[right]) {
+              return false;
+            }
+          } else {
+            if (arr[left].val !== arr[right].val) {
+              return false;
+            }
+          }
+          left++;
+          right--;
+        }
+        return true;
+      }
+      while (queue.length > 0) {
+        if (!help(queue)) {
+          return false;
+        }
+        let len = queue.length;
+        for (let i = 0; i < len; i++) {
+          node = queue.shift();
+          if (node !== null) {
+            queue.push(node.left);
+            queue.push(node.right);
+          }
+        }
+      }
+      return true
+    };
+
+    //方法二 递归DFS。
+
+    var isSymmetric = function (root) {
+      if (root === null) return true;
+      return help(root.left, root.right);
+      function help(left, right) {
+        if (left === null && right === null) {
+          return true;
+        }
+        if (left === null || right === null) {
+          return false;
+        }
+        return left.val === right.val && help(left.left, right.right) && help(left.right, right.left);
       }
     };
+
+    //方法三 BFS
+
+    var isSymmetric = function (root) {
+      let queue = [root, root];
+      while (queue.length > 0) {
+        let l = queue.shift();
+        let r = queue.shift();
+        if (l === null && r === null) continue;
+        if (l === null || r === null) return false;
+        if (l.val !== r.val) return false;
+        queue.push(l.left);
+        queue.push(r.right);
+        queue.push(l.right);
+        queue.push(r.left);
+      }
+      return true
+    };
+
+
   </script>
 </body>
 
