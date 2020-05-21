@@ -215,6 +215,7 @@
     }
 
     //防抖
+    //定时器版
     function debounce(fn, delay) {
       let timer
       return function () {
@@ -222,6 +223,16 @@
         timer = setInterval(() => {
           fn.apply(this, arguments)
         }, delay);
+      }
+    }
+    //时间戳版
+    function debounce(fn, delay) {
+      let time = 0
+      return function () {
+        time = Date.now()
+        if (Date.now() - time > delay) {
+          fn.apply(this, arguments)
+        }
       }
     }
     // 最后我们再思考一个小需求，
@@ -4702,19 +4713,6 @@
     };
 
     //二叉搜索树的最近公共祖先
-    /**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-    /**
-     * @param {TreeNode} root
-     * @param {TreeNode} p
-     * @param {TreeNode} q
-     * @return {TreeNode}
-     */
     var lowestCommonAncestor = function (root, p, q) {
       var val = root.val
       var pVal = p.val
@@ -4744,6 +4742,140 @@
       }
 
     };
+
+    // 重建二叉树
+    //输入某二叉树的前序遍历和中序遍历的结果，请重建该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+    var buildTree = function (preorder, inorder) {
+      if (!preorder) {
+        return null
+      }
+      if (preorder.length === 0) {
+        return null
+      }
+      if (preorder.length === 1) {
+        return new TreeNode(preorder[0])
+      }
+      let root = preorder[0] //根节点的值
+      let index = inorder.indexOf(root) //中序遍历中间点的位置
+      let preLeft = preorder.slice(1, index + 1) //左子树的前序遍历
+      let preRight = preorder.slice(index + 1) //右子树的前序遍历
+      let inLeft = inorder.slice(0, index) //左子树的中序遍历
+      let inRight = inorder.slice(index + 1)//右子树的中序遍历                              
+      let node = new TreeNode(root)
+      node.left = buildTree(preLeft, inLeft)
+      node.right = buildTree(preRight, inRight)
+      return node
+    };
+
+    //二叉树的层级遍历
+    //DFS
+    var levelOrder = function (root) {
+      if (!root) return []
+      let res = []
+      dfs(root, 0, res)
+      return res
+    };
+
+    function dfs(root, step, res) {
+      if (root) {
+        if (!res[step]) res[step] = []
+        res[step].push(root.val)
+        dfs(root.left, step + 1, res)
+        dfs(root.right, step + 1, res)
+      }
+    }
+    //BFS
+
+    var levelOrder = function (root) {
+      if (!root) return []
+      let queue = [root]
+      let res = []
+      while (queue.length > 0) {
+        let len = queue.length
+        let arr = []
+        while (len) {
+          let node = queue.shift()
+          arr.push(node.val)
+          if (node.left) queue.push(node.left)
+          if (node.right) queue.push(node.right)
+          len--
+        }
+        res.push(arr)
+      }
+      return res
+    };
+
+    // 求二叉树的遍历
+    //给定一棵二叉树的前序遍历和中序遍历，求其后序遍历
+    let pre;
+    let vin;
+
+    while ((pre = readline()) != null) {
+      vin = readline();
+      print(getHRD(pre, vin));
+    }
+
+    function getHRD(pre, vin) {
+      if (!pre) {
+        return '';
+      }
+      if (pre.length === 1) {
+        return pre;
+      }
+      const head = pre[0];
+      const splitIndex = vin.indexOf(head);
+      const vinLeft = vin.substring(0, splitIndex);
+      const vinRight = vin.substring(splitIndex + 1);
+      const preLeft = pre.substring(1, splitIndex + 1);
+      const preRight = pre.substring(splitIndex + 1);
+      return getHRD(preLeft, vinLeft) + getHRD(preRight, vinRight) + head;
+    }
+
+    //二叉树的镜像
+    function Mirror(root) {
+      if (root) {
+        const temp = root.right;
+        root.right = root.left;
+        root.left = temp;
+        Mirror(root.right);
+        Mirror(root.left);
+      }
+    }
+
+    //二叉树的后续遍历
+    // 输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出Yes,否则输出No。假设输入的数组的任意两个数字都互不相同。
+    // 1.后序遍历：分成三部分：最后一个节点为根节点，第二部分为左子树的值比根节点都小，第三部分为右子树的值比根节点都大。
+
+    // 2.先检测左子树，左侧比根节点小的值都判定为左子树。
+
+    // 3.除最后一个节点外和左子树外的其他值为右子树，右子树有一个比根节点小，则返回false。
+
+    // 4.若存在，左、右子树，递归检测左、右子树是否复合规范。
+    function VerifySquenceOfBST(sequence) {
+      if (sequence && sequence.length > 0) {
+        var root = sequence[sequence.length - 1]
+        for (var i = 0; i < sequence.length - 1; i++) {
+          if (sequence[i] > root) {
+            break;
+          }
+        }
+        for (let j = i; j < sequence.length - 1; j++) {
+          if (sequence[j] < root) {
+            return false;
+          }
+        }
+        var left = true;
+        if (i > 0) {
+          left = VerifySquenceOfBST(sequence.slice(0, i));
+        }
+        var right = true;
+        if (i < sequence.length - 1) {
+          right = VerifySquenceOfBST(sequence.slice(i, sequence.length - 1));
+        }
+        return left && right;
+      }
+    }
+    //小和问题
   </script>
 </body>
 
