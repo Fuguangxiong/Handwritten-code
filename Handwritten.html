@@ -4914,20 +4914,63 @@
         }
         while (i <= left.length - 1) {
           smallNumber += arr.reduce(function (a, b) {
-              return a + b
-            }, 0)
+            return a + b
+          }, 0)
           arr.push(left[i])
           i++
         }
         while (j <= right.length - 1) {
+          // smallNumber += arr.reduce(function (a, b) {
+          //     return a + b
+          //   }, 0)
           arr.push(right[j])
           j++
         }
         return arr
       }
     }
-    smallSum([1, 3, 4])
-    console.log(smallNumber, '小和')
+    // smallSum([1, 3, 4])   //有bug
+    // console.log(smallNumber, '小和')
+
+    //实现 strStr()
+    // 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
+    //KMP算法  http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html
+    //BM算法   http://www.ruanyifeng.com/blog/2013/05/boyer-moore_string_search_algorithm.html
+    const strStr = function (haystack, needle) {
+      if (needle === "") return 0;
+      if (haystack === "") return -1;
+      let inc = [];
+      // 计算偏移量
+      for (let i = 0; i < needle.length; i++) {
+        for (let j = 0; j <= i; j++) {
+          if (needle[j] !== needle[i - j]) {
+            inc[i] = j + 1;
+            break;
+          }
+          if (j === i && needle[j] === needle[i - j]) {
+            inc[i] = j + 1;
+          }
+        }
+      }
+      let i = 0;
+      let l = needle.length
+      while (i < haystack.length) {
+        for (let j = 0; j < l; j++) {
+          if (needle[j] !== haystack[i + j]) {
+            i += inc[j];
+            break;
+          }
+          if (j === l - 1 && needle[j] === haystack[i + j]) {
+            return i;
+          }
+        }
+      }
+      return -1;
+    };
+
+    //n皇后
+    
+    
   </script>
 </body>
 
