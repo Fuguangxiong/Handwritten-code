@@ -4936,41 +4936,80 @@
     // 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
     //KMP算法  http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html
     //BM算法   http://www.ruanyifeng.com/blog/2013/05/boyer-moore_string_search_algorithm.html
-    const strStr = function (haystack, needle) {
-      if (needle === "") return 0;
-      if (haystack === "") return -1;
-      let inc = [];
-      // 计算偏移量
-      for (let i = 0; i < needle.length; i++) {
-        for (let j = 0; j <= i; j++) {
-          if (needle[j] !== needle[i - j]) {
-            inc[i] = j + 1;
-            break;
+
+    // function getNext(str) {
+    //   const len = str.length,
+    //     next = new Array(len).fill(0);//默认下一跳回到0
+    //   for (let i = 0; i < len; i++) {
+    //     const subStr = str.slice(0, i);
+    //     for (let j = 0; j < i - 1; j++) {
+    //       //判断前缀和后缀的情况，存储当j位不匹配时，下一跳的位置，自动更新保证最大值
+    //       console.log(subStr,subStr.slice(0, j + 1),subStr.slice(i - j - 1),'--------------------')
+    //       if (subStr.slice(0, j + 1) === subStr.slice(i - j - 1)) {
+    //         next[i] = j + 1;
+    //       }
+    //     }
+    //   }
+    //   return next;
+    // }
+    function getNext(source) {
+      let next = new Array(source.length).fill(0)
+      let i = 1
+      let j = 0
+      while (i < source.length) {
+        if (source.charAt(i) === source.charAt(j)) {
+          next[i] = ++j
+        } else if (source.charAt(i) === source.charAt(0)) {
+          j = 1
+          next[i] = next[i - 1]
+        } else {
+          j = 0
+          next[i] = j
+        }
+        i++
+      }
+      return next
+    }
+    /**
+     * @param sourceStr 主字符串
+     * @param searchStr 模式字符串
+     * */
+    function KMP(sourceStr, searchStr) {
+      const sourceLen = sourceStr.length,
+        searchLen = searchStr.length,
+        next = getNext(searchStr);
+      //i为源字符串的指针，j为目标字符串的指针
+      let i = 0,
+        j = 0;
+
+      while (i < sourceLen && j < searchLen) {
+        if (sourceStr[i] === searchStr[j]) {
+          ++i;
+          ++j;
+        } else {
+          //这里用于判断当前指针的位置，如果指针已经在0了，表示模式字符串的第一位都不匹配，主字符串的指针往后移一位
+          if (j === 0) {
+            ++i;
+            continue;
           }
-          if (j === i && needle[j] === needle[i - j]) {
-            inc[i] = j + 1;
-          }
+          j = next[j - 1];
         }
       }
-      let i = 0;
-      let l = needle.length
-      while (i < haystack.length) {
-        for (let j = 0; j < l; j++) {
-          if (needle[j] !== haystack[i + j]) {
-            i += inc[j];
-            break;
-          }
-          if (j === l - 1 && needle[j] === haystack[i + j]) {
-            return i;
-          }
-        }
+
+      if (j === searchLen) {
+        return i - j;
+      } else {
+        return -1;
       }
-      return -1;
-    };
+    }
+    console.log(getNext('ABCDABD'));
+    console.log(KMP('BBC ABCDAB ABCDABCDABDE', 'ABCDABD'));
+
+
 
     //n皇后
-    
-    
+
+
   </script>
 </body>
 

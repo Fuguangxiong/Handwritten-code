@@ -9,22 +9,24 @@
 
 <body>
     <script>
-        //二叉树的右视图
-        var isSymmetric = function (root) {
-            let res = []
-            if (!root) {
-                return res
+        //kmp算法
+        function KMP(target, source) {
+            function getNext(source) {
+              let next = []
+              let j = 1
+              let k = 0
+              next[1] = 0
+              while(j<=source.length){
+                  if(k === 0 || source[j] === source[k]){
+                      next[++j] = ++k
+                  }else{
+                      k = next[k]
+                  }
+              }
+              return next
             }
+        }
 
-            function dfs(node, deep, res) {
-                if (res.length === deep) {
-                    res.push(node.value)
-                }
-                dfs(root.left, deep + 1, res)
-                dfs(root.right, deep + 1, res)
-            }
-            dfs(root, 0, res)
-        };
     </script>
 </body>
 
