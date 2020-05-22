@@ -4934,7 +4934,7 @@
 
     //实现 strStr()
     // 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。
-    //KMP算法  http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html
+    //KMP算法  http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html     二进制字符串匹配（普通字符串匹配更推荐 BM 算法
     //BM算法   http://www.ruanyifeng.com/blog/2013/05/boyer-moore_string_search_algorithm.html
 
     // function getNext(str) {
@@ -4952,7 +4952,7 @@
     //   }
     //   return next;
     // }
-    function getNext(source) {
+    function getNext(source) {   //'ABCDABD'
       let next = new Array(source.length).fill(0)
       let i = 1
       let j = 0
@@ -4963,8 +4963,7 @@
           j = 1
           next[i] = next[i - 1]
         } else {
-          j = 0
-          next[i] = j
+          next[i] = j = 0
         }
         i++
       }
