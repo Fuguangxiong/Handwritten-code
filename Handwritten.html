@@ -1022,7 +1022,7 @@
       if (a > 1000) {
         break
       }
-      console.log(a)
+      //console.log(a)
     }
     // console.log(getNumx(8))
     //求一个数组的最小子元素和
@@ -4453,60 +4453,60 @@
 
     //Koa的洋葱中间件，Redux的中间件，Axios的拦截器让你迷惑吗？实现一个精简版的就彻底搞懂了。
     //Axios的拦截器的基本原理:先构造一个对象 存放拦截器
-    axios.interceptors = {
-      request: [],
-      response: []
-    };
+    // axios.interceptors = {
+    //   request: [],
+    //   response: []
+    // };
 
-    // 注册请求拦截器
-    axios.useRequestInterceptor = (resolved, rejected) => {
-      axios.interceptors.request.push({
-        resolved,
-        rejected
-      });
-    };
+    // // 注册请求拦截器
+    // axios.useRequestInterceptor = (resolved, rejected) => {
+    //   axios.interceptors.request.push({
+    //     resolved,
+    //     rejected
+    //   });
+    // };
 
-    // 注册响应拦截器
-    axios.useResponseInterceptor = (resolved, rejected) => {
-      axios.interceptors.response.push({
-        resolved,
-        rejected
-      });
-    };
+    // // 注册响应拦截器
+    // axios.useResponseInterceptor = (resolved, rejected) => {
+    //   axios.interceptors.response.push({
+    //     resolved,
+    //     rejected
+    //   });
+    // };
 
-    // 运行拦截器
-    axios.run = config => {
-      const chain = [{
-        resolved: axios,
-        rejected: undefined
-      }];
+    // // 运行拦截器
+    // axios.run = config => {
+    //   const chain = [{
+    //     resolved: axios,
+    //     rejected: undefined
+    //   }];
 
-      // 把请求拦截器往数组头部推
-      axios.interceptors.request.forEach(interceptor => {
-        chain.unshift(interceptor);
-      });
+    //   // 把请求拦截器往数组头部推
+    //   axios.interceptors.request.forEach(interceptor => {
+    //     chain.unshift(interceptor);
+    //   });
 
-      // 把响应拦截器往数组尾部推
-      axios.interceptors.response.forEach(interceptor => {
-        chain.push(interceptor);
-      });
+    //   // 把响应拦截器往数组尾部推
+    //   axios.interceptors.response.forEach(interceptor => {
+    //     chain.push(interceptor);
+    //   });
 
-      // 把config也包装成一个promise
-      let promise = Promise.resolve(config);
+    //   // 把config也包装成一个promise
+    //   let promise = Promise.resolve(config);
 
-      // 暴力while循环解忧愁
-      // 利用promise.then的能力递归执行所有的拦截器
-      while (chain.length) {
-        const {
-          resolved,
-          rejected
-        } = chain.shift();
-        promise = promise.then(resolved, rejected);
-      }
+    //   // 暴力while循环解忧愁
+    //   // 利用promise.then的能力递归执行所有的拦截器
+    //   while (chain.length) {
+    //     const {
+    //       resolved,
+    //       rejected
+    //     } = chain.shift();
+    //     promise = promise.then(resolved, rejected);
+    //   }
 
-      // 最后暴露给用户的就是响应拦截器处理过后的promise
-      return promise;
-    };
+    //   // 最后暴露给用户的就是响应拦截器处理过后的promise
+    //   return promise;
+    // };
 
     //koa中间件原理
     class Koa {
@@ -4807,29 +4807,29 @@
 
     // 求二叉树的遍历
     //给定一棵二叉树的前序遍历和中序遍历，求其后序遍历
-    let pre;
-    let vin;
+    // let pre;
+    // let vin;
 
-    while ((pre = readline()) != null) {
-      vin = readline();
-      print(getHRD(pre, vin));
-    }
+    // while ((pre = readline()) != null) {
+    //   vin = readline();
+    //   print(getHRD(pre, vin));
+    // }
 
-    function getHRD(pre, vin) {
-      if (!pre) {
-        return '';
-      }
-      if (pre.length === 1) {
-        return pre;
-      }
-      const head = pre[0];
-      const splitIndex = vin.indexOf(head);
-      const vinLeft = vin.substring(0, splitIndex);
-      const vinRight = vin.substring(splitIndex + 1);
-      const preLeft = pre.substring(1, splitIndex + 1);
-      const preRight = pre.substring(splitIndex + 1);
-      return getHRD(preLeft, vinLeft) + getHRD(preRight, vinRight) + head;
-    }
+    // function getHRD(pre, vin) {
+    //   if (!pre) {
+    //     return '';
+    //   }
+    //   if (pre.length === 1) {
+    //     return pre;
+    //   }
+    //   const head = pre[0];
+    //   const splitIndex = vin.indexOf(head);
+    //   const vinLeft = vin.substring(0, splitIndex);
+    //   const vinRight = vin.substring(splitIndex + 1);
+    //   const preLeft = pre.substring(1, splitIndex + 1);
+    //   const preRight = pre.substring(splitIndex + 1);
+    //   return getHRD(preLeft, vinLeft) + getHRD(preRight, vinRight) + head;
+    // }
 
     //二叉树的镜像
     function Mirror(root) {
@@ -4875,7 +4875,59 @@
         return left && right;
       }
     }
-    //小和问题
+    // 小和问题
+    // 在一个数组中， 每一个数左边比当前数小的数累加起来， 叫做这个数组的小和。 求一个数组
+    // 的小和。
+    // 例子：
+    // [1, 3, 4, 2, 5]
+    // 1左边比1小的数， 没有；
+    // 3左边比3小的数， 1；
+    // 4左边比4小的数， 1、 3；
+    // 2左边比2小的数， 1；
+    // 5左边比5小的数， 1、 3、 4、 2；
+    // 所以小和为1 + 1 + 3 + 1 + 1 + 3 + 4 + 2=16
+    // 如果直接用两层for循环扫一遍，时间复杂度O(n * n) ，这个题目可以利用归并排序把时间复杂度降到O(nlogn)
+    let smallNumber = 0
+    function smallSum(arr) {
+      if (arr.length <= 1) {
+        return arr
+      }
+      let mid = arr.length >> 1
+      let left = arr.slice(0, mid)
+      let right = arr.slice(mid)
+      return merge(smallSum(left), smallSum(right))
+      function merge(left, right) {
+        let i = 0;
+        let j = 0;
+        let arr = []
+        while (i <= left.length - 1 && j <= right.length - 1) {
+          if (left[i] < right[j]) {
+            arr.push(left[i])
+            smallNumber += arr.reduce(function (a, b) {
+              return a + b
+            }, 0)
+            i++
+          } else {
+            arr.push(right[j])
+            j++
+          }
+        }
+        while (i <= left.length - 1) {
+          smallNumber += arr.reduce(function (a, b) {
+              return a + b
+            }, 0)
+          arr.push(left[i])
+          i++
+        }
+        while (j <= right.length - 1) {
+          arr.push(right[j])
+          j++
+        }
+        return arr
+      }
+    }
+    smallSum([1, 3, 4])
+    console.log(smallNumber, '小和')
   </script>
 </body>
 
