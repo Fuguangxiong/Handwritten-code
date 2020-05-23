@@ -1819,12 +1819,12 @@
 
     let link = new LinkList()
     link.append(1)
+    link.append(2)
     link.append(3)
-    link.append('a')
-    link.append(6)
-    link.append('b')
-    link.append('7')
-    link.append(1)
+    link.append(3)
+    link.append(4)
+    link.append(4)
+    link.append(5)
     // link.delete('a')
     // link.delete(1)
     // link.delete(1)
@@ -4448,7 +4448,7 @@
     };
     jane[Symbol.iterator] = objectEntries;
     for (let [key, value] of jane) {
-      console.log(`${key}: ${value}`);
+      // console.log(`${key}: ${value}`);
     }
 
     //Koa的洋葱中间件，Redux的中间件，Axios的拦截器让你迷惑吗？实现一个精简版的就彻底搞懂了。
@@ -5085,6 +5085,130 @@
       return lists;
     }
 
+    //删除链表中重复的节点
+    // 在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，
+    // 重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5
+    // function deleteDuplication(head) {
+    //   if (!head || !head.next) {
+    //     return head
+    //   } else if (head.value === head.next.value) { //如果从第一项开始重复
+    //     head = head.next.next
+    //     return deleteDuplication(head)
+    //   } else { //如果第一项不重复
+    //     head.next = deleteDuplication(head.next)
+    //     return head
+    //   }
+    //   return head
+    // }
+    function deleteDuplication(pHead) {
+      if (!pHead || !pHead.next) {
+        return pHead;
+      } else if (pHead.value === pHead.next.value) {
+        let tempNode = pHead.next;
+        while (tempNode && pHead.value === tempNode.value) {
+          tempNode = tempNode.next;
+        }
+        return deleteDuplication(tempNode);
+      } else {
+        pHead.next = deleteDuplication(pHead.next);
+        return pHead;
+      }
+    }
+    console.log(deleteDuplication(link),'删除链表中重复的值')
+
+    //从尾到头打印链表
+    //输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
+    function printListFromTailToHead(head){
+    const array = [];
+    while(head){
+        array.unshift(head.val);
+        head = head.next;
+    }
+    return array;
+    }
+
+    //链表倒数第k个节点
+     //输入一个链表，输出该链表中倒数第k个结点。
+    function FindKthToTail(head, k) {
+      if (!head || !k) return null;
+      let front = head;
+      let behind = head;
+      let index = 1;
+      while (front.next) {
+        index++;
+        front = front.next;
+        if (index > k) {
+          behind = behind.next;
+        }
+      }
+      return (k <= index) && behind;
+    }
+   
+    //反转链表
+    var reverseList = function(head) {
+    if(!head || !head.next) return head
+    var prev = null, curr = head
+    while(curr) {
+        // 用于临时存储 curr 后继节点
+        var next = curr.next
+        // 反转 curr 的后继指针
+        curr.next = prev
+        // 变更prev、curr 
+        // 待反转节点指向下一个节点 
+        prev = curr
+        curr = next
+    }
+    head = prev
+    return head
+};
+
+//输入两个链表，找出它们的第一个公共结点。   参考上面:找到两个单链表相交的起始节点
+// 1.先找到两个链表的长度length1、length2
+
+// 2.让长一点的链表先走length2-length1步，让长链表和短链表起点相同
+
+// 3.两个链表一起前进，比较获得第一个相等的节点
+
+// 时间复杂度O(length1+length2) 空间复杂度O(0)
+function FindFirstCommonNode(pHead1, pHead2) {
+      if (!pHead1 || !pHead2) { return null; }
+      // 获取链表长度
+      let length1 = getLength(pHead1);
+      let length2 = getLength(pHead2);
+      // 长链表先行
+      let lang, short, interval;
+      if (length1 > length2) {
+        lang = pHead1;
+        short = pHead2;
+        interval = length1 - length2;
+      } else {
+        lang = pHead2;
+        short = pHead1;
+        interval = length2 - length1;
+      }
+      while (interval--) {
+        lang = lang.next;
+      }
+      // 找相同节点
+      while (lang) {
+        if (lang === short) {
+          return lang;
+        }
+        lang = lang.next;
+        short = short.next;
+      }
+      return null;
+    }
+
+    function getLength(head) {
+      let current = head;
+      let result = 0;
+      while (current) {
+        result++;
+        current = current.next;
+      }
+      return result;
+    }
     //n皇后
   </script>
 </body>
