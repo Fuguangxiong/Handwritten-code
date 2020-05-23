@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3224,13 +3224,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3420,7 +3420,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -4565,6 +4565,7 @@
       if (!root) return []
       let arr = []
       dfs(root, 0, arr)
+
       function dfs(root, step, res) {
         if (root) {
           if (res.length === step) {
@@ -4605,8 +4606,10 @@
       if (root === null) return true;
       let node = root;
       let queue = [node];
+
       function help(arr) {
-        let left = 0, right = arr.length - 1;
+        let left = 0,
+          right = arr.length - 1;
         while (left < right) {
           if (arr[left] === null || arr[right] === null) {
             if (arr[left] !== arr[right]) {
@@ -4643,6 +4646,7 @@
     var isSymmetric = function (root) {
       if (root === null) return true;
       return help(root.left, root.right);
+
       function help(left, right) {
         if (left === null && right === null) {
           return true;
@@ -4696,10 +4700,10 @@
       while (res.length < 2 ** n) {
         let temp = arr.slice()
         for (let i = 0; i < n; i++) {
-          temp[i] ^= 1    // 异或操作，1变0，0变1 
+          temp[i] ^= 1 // 异或操作，1变0，0变1 
           let str = temp.join('')
           if (set.has(str)) {
-            temp[i] = arr[i]  // 若已存在，则变回去
+            temp[i] = arr[i] // 若已存在，则变回去
           } else {
             set.add(str)
             res.push(strToNum(str))
@@ -4760,7 +4764,7 @@
       let preLeft = preorder.slice(1, index + 1) //左子树的前序遍历
       let preRight = preorder.slice(index + 1) //右子树的前序遍历
       let inLeft = inorder.slice(0, index) //左子树的中序遍历
-      let inRight = inorder.slice(index + 1)//右子树的中序遍历                              
+      let inRight = inorder.slice(index + 1) //右子树的中序遍历                              
       let node = new TreeNode(root)
       node.left = buildTree(preLeft, inLeft)
       node.right = buildTree(preRight, inRight)
@@ -4888,6 +4892,7 @@
     // 所以小和为1 + 1 + 3 + 1 + 1 + 3 + 4 + 2=16
     // 如果直接用两层for循环扫一遍，时间复杂度O(n * n) ，这个题目可以利用归并排序把时间复杂度降到O(nlogn)
     let smallNumber = 0
+
     function smallSum(arr) {
       if (arr.length <= 1) {
         return arr
@@ -4896,6 +4901,7 @@
       let left = arr.slice(0, mid)
       let right = arr.slice(mid)
       return merge(smallSum(left), smallSum(right))
+
       function merge(left, right) {
         let i = 0;
         let j = 0;
@@ -4937,38 +4943,38 @@
     //KMP算法  http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html     二进制字符串匹配（普通字符串匹配更推荐 BM 算法
     //BM算法   http://www.ruanyifeng.com/blog/2013/05/boyer-moore_string_search_algorithm.html
 
-    // function getNext(str) {
-    //   const len = str.length,
-    //     next = new Array(len).fill(0);//默认下一跳回到0
-    //   for (let i = 0; i < len; i++) {
-    //     const subStr = str.slice(0, i);
-    //     for (let j = 0; j < i - 1; j++) {
-    //       //判断前缀和后缀的情况，存储当j位不匹配时，下一跳的位置，自动更新保证最大值
-    //       console.log(subStr,subStr.slice(0, j + 1),subStr.slice(i - j - 1),'--------------------')
-    //       if (subStr.slice(0, j + 1) === subStr.slice(i - j - 1)) {
-    //         next[i] = j + 1;
-    //       }
-    //     }
-    //   }
-    //   return next;
-    // }
-    function getNext(source) {   //'ABCDABD'
-      let next = new Array(source.length).fill(0)
-      let i = 1
-      let j = 0
-      while (i < source.length) {
-        if (source.charAt(i) === source.charAt(j)) {
-          next[i] = ++j
-        } else if (source.charAt(i) === source.charAt(0)) {
-          j = 1
-          next[i] = next[i - 1]
-        } else {
-          next[i] = j = 0
+    function getNext(str) {
+      const len = str.length,
+        next = new Array(len).fill(0); //默认下一跳回到0
+      for (let i = 0; i < len; i++) {
+        const subStr = str.slice(0, i);
+        for (let j = 0; j < i - 1; j++) {
+          //判断前缀和后缀的情况，存储当j位不匹配时，下一跳的位置，自动更新保证最大值
+          console.log(subStr, subStr.slice(0, j + 1), subStr.slice(i - j - 1), '--------------------')
+          if (subStr.slice(0, j + 1) === subStr.slice(i - j - 1)) {
+            next[i] = j + 1;
+          }
         }
-        i++
       }
-      return next
+      return next;
     }
+    // function getNext(source) {   //'ABCDABD'
+    //   let next = new Array(source.length).fill(0)
+    //   let i = 1
+    //   let j = 0
+    //   while (i < source.length) {
+    //     if (source.charAt(i) === source.charAt(j)) {
+    //       next[i] = ++j
+    //     } else if (source.charAt(i) === source.charAt(0)) {
+    //       j = 1
+    //       next[i] = next[i - 1]
+    //     } else {
+    //       next[i] = j = 0
+    //     }
+    //     i++
+    //   }
+    //   return next
+    // }
     /**
      * @param sourceStr 主字符串
      * @param searchStr 模式字符串
@@ -5001,14 +5007,85 @@
         return -1;
       }
     }
-    console.log(getNext('ABCDABD'));
-    console.log(KMP('BBC ABCDAB ABCDABCDABDE', 'ABCDABD'));
+    // console.log(getNext('ABCDABD'));
+    // console.log(KMP('BBC ABCDAB ABCDABCDABDE', 'ABCDABD'));
 
+    //二叉树的序列化与反序列化
+    //二叉树的序列化
+    function Serialize(root, arr = []) {
+      if (!root) {
+        arr.push('#')
+        return
+      }
+      arr.push(root.value)
+      Serialize(root.left, arr)
+      Serialize(root.right, arr)
+      return arr.join(',')
+    }
+    //二叉树的反序列化
+    function Deserialize(s) {
+      if (!s) {
+        return null;
+      }
+      return deserialize(s.split(','));
+    }
 
+    function deserialize(arr) {
+      let node = null;
+      const current = arr.shift();
+      if (current !== '#') {
+        node = {
+          val: current
+        }
+        node.left = deserialize(arr);
+        node.right = deserialize(arr);
+      }
+      return node;
+    }
+
+    //按之字型打印二叉树
+    function Print(pRoot) {
+      const lists = [];
+
+      if (pRoot === null) {
+        return lists;
+      }
+
+      const stack1 = [];
+      const stack2 = [];
+
+      stack2.push(pRoot);
+      let i = 1;
+      while (stack1.length !== 0 || stack2.length !== 0) {
+        const list = [];
+
+        // 为奇数层
+        if ((i & 1) === 1) {
+          while (stack2.length !== 0) {
+            const tmp = stack2[stack2.length - 1];
+            stack2.pop();
+            list.push(tmp.val);
+            if (tmp.left !== null) stack1.push(tmp.left);
+            if (tmp.right !== null) stack1.push(tmp.right);
+          }
+        }
+        // 为偶数层
+        else {
+          while (stack1.length !== 0) {
+            const tmp = stack1[stack1.length - 1];
+            stack1.pop();
+            list.push(tmp.val);
+            if (tmp.right !== null) stack2.push(tmp.right);
+            if (tmp.left !== null) stack2.push(tmp.left);
+          }
+        }
+        ++i;
+        lists.push(list);
+      }
+      return lists;
+    }
 
     //n皇后
-
-
   </script>
 </body>
 
