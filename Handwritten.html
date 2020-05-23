@@ -5114,21 +5114,21 @@
         return pHead;
       }
     }
-    console.log(deleteDuplication(link),'删除链表中重复的值')
+    console.log(deleteDuplication(link), '删除链表中重复的值')
 
     //从尾到头打印链表
     //输入一个链表，按链表值从尾到头的顺序返回一个ArrayList。
-    function printListFromTailToHead(head){
-    const array = [];
-    while(head){
+    function printListFromTailToHead(head) {
+      const array = [];
+      while (head) {
         array.unshift(head.val);
         head = head.next;
-    }
-    return array;
+      }
+      return array;
     }
 
     //链表倒数第k个节点
-     //输入一个链表，输出该链表中倒数第k个结点。
+    //输入一个链表，输出该链表中倒数第k个结点。
     function FindKthToTail(head, k) {
       if (!head || !k) return null;
       let front = head;
@@ -5143,12 +5143,13 @@
       }
       return (k <= index) && behind;
     }
-   
+
     //反转链表
-    var reverseList = function(head) {
-    if(!head || !head.next) return head
-    var prev = null, curr = head
-    while(curr) {
+    var reverseList = function (head) {
+      if (!head || !head.next) return head
+      var prev = null,
+        curr = head
+      while (curr) {
         // 用于临时存储 curr 后继节点
         var next = curr.next
         // 反转 curr 的后继指针
@@ -5157,21 +5158,23 @@
         // 待反转节点指向下一个节点 
         prev = curr
         curr = next
-    }
-    head = prev
-    return head
-};
+      }
+      head = prev
+      return head
+    };
 
-//输入两个链表，找出它们的第一个公共结点。   参考上面:找到两个单链表相交的起始节点
-// 1.先找到两个链表的长度length1、length2
+    //输入两个链表，找出它们的第一个公共结点。   参考上面:找到两个单链表相交的起始节点
+    // 1.先找到两个链表的长度length1、length2
 
-// 2.让长一点的链表先走length2-length1步，让长链表和短链表起点相同
+    // 2.让长一点的链表先走length2-length1步，让长链表和短链表起点相同
 
-// 3.两个链表一起前进，比较获得第一个相等的节点
+    // 3.两个链表一起前进，比较获得第一个相等的节点
 
-// 时间复杂度O(length1+length2) 空间复杂度O(0)
-function FindFirstCommonNode(pHead1, pHead2) {
-      if (!pHead1 || !pHead2) { return null; }
+    // 时间复杂度O(length1+length2) 空间复杂度O(0)
+    function FindFirstCommonNode(pHead1, pHead2) {
+      if (!pHead1 || !pHead2) {
+        return null;
+      }
       // 获取链表长度
       let length1 = getLength(pHead1);
       let length2 = getLength(pHead2);
@@ -5209,6 +5212,159 @@ function FindFirstCommonNode(pHead1, pHead2) {
       }
       return result;
     }
+
+    //约瑟夫环问题
+    // 0,1,...,n-1这n个数字排成一个圆圈，从数字0开始，每次从这个圆圈里删除第m个数字。求出这个圆圈里剩下的最后一个数字
+    // 解法1: 用链表模拟环
+    // 用链表模拟一个环
+    // 模拟游戏场景
+    // 记录头节点的前一个节点current， 以保证我们找到的要删除的节点是current.next
+    // 每次循环m次找到目标节点删除， 直到链表只剩下一个节点
+    // 时间复杂度O(m * n) 空间复杂度O(n)
+    function LastRemaining_Solution(n, m) {
+      if (n < 1 || m < 1) {
+        return -1;
+      }
+      const head = {
+        val: 0
+      }
+      let current = head;
+      for (let i = 1; i < n; i++) {
+        current.next = {
+          val: i
+        }
+        current = current.next;
+      }
+      current.next = head;
+
+      while (current.next != current) {
+        for (let i = 0; i < m - 1; i++) {
+          current = current.next;
+        }
+        current.next = current.next.next;
+      }
+      return current.val;
+    }
+
+    //求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+    function Sum_Solution(n) {
+      return n && (n + Sum_Solution(n - 1));
+    }
+
+    //最小路径和
+    // 给定一个包含非负整数的 m x n 网格， 请找出一条从左上角到右下角的路径， 使得路径上的数字总和为最小。
+    // 说明： 每次只能向下或者向右移动一步。
+    // 示例:
+    //   输入: [
+    //     [1, 3, 1],
+    //     [1, 5, 1],
+    //     [4, 2, 1]
+    //   ]
+    // 输出: 7
+    // 解释: 因为路径 1→ 3→ 1→ 1→ 1 的总和最小。
+    // 思路
+    // 状态定义：
+    // 设dp[i][j]为走到当前位置的最小路径和
+    // 递推公式：
+    // 只能向下或向右走，意味着当前格子只能由上边或者左边走过来
+    // dp[i][j] = Min(dp[i-1][j],dp[i][j-1]) + grid[i][j]
+    // 初始化
+    // 第一行第n列和第一列第n行为均原数组值
+    // 边界条件
+    // 格子有边界，因此当i==0 或j==0时，i-1和j-1会越界
+    // i = 0，j != 0时,dp[i][j] = dp[i][j-1]+grid[i][j]
+    // i !=0，j == 0时,dp[i][j] = dp[i-1][j]+grid[i][j]
+    // i !=0 && j != 0时,dp[i][j] = Min(dp[i-1][j],dp[i][j-1])+grid[i][j]
+    // i == 0 && j == 0时,dp[i][j]=grid[i][j]
+    // 返回值
+    // dp最后一个元素值
+    /**
+     * @param {number[][]} grid
+     * @return {number}
+     */
+    var minPathSum = function (grid) {
+      var n = grid.length;
+      var m = grid[0].length;
+      var dp = Array.from(new Array(n), () => new Array(m));
+      for (var i = 0; i < n; i++) {
+        for (var j = 0; j < m; j++) {
+          if (i != 0 && j != 0) {
+            dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+          } else if (i == 0 && j != 0) {
+            dp[i][j] = dp[i][j - 1] + grid[i][j];
+          } else if (i != 0 && j == 0) {
+            dp[i][j] = dp[i - 1][j] + grid[i][j];
+          } else if (i == 0 && j == 0) {
+            dp[i][j] = grid[i][j];
+          }
+        }
+      }
+      return dp[n - 1][m - 1];
+    };
+    //打家劫舍
+    // 你是一个专业的小偷， 计划偷窃沿街的房屋。 每间房内都藏有一定的现金， 
+    //影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
+    //如果两间相邻的房屋在同一晚上被小偷闯入， 系统会自动报警。
+
+    // 给定一个代表每个房屋存放金额的非负整数数组， 计算你在不触动警报装置的情况下， 能够偷窃到的最高金额。
+
+    // 示例 1:
+
+    //   输入: [1, 2, 3, 1]
+    // 输出: 4
+    // 解释: 偷窃 1 号房屋(金额 = 1)， 然后偷窃 3 号房屋(金额 = 3)。
+    // 偷窃到的最高金额 = 1 + 3 = 4。
+    // 示例 2:
+
+    //   输入: [2, 7, 9, 3, 1]
+    // 输出: 12
+    // 解释: 偷窃 1 号房屋(金额 = 2), 偷窃 3 号房屋(金额 = 9)， 接着偷窃 5 号房屋(金额 = 1)。
+    // 偷窃到的最高金额 = 2 + 9 + 1 = 12。
+    //方法一  一维动态规划
+    var rob = function (nums) {
+      var len = nums.length;
+      if (len < 2) {
+        return nums[len - 1] ? nums[len - 1] : 0;
+      }
+      var current = [nums[0], Math.max(nums[0], nums[1])];
+      for (var k = 2; k < len; k++) {
+        current[k] = Math.max(current[k - 2] + nums[k], current[k - 1]);
+      }
+      return current[len - 1];
+    };
+    //方法二
+    // 第i个偷
+    // dp[i][1]，增加维度，二维1代表偷当前i房
+    // 第i个不偷
+    // dp[i][0]，增加维度，二维0代表不偷当前i房
+    // DP方程
+    // 第i个不偷
+    // dp[i][0] = Math.max(dp[i-1][0],dp[i-1][1])
+    // 不知道i-1是否能偷，偷也不违背相邻原则
+    // 第i个偷
+    // dp[i][1] = nums[i] + Math.max(dp[i-1][0]+0) = nums[i] + dp[i-1][0]
+    // 第i房偷，则先加nums[i]之金额，且第i-1就一定不能偷，否则违背相邻原则
+    // 至于dp[i-2]则不需重复考虑，因其已在dp[i-1]的子问题当中了
+    // 总结状态转移方程为
+    // dp[i][0] = Math.max(dp[i-1][0],dp[i-1][1]);
+    // dp[i][1] = dp[i-1][0] + nums[i];
+    var rob = function (nums) {
+      var n = nums.length;
+      if (n == 0) {
+        return 0;
+      } else if (n == 1) {
+        return nums[0];
+      }
+      var dp = Array.from(new Array(n), () => new Array(n).fill(0));
+      dp[0][0] = 0;
+      dp[0][1] = nums[0];
+      for (var i = 1; i < n; i++) {
+        dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+        dp[i][1] = dp[i - 1][0] + nums[i];
+      }
+      return Math.max(dp[n - 1][0], dp[n - 1][1]);
+    };
+
     //n皇后
   </script>
 </body>
