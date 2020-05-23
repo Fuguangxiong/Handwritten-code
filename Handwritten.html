@@ -5365,7 +5365,297 @@
       return Math.max(dp[n - 1][0], dp[n - 1][1]);
     };
 
+    //不同路径
+    // 一个机器人位于一个 m x n 网格的左上角（ 起始点在下图中标记为“ Start”）。
+
+    // 机器人每次只能向下或者向右移动一步。 机器人试图达到网格的右下角（ 在下图中标记为“ Finish”）。
+
+    // 问总共有多少条不同的路径？
+    // 示例 1:
+
+    //   输入: m = 3, n = 2
+    // 输出: 3
+    // 解释:
+    //   从左上角开始， 总共有 3 条路径可以到达右下角。
+    // 1. 向右 - > 向右 - > 向下
+    // 2. 向右 - > 向下 - > 向右
+    // 3. 向下 - > 向右 - > 向右
+    // 示例 2:
+
+    //   输入: m = 7, n = 3
+    // 输出: 28
+    var uniquePaths = function (m, n) {
+      let dp = Array.from(new Array(m), () => new Array(n).fill(1))
+      //定义左上角的坐标为(0,0) 右下角的坐标(m-1,n-1)
+      //dp[i][j] 表示(0,0)到坐标为(i,j)的走法
+      for (i = 0; i <= m - 1; i++) {
+        for (j = 0; j <= n - 1; j++) {
+          if (i === 0 && j === 0) {
+            dp[i][j] = 1
+          } else
+          if (i === 0 && j > 0) {
+            dp[i][j] = 1
+          } else if (i > 0 && j === 0) {
+            dp[i][j] = 1
+          } else {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+          }
+
+        }
+      }
+      return dp[m - 1][n - 1]
+    };
+
+    //不同路径 II
+    // 一个机器人位于一个 m x n 网格的左上角（ 起始点在下图中标记为“ Start”）。
+
+    // 机器人每次只能向下或者向右移动一步。 机器人试图达到网格的右下角（ 在下图中标记为“ Finish”）。
+
+    // 现在考虑网格中有障碍物。 那么从左上角到右下角将会有多少条不同的路径？
+    // 输入: [
+    //   [0, 0, 0],
+    //   [0, 1, 0],
+    //   [0, 0, 0]
+    // ]
+    // 输出: 2
+    // 解释:
+    //   3 x3 网格的正中间有一个障碍物。
+    // 从左上角到右下角一共有 2 条不同的路径：
+    // 1. 向右 - > 向右 - > 向下 - > 向下
+    // 2. 向下 - > 向下 - > 向右 - > 向右
+    // 既然是障碍物，说明此路不通，即经过此节点的路径数为0，所以当遇到障碍物时，设置dp[i][r] = 0即可
+    // 那么第一行第一列数据初始化的时候就不能都是1了，因为有的地方有障碍物存在
+    // 初始化dp二维数组的时候各个节点都不可达
+    // 这样dp递推的时候，只需要在62题的基础上加上obstacleGrid[i][r]当前节点不为障碍物的条件即可
+    // 而有障碍物的地方为0，加0也就等于没走
+
+    /**
+     * @param {number[][]} obstacleGrid
+     * @return {number}
+     */
+    /**
+     * @param {number[][]} obstacleGrid
+     * @return {number}
+     */
+    var uniquePathsWithObstacles = function (obstacleGrid) {
+      let dp = [];
+      let xlen = obstacleGrid.length;
+      if (xlen == 0) {
+        return 0;
+      }
+      let ylen = obstacleGrid[0].length;
+      if (ylen == 0) {
+        return 1;
+      }
+      for (let i = 0; i < xlen; i++) {
+        dp[i] = [];
+      }
+      dp[0][0] = 1;
+      for (let i = 0; i < xlen; i++) {
+        for (let j = 0; j < ylen; j++) {
+          if (obstacleGrid[i][j] == 1) {
+            dp[i][j] = 0;
+            continue;
+          }
+          if (i == 0 || j == 0) {
+            if (i == 0 && j == 0) {
+              continue;
+            }
+            if (i == 0) {
+              dp[i][j] = dp[0][j - 1];
+            } else {
+              dp[i][j] = dp[i - 1][0];
+            }
+          } else {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+          }
+        }
+      }
+      return dp[xlen - 1][ylen - 1];
+    };
+
+    //买卖股票的最佳时机
+    // 给定一个数组， 它的第 i 个元素是一支给定股票第 i 天的价格。
+
+    // 如果你最多只允许完成一笔交易（ 即买入和卖出一支股票一次）， 设计一个算法来计算你所能获取的最大利润。
+
+    // 注意： 你不能在买入股票前卖出股票。
+    // 示例 1:
+
+    //   输入: [7, 1, 5, 3, 6, 4]
+    // 输出: 5
+    // 解释: 在第 2 天（ 股票价格 = 1） 的时候买入， 在第 5 天（ 股票价格 = 6） 的时候卖出， 最大利润 = 6 - 1 = 5。
+    // 注意利润不能是 7 - 1 = 6, 因为卖出价格需要大于买入价格； 同时， 你不能在买入前卖出股票。
+    // 示例 2:
+
+    //   输入: [7, 6, 4, 3, 1]
+    // 输出: 0
+    // 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+    var maxProfit = function (prices) {
+      let curMin = prices[0]
+      let sum = 0
+      for (let i = 0; i < prices.length; i++) {
+        if (prices[i] < curMin) {
+          curMin = prices[i]
+          continue;
+        }
+        sum = Math.max(prices[i] - curMin, sum)
+      }
+      return sum
+    };
+
+    //最长上升子序列
+    // 给定一个无序的整数数组， 找到其中最长上升子序列的长度。
+
+    // 示例:
+
+    //   输入: [10, 9, 2, 5, 3, 7, 101, 18]
+    // 输出: 4
+    // 解释: 最长的上升子序列是[2, 3, 7, 101]， 它的长度是 4。
+
+    // dp[i]：表示以nums[i]为当前最长递增子序列尾元素的长度
+    var lengthOfLIS = function (nums) {
+      let n = nums.length;
+      if (n == 0) {
+        return 0;
+      }
+      let dp = new Array(n).fill(1);
+      let max = 0;
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < i; j++) {
+          if (nums[j] < nums[i]) {
+            dp[i] = Math.max(dp[i], dp[j] + 1);
+          }
+        }
+        max = Math.max(max, dp[i]);
+      }
+      return max;
+    };
+
     //n皇后
+    /**
+     * @param {number} n
+     * @return {string[][]}
+     * n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+     * 每一种解法包含一个明确的 n 皇后问题的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+     */
+
+    /*
+     * 回溯算法实际上一个类似枚举的搜索尝试过程，
+     * 主要是在搜索尝试过程中寻找问题的解，
+     * 当发现已不满足求解条件时，就“回溯”返回，
+     * 尝试别的路径。回溯法是一种选优搜索法，按选优条件向前搜索，
+     * 以达到目标。但当探索到某一步时，发现原先选择并不优或达不到目标，
+     * 就退回一步重新选择，这种走不通就退回再走的技术为回溯法，
+     * 而满足回溯条件的某个状态的点称为“回溯点”。
+     * 许多复杂的，规模较大的问题都可以使用回溯法，
+     * 有“通用解题方法”的美称。
+     * */
+
+    //来源于八皇后问题,使用的是回溯算法
+    var solveNQueens = function (n) {
+      //最终返回的答案
+      var result = [];
+      //缓存在递归过程中前面行的列数,已经有的列数就不必再进行可行性判断了
+      var columnCache = [];
+
+      //先构建一个n*n的棋盘,初始化时不放置任何皇后
+      var chessboard = [];
+      for (var index = 0; index < n; index++) {
+        var columns = [];
+        for (var j = 0; j < n; j++) {
+          columns.push(".");
+        }
+        chessboard.push(columns);
+      }
+
+      //递归函数,逐行对皇后进行放置
+      function dropQueen(currentRow) {
+        var row = currentRow || 0;
+
+        //当行数大于n时,说明已经放完了皇后,方法成功
+        if (row >= n) {
+          //保存结果
+          result.push(snapshot(chessboard));
+          return;
+        }
+
+        //对每一列进行递归判断,
+        for (var column = 0; column < n; column++) {
+          //如果当前列已经在之前的行中放置了皇后,则不可放置,直接跳过
+          if (columnCache.includes(column)) {
+            continue;
+          }
+          //第一行直接完成
+          if (row === 0) {
+            chessboard[row][column] = "Q";
+            columnCache.push(column);
+            dropQueen(row + 1);
+            //递归完成,重置棋盘,将当前棋子去除
+            chessboard[row][column] = ".";
+            //列缓存出栈
+            columnCache.pop();
+          } else {
+            if (checkPosition(row, column)) {
+              chessboard[row][column] = "Q";
+              columnCache.push(column);
+              dropQueen(row + 1);
+              chessboard[row][column] = ".";
+              columnCache.pop();
+            }
+          }
+        }
+      }
+
+      //检查在当前行/列上放置皇后是否合法
+      function checkPosition(row, column) {
+        //检查同一列上是否有皇后
+        for (var i = 0; i < row; i++) {
+          if (chessboard[i][column] === "Q") {
+            return false;
+          }
+        }
+        //检查左对角线上是否有皇后
+        for (var j = column - 1; j >= 0; j--) {
+          var curRow = row - (column - j);
+          if (curRow < 0) {
+            break;
+          }
+          if (chessboard[curRow][j] === "Q") {
+            return false;
+          }
+        }
+        //检查右对角线上是否有皇后
+        for (var k = column + 1; k <= n; k++) {
+          var curRow1 = row - (k - column);
+          if (row === 2 && column === 1) {}
+          if (curRow1 < 0) {
+            break;
+          }
+          if (chessboard[curRow1][k] === "Q") {
+            return false;
+          }
+        }
+        //由于是从上想先放置,不需要判断左下与右上的情况
+        return true;
+      }
+
+      //对得出的结果进行快照,保存
+      function snapshot(source) {
+        var target = [];
+        for (var u = 0; u < source.length; u++) {
+          target.push(source[u].join(''));
+        }
+        return target;
+      }
+
+      //开始进行八皇后问题
+      dropQueen();
+      return result;
+    };
+
+    // var result = solveNQueens(4);
+    // console.log("解法 ==>", result);
   </script>
 </body>
 
