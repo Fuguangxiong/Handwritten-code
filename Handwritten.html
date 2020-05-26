@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3224,13 +3224,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3420,7 +3420,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -5393,13 +5393,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-          if (i === 0 && j > 0) {
-            dp[i][j] = 1
-          } else if (i > 0 && j === 0) {
-            dp[i][j] = 1
-          } else {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-          }
+            if (i === 0 && j > 0) {
+              dp[i][j] = 1
+            } else if (i > 0 && j === 0) {
+              dp[i][j] = 1
+            } else {
+              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+            }
 
         }
       }
@@ -5628,7 +5628,7 @@
         //检查右对角线上是否有皇后
         for (var k = column + 1; k <= n; k++) {
           var curRow1 = row - (k - column);
-          if (row === 2 && column === 1) {}
+          if (row === 2 && column === 1) { }
           if (curRow1 < 0) {
             break;
           }
@@ -5790,8 +5790,8 @@
     // 说明：
     // 你的算法只能使用常数的额外空间。
     // 你不能只是单纯的改变节点内部的值， 而是需要实际进行节点交换。
-// 限制k个
-// 用计数实现，实时更新链表需要反转部分的头、尾节点
+    // 限制k个
+    // 用计数实现，实时更新链表需要反转部分的头、尾节点
     var reverseKGroup = function (head, k) {
       let cur = head;
       let count = 0;
@@ -5818,6 +5818,42 @@
     };
 
     //如何模拟实现 Array.prototype.splice
+
+    //有序数组中的单一元素
+    // 给定一个只包含整数的有序数组，每个元素都会出现两次，唯有一个数只会出现一次，找出这个数。
+    // 示例 1:
+    // 输入: [1, 1, 2, 3, 3, 4, 4, 8, 8]
+    // 输出: 2
+    // 示例 2:
+    // 输入: [3, 3, 7, 7, 10, 11, 11]
+    // 输出: 10
+    // 注意: 您的方案应该在 O(log n)时间复杂度和 O(1)空间复杂度中运行。
+    function singleNonDuplicate(nums) {
+      let start = 0
+      let end = nums.length - 1
+      while (start <= end) {  //注意这个地方取等不取等和下面注释部分的关系
+        let mid = start + (end - start) / 2
+        let halvesAreEven = (end - mid) % 2 === 0  //除去中间项 两边元素的个数是奇数项还是偶数项
+        if (nums[mid] === nums[mid + 1]) {
+          if (halvesAreEven) {
+            start = mid + 2
+          } else {
+            end = mid - 1
+          }
+        } else if (nums[mid] === nums[mid - 1]) {
+          if (halvesAreEven) {
+            end = mid - 2
+          } else {
+            start = mid + 1
+          }
+        } else {
+          return nums[mid]
+        }
+      }
+    //   console.log(start,end)
+    //   return nums[end]
+    }
+
   </script>
 </body>
 
