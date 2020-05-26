@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3224,13 +3224,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3420,7 +3420,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -5393,13 +5393,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-            if (i === 0 && j > 0) {
-              dp[i][j] = 1
-            } else if (i > 0 && j === 0) {
-              dp[i][j] = 1
-            } else {
-              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-            }
+          if (i === 0 && j > 0) {
+            dp[i][j] = 1
+          } else if (i > 0 && j === 0) {
+            dp[i][j] = 1
+          } else {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+          }
 
         }
       }
@@ -5552,110 +5552,57 @@
      * 有“通用解题方法”的美称。
      * */
 
-    //来源于八皇后问题,使用的是回溯算法
+    /**
+     * @param {number} n
+     * @return {string[][]}
+     */
     var solveNQueens = function (n) {
-      //最终返回的答案
-      var result = [];
-      //缓存在递归过程中前面行的列数,已经有的列数就不必再进行可行性判断了
-      var columnCache = [];
-
-      //先构建一个n*n的棋盘,初始化时不放置任何皇后
-      var chessboard = [];
-      for (var index = 0; index < n; index++) {
-        var columns = [];
-        for (var j = 0; j < n; j++) {
-          columns.push(".");
-        }
-        chessboard.push(columns);
-      }
-
-      //递归函数,逐行对皇后进行放置
-      function dropQueen(currentRow) {
-        var row = currentRow || 0;
-
-        //当行数大于n时,说明已经放完了皇后,方法成功
+      const res = []
+      const cols = new Set() // 垂直线的攻击位置
+      const pies = new Set() // 向左对角线的攻击位置
+      const nas = new Set() // 向右对角线的攻击位置
+      // 递归生成皇后的位置
+      const recurison = function (row, queens) {
         if (row >= n) {
-          //保存结果
-          result.push(snapshot(chessboard));
-          return;
+          // 由于queens在reverse会被修改，所以这里clone一份
+          res.push(queens.slice(0))
+          return
         }
+        // 遍历列
+        for (let col = 0; col < n; col++) {
+          // 判断是否在攻击范围，是则continue
+          if (cols.has(col) || pies.has(col + row) || nas.has(col - row)) {
+            continue
+          }
+          cols.add(col)
+          pies.add(col + row)
+          nas.add(col - row)
+          queens.push(col)
 
-        //对每一列进行递归判断,
-        for (var column = 0; column < n; column++) {
-          //如果当前列已经在之前的行中放置了皇后,则不可放置,直接跳过
-          if (columnCache.includes(column)) {
-            continue;
-          }
-          //第一行直接完成
-          if (row === 0) {
-            chessboard[row][column] = "Q";
-            columnCache.push(column);
-            dropQueen(row + 1);
-            //递归完成,重置棋盘,将当前棋子去除
-            chessboard[row][column] = ".";
-            //列缓存出栈
-            columnCache.pop();
-          } else {
-            if (checkPosition(row, column)) {
-              chessboard[row][column] = "Q";
-              columnCache.push(column);
-              dropQueen(row + 1);
-              chessboard[row][column] = ".";
-              columnCache.pop();
-            }
-          }
+          // drill down
+          recurison(row + 1, queens)
+
+          // reverse status
+          queens.pop()
+          cols.delete(col)
+          pies.delete(col + row)
+          nas.delete(col - row)
         }
       }
-
-      //检查在当前行/列上放置皇后是否合法
-      function checkPosition(row, column) {
-        //检查同一列上是否有皇后
-        for (var i = 0; i < row; i++) {
-          if (chessboard[i][column] === "Q") {
-            return false;
-          }
-        }
-        //检查左对角线上是否有皇后
-        for (var j = column - 1; j >= 0; j--) {
-          var curRow = row - (column - j);
-          if (curRow < 0) {
-            break;
-          }
-          if (chessboard[curRow][j] === "Q") {
-            return false;
-          }
-        }
-        //检查右对角线上是否有皇后
-        for (var k = column + 1; k <= n; k++) {
-          var curRow1 = row - (k - column);
-          if (row === 2 && column === 1) { }
-          if (curRow1 < 0) {
-            break;
-          }
-          if (chessboard[curRow1][k] === "Q") {
-            return false;
-          }
-        }
-        //由于是从上想先放置,不需要判断左下与右上的情况
-        return true;
+      // 生成棋盘
+      const generateCheckerboard = function () {
+        return res.map(queens => {
+          return queens.map(q => {
+            return Array(n).fill().map((k, i) => {
+              return i === q ? 'Q' : '.'
+            }).join('')
+          })
+        })
       }
-
-      //对得出的结果进行快照,保存
-      function snapshot(source) {
-        var target = [];
-        for (var u = 0; u < source.length; u++) {
-          target.push(source[u].join(''));
-        }
-        return target;
-      }
-
-      //开始进行八皇后问题
-      dropQueen();
-      return result;
+      recurison(0, [])
+      return generateCheckerboard()
     };
 
-    // var result = solveNQueens(4);
-    // console.log("解法 ==>", result);
 
     //贪心算法
     //零钱兑换
@@ -5831,9 +5778,9 @@
     function singleNonDuplicate(nums) {
       let start = 0
       let end = nums.length - 1
-      while (start <= end) {  //注意这个地方取等不取等和下面注释部分的关系
+      while (start <= end) { //注意这个地方取等不取等和下面注释部分的关系
         let mid = start + (end - start) / 2
-        let halvesAreEven = (end - mid) % 2 === 0  //除去中间项 两边元素的个数是奇数项还是偶数项
+        let halvesAreEven = (end - mid) % 2 === 0 //除去中间项 两边元素的个数是奇数项还是偶数项
         if (nums[mid] === nums[mid + 1]) {
           if (halvesAreEven) {
             start = mid + 2
@@ -5902,6 +5849,57 @@
       return ans;
     };
 
+    // 给定正整数 n， 找到若干个完全平方数（ 比如 1, 4, 9, 16, ...）使得它们的和等于 n。 你需要让组成和的完全平方数的个数最少。
+    // 示例 1:
+    //   输入: n = 12
+    // 输出: 3
+    // 解释: 12 = 4 + 4 + 4.
+    // 示例 2:
+    //   输入: n = 13
+    // 输出: 2
+    // 解释: 13 = 4 + 9.
+    var numSquares = function (n) {
+      const dp = [...Array(n + 1)].map(_ => 0); // 数组长度为n+1，值均为0
+      for (let i = 1; i <= n; i++) {
+        dp[i] = i; // 最坏的情况就是每次+1
+        for (let j = 1; i - j * j >= 0; j++) {
+          dp[i] = Math.min(dp[i], dp[i - j * j] + 1); // 动态转移方程
+        }
+      }
+      return dp[n];
+    };
+
+    // 阶乘后的零
+    // 给定一个整数 n， 返回 n!结果尾数中零的数量。
+    // 示例 1:
+    //   输入: 3
+    // 输出: 0
+    // 解释: 3! = 6, 尾数中没有零。
+    // 示例 2:
+    //   输入: 5
+    // 输出: 1
+    // 解释: 5! = 120, 尾数中有 1 个零.
+    // 说明: 你算法的时间复杂度应为 O(log n)。
+    // 通过观察，我们发现如果想要结果末尾是0，必须是分解质因数之后，2 和 5 相乘才行，同时因数分解之后发现5的个数远小于2，
+    //  因此我们只需要求解这n数字分解质因数之后一共有多少个5即可.
+    var trailingZeroes = function (n) {
+      if (n < 5) {
+        return 0;
+      } else {
+        let k = Math.floor(n / 5);
+        return k + trailingZeroes(k);
+      }
+    };
+
+    var trailingZeroes = function (n) {
+      let res = 0;
+      while (n >= 5) {
+        let k = Math.floor(n / 5);
+        res += k;
+        n = k;
+      }
+      return res;
+    };
   </script>
 </body>
 
