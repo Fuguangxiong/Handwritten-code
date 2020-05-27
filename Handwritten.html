@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3224,13 +3224,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3421,7 +3421,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -5483,13 +5483,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-            if (i === 0 && j > 0) {
-              dp[i][j] = 1
-            } else if (i > 0 && j === 0) {
-              dp[i][j] = 1
-            } else {
-              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-            }
+          if (i === 0 && j > 0) {
+            dp[i][j] = 1
+          } else if (i > 0 && j === 0) {
+            dp[i][j] = 1
+          } else {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+          }
 
         }
       }
@@ -6073,8 +6073,10 @@
 
     //摩尔投票法
     var majorityElement = function (nums) {
-      let num1 = null, num2 = null;
-      let count1 = 0, count2 = 0;
+      let num1 = null,
+        num2 = null;
+      let count1 = 0,
+        count2 = 0;
       let length = nums.length;
       for (let num of nums) {
         if (num1 == num) {
@@ -6192,10 +6194,50 @@
     // 输出：-1
     // 解释：最后得到的子数组不能为空，所以我们不能选择[-1] 并从中删去 - 1 来得到 0。
     // 我们应该直接选择[-1]，或者选择[-1, -1] 再从中删去一个 - 1。
+    function maximumSum(arr) {
+      let len = arr.length
+      let dp1 = new Array(len) //没删除元素前的连续数组最大值
+      let dp2 = new Array(len) //删除元素后的连续最大值
+      dp1[0] = arr[0]
+      dp2[0] = -Infinity //我们不能选择[-1] 并从中删去 - 1 来得到 0 
+      for (let i = 1; i < len; i++) {
+        dp1[i] = Math.max(dp1[i - 1] + arr[i], arr[i])
+        dp2[i] = Math.max(dp2[i - 1] + arr[i], dp1[i - 1]) //删除的项不在最后或者最后一项是删除的项
+      }
+      // let res = Number.MIN_VALUE  
+      //MIN_VALUE 属性是 JavaScript 中可表示的最小的数（接近 0 ，但不是负数）。它的近似值为 5 x 10-324。
+      let res = -Math.pow(10, 4)
+      for (let i = 0; i < len; i++) {
+        res = Math.max(res, Math.max(dp1[i], dp2[i]));
+      }
+      //console.log(dp1, dp2)
+      return res;
+    }
+
 
     //存在重复元素 II
     //给定一个整数数组和一个整数 k，判断数组中是否存在两个不同的索引 i 和 j，使得 nums [i] = nums [j]，并且 i 和 j 的差的绝对值最大为 k。
-
+    // var containsNearbyDuplicate = function (nums, k) {   //我的常规做法
+    //   let exist = true
+    //   for (let i = 0; i < nums.length; i++) {
+    //     for (let j = i + 1; j < nums.length && j <= i + k; j++) {
+    //       if (nums[i] === nums[j]) {
+    //         return true
+    //       }
+    //     }
+    //   }
+    //   return false
+    // };
+    var containsNearbyDuplicate = function (nums, k) { //用map记录位置降低时间复杂度
+      const map = new Map();
+      for (let i = 0, n = nums.length; i < n; i++) {
+        if (map.has(nums[i]) && i - map.get(nums[i]) <= k) {
+          return true
+        }
+        map.set(nums[i], i)
+      }
+      return false;
+    };
 
     // 75. 颜色分类
     // 给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
@@ -6214,6 +6256,55 @@
     // 一个直观的解决方案是使用计数排序的两趟扫描算法。
     // 首先，迭代计算出0、1 和 2 元素的个数，然后按照0、1、2的排序，重写当前数组。
     // 你能想出一个仅使用常数空间的一趟扫描算法吗？
+
+    //计数排序
+    var sortColors = function (nums) {
+      let countSort = (arr, maxVal) => {
+        let bucketLen = maxVal + 1;
+        let bucket = new Array(bucketLen).fill(0);
+        let sortedI = 0;
+        let arrLen = arr.length;
+        for (let i = 0; i < arrLen; i++) {
+          bucket[arr[i]]++;
+        }
+        for (let j = 0; j < bucketLen; j++) {
+          while (bucket[j] > 0) {
+            arr[sortedI++] = j;
+            bucket[j]--;
+          }
+        }
+        return arr;
+      }
+      return countSort(nums, 2);
+    };
+
+    var sortColors = function (nums) {
+      let left = 0,
+        right = nums.length - 1,
+        curr = 0;
+      while (curr <= right) {
+        if (nums[curr] === 0) {
+          [nums[curr], nums[left]] = [nums[left], nums[curr]];
+          //这里为什么可以自信的直接加1而不检测被调换过来的数字呢？我们可以假设被换过来的数字可能为1，2；但是如果这个数字是2，那么在之前的循环中已经被移动末尾了，所以这个数组只可能是1.
+          left++;
+          curr++;
+          continue;
+        }
+        if (nums[curr] === 2) {
+          [nums[curr], nums[right]] = [nums[right], nums[curr]];
+          right--;
+          continue;
+        }
+        if (nums[curr] === 1) {
+          curr++;
+          continue;
+        }
+
+      }
+      return nums
+    };
+    //sortColors([2,0,1])
+
 
     // 73. 矩阵置零
     // 给定一个 m x n 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用原地算法。
