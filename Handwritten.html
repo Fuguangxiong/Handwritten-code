@@ -3414,6 +3414,7 @@
     // <a id="black" href="#/black">black</a>
     // <a id="red" href="#/red">red</a>
     // <a id="yellow" href="#/yellow">yellow</a>
+    //hash模式
     function Router() {
       this.route = {};
       this.currentUlr = '';
@@ -3443,6 +3444,95 @@
     router.router('/yellow', function () {
       document.querySelector('body').style.backgroundColor = 'yellow';
     })
+
+   //history模式
+    // // baseUrl 是根路径
+    // var app = document.getElementById("app"), baseUrl = "/router/";
+
+    //   function RouterClass(opts) {
+    //     this.routes = {};
+    //     this.curUrl = "";
+    //     this.mode = "";
+    //     if (opts) {
+    //       this.mode = opts.mode;
+    //       if (this.mode === 'history') {
+    //         this.eventHistoryRouter();
+    //       } else {
+    //         this.eventHashRouter();
+    //       }
+    //     } else {
+    //       this.eventHashRouter();
+    //     }
+    //   }
+
+    //   RouterClass.prototype.route = function (path, callback) {
+    //     this.routes[path] = callback || function () { }
+    //   }
+
+    //   // 监听hash模式路由
+    //   RouterClass.prototype.eventHashRouter = function () {
+    //     // 监听load事件，防止刷新页面数据丢失
+    //     window.addEventListener("load", this.hashRouter.bind(this));
+    //     window.addEventListener("hashchange", this.hashRouter.bind(this))
+    //   }
+
+    //   //hash模式
+    //   RouterClass.prototype.hashRouter = function () {
+    //     this.curUrl = window.location.hash.slice(1) || '/';
+    //     // console.log(this.curUrl);
+    //     this.routes[this.curUrl]();
+    //   }
+
+    //   // history模式
+    //   RouterClass.prototype.historyRouter = function () {
+    //     this.curUrl = window.location.pathname;
+    //     this.routes[this.curUrl]();
+    //   }
+
+    //   // 监听history模式
+    //   RouterClass.prototype.eventHistoryRouter = function () {
+    //     window.addEventListener("load", this.historyRouter.bind(this));
+    //     // 监听回退事件  打个比方：就是你点浏览器那个返回的箭头按钮时触发的事件
+    //     window.addEventListener("popstate", this.historyRouter.bind(this));
+    //   }
+
+    //   // push模式页面跳转
+    //   RouterClass.prototype.push = function (url) {
+    //     if (this.mode === 'history') {
+    //       window.history.pushState({}, null, url);
+    //       this.routes[url]();
+    //     } else {
+    //       url = "#" + url;
+    //       window.location.href = url;
+    //     }
+    //   }
+
+    //   //replace模式页面跳转
+    //   RouterClass.prototype.replace = function (url) {
+    //     if (this.mode === 'history') {
+    //       window.history.replaceState({}, null, url);
+    //       this.routes[url]();
+    //     } else {
+    //       url = "#" + url;
+    //       window.location.replace(url);
+    //     }
+    //   }
+
+    //   var Router = new RouterClass({
+    //     mode: "history"  //hash:带#号,history:不带#号
+    //   });
+
+    //   // 构造一个函数，根据url 改变 #app 中的内容，对页面进行渲染
+    //   Router.route(baseUrl, function () {
+    //     app.innerHTML = "首页"
+    //   })
+    //   Router.route(baseUrl + 'news', function () {
+    //     app.innerHTML = "新闻页面"
+    //   })
+    //   Router.route(baseUrl + 'product', function () {
+    //     app.innerHTML = "产品页面"
+    //   })
+    
 
     //打乱数组 leetcode
     var Solution = function (nums) {
