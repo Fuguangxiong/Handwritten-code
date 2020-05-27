@@ -5902,6 +5902,50 @@
       return res;
     };
 
+    //【leetcode系列】多数元素
+    // 给定一个大小为 n 的数组，找出其中所有出现超过 ⌊ n / 2 ⌋ 次的元素。
+    //     var majorityElement = function(nums) {
+    //     let count = 1;
+    //     let majority = nums[0];
+    //     for(let i = 1; i < nums.length; i++) {
+    //         if (count === 0) {
+    //             majority = nums[i];
+    //         }
+    //         if (nums[i] === majority) {
+    //             count ++;
+    //         } else {
+    //             count --;
+    //         }
+    //     }
+    //     return majority;
+    // };
+
+    // 作者：fe-lucifer
+    // 链接：https://leetcode-cn.com/problems/majority-element/solution/169-duo-shu-yuan-su-tou-piao-suan-fa-python-js-by-/
+    // 来源：力扣（LeetCode）
+    // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    var majorityElement = function (nums) {
+      let num, count = 0
+      for (let i = 0; i < nums.length; i++) {
+        if (num === nums[i]) {
+          count++
+        } else if (count === 0) {
+          [num, count] = [nums[i], 1]
+        } else {
+          count--
+        }
+      }
+      count = 0
+      for (let num1 of nums) {
+        if (num1 === num) {
+          count++
+        }
+      }
+      if (count > num.length / 2) {
+        return num
+      }
+    };
+
     //【leetcode系列】229. 求众数 II
     // 给定一个大小为 n 的数组，找出其中所有出现超过 ⌊ n / 3 ⌋ 次的元素。
 
