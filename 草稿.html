@@ -9,24 +9,35 @@
 
 <body>
     <script>
-        //kmp算法
-        function KMP(target, source) {
-            function getNext(source) {
-              let next = []
-              let j = 1
-              let k = 0
-              next[1] = 0
-              while(j<=source.length){
-                  if(k === 0 || source[j] === source[k]){
-                      next[++j] = ++k
-                  }else{
-                      k = next[k]
-                  }
-              }
-              return next
-            }
-        }
+        //计数排序
+        // 计数排序就是简单的桶排序，一个桶代表数组中一个数出现的个数，
+        // 所以需要一个和数组数字范围一样大的辅助数组，一般用在范围小于100的排序，时间复杂度为O(n)，
+        // 空间复杂度为数组的数字范围。
+        function countingSort(arr, maxValue) {
+            var bucket = new Array(maxValue + 1),
+                sortedIndex = 0;
+            arrLen = arr.length,
+                bucketLen = maxValue + 1;
 
+            for (var i = 0; i < arrLen; i++) {
+                if (!bucket[arr[i]]) {
+                    bucket[arr[i]] = 0;
+                }
+                bucket[arr[i]]++;
+            }
+            console.log(bucket,'bucket...............')
+            for (var j = 0; j < bucketLen; j++) {
+                while (bucket[j] > 0) {
+                    arr[sortedIndex++] = j;
+                    bucket[j]--;
+                }
+            }
+
+            return arr;
+        }
+        var arr = [2, 3, 8, 7, 1, 2, 7, 3];
+        console.log(countingSort(arr, 8));//1,2,2,3,3,7,7,8
+        console.log(countingSort([2, 0, 2, 1, 1, 0], 6))
     </script>
 </body>
 

@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3224,13 +3224,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3421,7 +3421,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -5483,13 +5483,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-          if (i === 0 && j > 0) {
-            dp[i][j] = 1
-          } else if (i > 0 && j === 0) {
-            dp[i][j] = 1
-          } else {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-          }
+            if (i === 0 && j > 0) {
+              dp[i][j] = 1
+            } else if (i > 0 && j === 0) {
+              dp[i][j] = 1
+            } else {
+              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+            }
 
         }
       }
@@ -6258,25 +6258,31 @@
     // 你能想出一个仅使用常数空间的一趟扫描算法吗？
 
     //计数排序
-    var sortColors = function (nums) {
-      let countSort = (arr, maxVal) => {
-        let bucketLen = maxVal + 1;
-        let bucket = new Array(bucketLen).fill(0);
-        let sortedI = 0;
-        let arrLen = arr.length;
-        for (let i = 0; i < arrLen; i++) {
-          bucket[arr[i]]++;
-        }
-        for (let j = 0; j < bucketLen; j++) {
-          while (bucket[j] > 0) {
-            arr[sortedI++] = j;
-            bucket[j]--;
-          }
-        }
-        return arr;
-      }
-      return countSort(nums, 2);
-    };
+    // 计数排序就是简单的桶排序，一个桶代表数组中一个数出现的个数，
+    // 所以需要一个和数组数字范围一样大的辅助数组，一般用在范围小于100的排序，时间复杂度为O(n)，
+    // 空间复杂度为数组的数字范围。
+    // function countingSort(arr, maxValue) {
+    //   var bucket = new Array(maxValue + 1),
+    //     sortedIndex = 0;
+    //   arrLen = arr.length,
+    //     bucketLen = maxValue + 1;
+
+    //   for (var i = 0; i < arrLen; i++) {
+    //     if (!bucket[arr[i]]) {
+    //       bucket[arr[i]] = 0;
+    //     }
+    //     bucket[arr[i]]++;
+    //   }
+    //   console.log(bucket, 'bucket...............')
+    //   for (var j = 0; j < bucketLen; j++) {
+    //     while (bucket[j] > 0) {
+    //       arr[sortedIndex++] = j;
+    //       bucket[j]--;
+    //     }
+    //   }
+    //   return arr;
+    // }
+    // console.log(sortColors([2, 0, 2, 1, 1, 0], 6))
 
     var sortColors = function (nums) {
       let left = 0,
