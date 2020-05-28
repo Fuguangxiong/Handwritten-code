@@ -9,35 +9,46 @@
 
 <body>
     <script>
-        //计数排序
-        // 计数排序就是简单的桶排序，一个桶代表数组中一个数出现的个数，
-        // 所以需要一个和数组数字范围一样大的辅助数组，一般用在范围小于100的排序，时间复杂度为O(n)，
-        // 空间复杂度为数组的数字范围。
-        function countingSort(arr, maxValue) {
-            var bucket = new Array(maxValue + 1),
-                sortedIndex = 0;
-            arrLen = arr.length,
-                bucketLen = maxValue + 1;
 
-            for (var i = 0; i < arrLen; i++) {
-                if (!bucket[arr[i]]) {
-                    bucket[arr[i]] = 0;
-                }
-                bucket[arr[i]]++;
-            }
-            console.log(bucket,'bucket...............')
-            for (var j = 0; j < bucketLen; j++) {
-                while (bucket[j] > 0) {
-                    arr[sortedIndex++] = j;
-                    bucket[j]--;
-                }
-            }
 
+        // var subsets = function (nums) {
+        //     let n = nums.length
+        //     let res = []
+        //     let temp = []
+        //     let backtrack = function (temp, start) {
+        //         //满足条件加入结果
+        //         res.push(temp)
+        //         //回溯
+        //         for (let i = start; i < n; i++) {
+        //             temp.push(nums[i])
+        //             backtrack(temp.slice(), i + 1) //只能写i+1 不能写i++ ++i
+        //             temp.pop()
+        //         }
+        //     }
+        //     backtrack(temp, 0)
+        //     return res
+        // };
+        var subsets = function (nums) {
+            if (nums.length === 0) return []
+            let arr = [];
+            let strMax = Array(nums.length).fill(1).join('');//得到满1的二进制数
+            let len = parseInt(strMax, 2);//循环次数为该二进制数对应的十进制
+            console.log(strMax, len,'...............')
+            let fill = '000000000000000000000000000000000000000';  //二进制补0
+            for (let i = 0; i < len + 1; i++) {
+                let str = (fill + i.toString(2)).slice(-nums.length); //二进制补0后裁剪
+                console.log(str,'.....1')
+                let item = [];
+                for (let j = 0; j < nums.length; j++) {  //循环二进制字符串，为1则计入数组
+                    if (str[j] == 1) {
+                        item.push(nums[j])
+                    }
+                }
+                arr.push(item)
+            }
             return arr;
-        }
-        var arr = [2, 3, 8, 7, 1, 2, 7, 3];
-        console.log(countingSort(arr, 8));//1,2,2,3,3,7,7,8
-        console.log(countingSort([2, 0, 2, 1, 1, 0], 6))
+        };
+        subsets([1, 2, 3])
     </script>
 </body>
 

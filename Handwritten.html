@@ -6261,6 +6261,7 @@
     // 计数排序就是简单的桶排序，一个桶代表数组中一个数出现的个数，
     // 所以需要一个和数组数字范围一样大的辅助数组，一般用在范围小于100的排序，时间复杂度为O(n)，
     // 空间复杂度为数组的数字范围。
+    //它的优势在于在对一定范围内的整数排序时，它的复杂度为Ο(n+k)（其中k是整数的范围），快于任何比较排序算法。 [1]  当然这是一种牺牲空间换取时间的做法，
     // function countingSort(arr, maxValue) {
     //   var bucket = new Array(maxValue + 1),
     //     sortedIndex = 0;
@@ -6346,6 +6347,58 @@
     // 一个直接的解决方案是使用  O(mn) 的额外空间，但这并不是一个好的解决方案。
     // 一个简单的改进方案是使用 O(m + n) 的额外空间，但这仍然不是最好的解决方案。
     // 你能想出一个常数空间的解决方案吗？
+    //O(m + n) 的额外空间
+    var setZeroes = function (matrix) {
+      let rowSet = new Set();
+      let colSet = new Set();
+      let rowLen = matrix.length
+      let colLen = matrix[0].length;
+      for (let i = 0; i < rowLen; i++) {
+        for (let j = 0; j < colLen; j++) {
+          if (matrix[i][j] == 0) {
+            rowSet.add(i);
+            colSet.add(j);
+          }
+        }
+      }
+      for (let i = 0; i < rowLen; i++) {
+        for (let j = 0; j < colLen; j++) {
+          if (rowSet.has(i) || colSet.has(j)) {
+            matrix[i][j] = 0;
+          }
+        }
+      }
+      return matrix;
+    };
+    //常数空间复杂度
+    var setZeroes = function (matrix) {
+      let rowLen = matrix.length
+      let colLen = matrix[0].length;
+      for (let i = 0; i < rowLen; i++) {
+        for (let j = 0; j < colLen; j++) {
+          if (matrix[i][j] == 0) {
+            for (let rowI = 0; rowI < rowLen; rowI++) {
+              if (matrix[rowI][j] != 0) {
+                matrix[rowI][j] = true;
+              }
+            }
+            for (let colI = 0; colI < colLen; colI++) {
+              if (matrix[i][colI] != 0) {
+                matrix[i][colI] = true;
+              }
+            }
+          }
+        }
+      }
+      for (let i = 0; i < rowLen; i++) {
+        for (let j = 0; j < colLen; j++) {
+          if (typeof (matrix[i][j]) == 'boolean') {
+            matrix[i][j] = 0;
+          }
+        }
+      }
+      return matrix;
+    };
 
     // 78. 子集
     // 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
@@ -6366,6 +6419,55 @@
     //   [1, 2],
     //   []
     // ]
+    //回溯法
+    var subsets = function (nums) {
+      let n = nums.length
+      let res = []
+      let temp = []
+      let backtrack = function (temp, start) {
+        //满足条件加入结果
+        res.push(temp)
+        //回溯
+        for (let i = start; i < n; i++) {
+          temp.push(nums[i])
+          backtrack(temp.slice(), i + 1) //只能写i+1 不能写i++ ++i
+          temp.pop()
+        }
+      }
+      backtrack(temp, 0)
+      return res
+    };
+
+    //字典排序（二进制排序） 子集
+    //     要点：
+    // 使用二进制映射数组元素出现的情况，1为出现，0为不出现，如 nums = [1,2,3]
+    // 000 => []
+    // 001 => [3]
+    // 010 => [2]
+    // 011 => [2,3]
+    // 100 => [1]
+    // 101 => [1,3]
+    // 110 => [1,2]
+    // 111 => [1,2,3]
+
+    var subsets = function (nums) {
+      if (nums.length === 0) return []
+      let arr = [];
+      let strMax = Array(nums.length).fill(1).join('');//得到满1的二进制数
+      let len = parseInt(strMax, 2);//循环次数为该二进制数对应的十进制
+      let fill = '000000000000000000000000000000000000000';  //二进制补0
+      for (let i = 0; i < len + 1; i++) {
+        let str = (fill + i.toString(2)).slice(-nums.length); //二进制补0后裁剪
+        let item = [];
+        for (let j = 0; j < nums.length; j++) {  //循环二进制字符串，为1则计入数组
+          if (str[j] == 1) {
+            item.push(nums[j])
+          }
+        }
+        arr.push(item)
+      }
+      return arr;
+    };
 
     // 190. 颠倒二进制位
     // 颠倒给定的 32 位无符号整数的二进制位。
