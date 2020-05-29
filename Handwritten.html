@@ -6502,6 +6502,33 @@
     //老鼠试毒  //鸡蛋掉落  //64匹马、8赛道，至少多少轮比赛找出速度最快的4匹马?
     // 题目
     // 面试题：有1000个一模一样的瓶子，其中有1瓶是毒药，老鼠喝了有毒的会在24h之后死亡。求最少需要多少老鼠才能在24h里找到有毒的那瓶。
+
+    //单值二叉树
+    var isUnivalTree = function (root) {
+      if (!root) {
+        return true
+      }
+      let val = root.val
+      let flag = true
+      function bfs(node) {
+        if (node.val !== val) {
+          flag = false
+        }
+        if (node.left) {
+          bfs(node.left)
+        }
+        if (node.right) {
+          bfs(node.right)
+        }
+      }
+      if (root.left) {
+        bfs(root.left)
+      }
+      if (root.right) {
+        bfs(root.right)
+      }
+      return flag
+    };
   </script>
 </body>
 
