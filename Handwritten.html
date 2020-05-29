@@ -6706,6 +6706,26 @@
     //   [3, 1, 2],
     //   [3, 2, 1]
     // ]
+    var permute = function (nums) {  //有bug待查
+      let res = []
+      let temPath = []
+      backTrack(temPath, 0)
+      return res
+      function backTrack(temPath, start) {
+        if (temPath.length === 3) {
+          res.push(temPath)
+          return
+        }
+        for (let i = start === nums.length - 1 ? 0 : start; i < nums.length; i++) {
+          if (temPath.includes(nums[i])) {
+            continue
+          }
+          temPath.push(nums[i])
+          backTrack(temPath.slice(), start + 1)
+          temPath.pop()
+        }
+      }
+    };
   </script>
 </body>
 
