@@ -9,46 +9,23 @@
 
 <body>
     <script>
+        var permute = function (nums) {
+            const list = [];
+            debugger;
+            backtrack(list, [])
+            return list
 
-
-        // var subsets = function (nums) {
-        //     let n = nums.length
-        //     let res = []
-        //     let temp = []
-        //     let backtrack = function (temp, start) {
-        //         //满足条件加入结果
-        //         res.push(temp)
-        //         //回溯
-        //         for (let i = start; i < n; i++) {
-        //             temp.push(nums[i])
-        //             backtrack(temp.slice(), i + 1) //只能写i+1 不能写i++ ++i
-        //             temp.pop()
-        //         }
-        //     }
-        //     backtrack(temp, 0)
-        //     return res
-        // };
-        var subsets = function (nums) {
-            if (nums.length === 0) return []
-            let arr = [];
-            let strMax = Array(nums.length).fill(1).join('');//得到满1的二进制数
-            let len = parseInt(strMax, 2);//循环次数为该二进制数对应的十进制
-            console.log(strMax, len,'...............')
-            let fill = '000000000000000000000000000000000000000';  //二进制补0
-            for (let i = 0; i < len + 1; i++) {
-                let str = (fill + i.toString(2)).slice(-nums.length); //二进制补0后裁剪
-                console.log(str,'.....1')
-                let item = [];
-                for (let j = 0; j < nums.length; j++) {  //循环二进制字符串，为1则计入数组
-                    if (str[j] == 1) {
-                        item.push(nums[j])
-                    }
+            function backtrack(list, tempList) {
+                if (tempList.length === nums.length) return list.push([...tempList]);
+                for (let i = 0; i < nums.length; i++) {
+                    if (tempList.includes(nums[i])) continue;
+                    tempList.push(nums[i]);
+                    backtrack(list, tempList);
+                    tempList.pop();
                 }
-                arr.push(item)
             }
-            return arr;
         };
-        subsets([1, 2, 3])
+        permute([1, 2, 3])
     </script>
 </body>
 
