@@ -7096,9 +7096,6 @@
 
     // 二叉树展开为链表
     // 给定一个二叉树，原地将它展开为一个单链表。
-
-
-
     // 例如，给定二叉树
 
     //     1
@@ -7120,6 +7117,19 @@
     //          \
     //           6
 
+    var flatten = function (root) {
+      if (!root) return;
+      flatten(root.left);
+      flatten(root.right);
+      var temp = root.right;
+      root.right = root.left;
+      root.left = null;
+      while (root.right) {
+        root = root.right;
+      }
+      root.right = temp;
+      return root
+    }
 
     // 面试题49.丑数
     // 我们把只包含因子 2、 3 和 5 的数称作丑数（ Ugly Number）。 求按从小到大的顺序的第 n 个丑数。
