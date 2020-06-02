@@ -6933,9 +6933,27 @@
 
     //   输入: [0, 1, 2, 3, 4, 5, 6, 7, 9]
     // 输出: 8
+    // ad地址：https://leetcode-cn.com/problems/que-shi-de-shu-zi-lcof/
+    // 原文地址：https://xxoo521.com/2020-03-14-missing-number/
+    //0 +1 +...+n-数组的和
+    var missingNumber = function (nums) {
+      let left = 0,
+        right = nums.length - 1;
+      while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        if (mid === nums[mid]) {
+          left = mid + 1;
+        } else if (mid < nums[mid]) {
+          right = mid - 1;
+        }
+      }
+
+      return left;
+    };
 
     // 300. 最长上升子序列
     // 给定一个无序的整数数组， 找到其中最长上升子序列的长度。
+
 
     // 示例:
 
@@ -6947,6 +6965,53 @@
     //   可能会有多种最长上升子序列的组合， 你只需要输出对应的长度即可。
     // 你算法的时间复杂度应该为 O(n2)。
     // 进阶: 你能将算法的时间复杂度降低到 O(n log n) 吗 ?
+    //动态规划
+    var lengthOfLIS = function (nums) {
+      let n = nums.length;
+      if (n == 0) {
+        return 0;
+      }
+      let dp = new Array(n).fill(1);
+      let max = 0;
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < i; j++) {
+          if (nums[j] < nums[i]) {
+            dp[i] = Math.max(dp[i], dp[j] + 1);
+          }
+        }
+        max = Math.max(max, dp[i]);
+      }
+      return max;
+    };
+   //二分法
+    var lengthOfLIS = function (nums) {
+      let n = nums.length;
+      if (n <= 1) {
+        return n;
+      }
+      let tail = new Array(n);
+      tail[0] = nums[0];
+      let end = 0;
+      for (let i = 1; i < n; i++) {
+        if (nums[i] > tail[end]) {
+          end++;
+          tail[end] = nums[i];
+        } else {
+          let left = 0;
+          let right = end;
+          while (left < right) {
+            let mid = left + ((right - left) >> 1);
+            if (tail[mid] < nums[i]) {
+              left = mid + 1;
+            } else {
+              right = mid;
+            }
+          }
+          tail[left] = nums[i];
+        }
+      }
+      return end + 1;
+    };
 
     // 240. 搜索二维矩阵 II
     // 编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target。 该矩阵具有以下特性：
@@ -7054,6 +7119,42 @@
     // 00011
     // 输出: 3
     // 解释: 每座岛屿只能由水平和 / 或竖直方向上相邻的陆地连接而成。
+    /*
+     * @lc app=leetcode id=200 lang=javascript
+     *
+     * [200] Number of Islands
+     */
+    function helper(grid, i, j, rows, cols) {
+      if (i < 0 || j < 0 || i > rows - 1 || j > cols - 1 || grid[i][j] === "0")
+        return;
+
+      grid[i][j] = "0";
+
+      helper(grid, i + 1, j, rows, cols);
+      helper(grid, i, j + 1, rows, cols);
+      helper(grid, i - 1, j, rows, cols);
+      helper(grid, i, j - 1, rows, cols);
+    }
+    /**
+     * @param {character[][]} grid
+     * @return {number}
+     */
+    var numIslands = function (grid) {
+      let res = 0;
+      const rows = grid.length;
+      if (rows === 0) return 0;
+      const cols = grid[0].length;
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          if (grid[i][j] === "1") {
+            helper(grid, i, j, rows, cols);
+            res++;
+          }
+        }
+      }
+      return res;
+    };
+
 
     //     被围绕的区域
     // 给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
@@ -7077,6 +7178,46 @@
     // 被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。
     //  任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。
     //  如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+
+    /**
+     * @param {character[][]} board
+     * @return {void} Do not return anything, modify board in-place instead.
+     */
+    var solve = function (board) {
+      let m = board.length;
+      if (m == 0) {
+        return
+      };
+      let n = board[0].length;
+      let cannot = {};
+      let dfs = (i, j) => {
+        // 越界、标示过或者非相连O下return
+        if (i < 0 || j < 0 || i == m || j == n || board[i][j] != 'O' || cannot[i + '-' + j]) {
+          return;
+        }
+        cannot[i + '-' + j] = true;
+        dfs(i - 1, j);
+        dfs(i + 1, j);
+        dfs(i, j - 1);
+        dfs(i, j + 1);
+      }
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+          // 从边缘O出发寻找其相连点都标示为不可替换
+          if ((i == 0 || j == 0 || i == m - 1 || j == n - 1) && board[i][j] == 'O') {
+            dfs(i, j);
+          }
+        }
+      }
+      // 规避边界条件去循环
+      for (let i = 1; i < m - 1; i++) {
+        for (let j = 1; j < n - 1; j++) {
+          if (!cannot[i + '-' + j] && board[i][j] == 'O') {
+            board[i][j] = 'X';
+          }
+        }
+      }
+    };
 
     // 不同的二叉搜索树
     // 给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
