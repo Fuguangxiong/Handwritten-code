@@ -6983,7 +6983,7 @@
       }
       return max;
     };
-   //二分法
+    //二分法
     var lengthOfLIS = function (nums) {
       let n = nums.length;
       if (n <= 1) {
@@ -7067,7 +7067,41 @@
     //   ["aa", "b"],
     //   ["a", "a", "b"]
     // ]
+    var partition = function (s) {
+      // 定义是否为回文字符串
+      const isPalidrome = (str) => {
+        let left = 0,
+          right = str.length - 1
+        while (left < right) {
+          if (str.charAt(left) !== str.charAt(right)) return false
 
+          right--
+          left++
+        }
+        return true
+      }
+
+      // 定义回溯算法
+      const backTrack = (res, str, tempRes) => {
+        // 需要注意，这里必须是 tempRes 的拷贝
+        if (str.length === 0) {
+          res.push(tempRes.concat())
+        }
+
+        for (let i = 1; i <= str.length; i++) {
+
+          if (isPalidrome(str.substring(0, i))) {
+            tempRes.push(str.substring(0, i))
+            backTrack(res, str.substring(i, str.length), tempRes)
+            // 返回上一次递归时，需要去除这次递归的回文子串
+            tempRes.pop()
+          }
+        }
+      }
+      let res = []
+      backTrack(res, s, [])
+      return res
+    };
     // 单词搜索
     // 给定一个二维网格和一个单词， 找出该单词是否存在于网格中。
 
