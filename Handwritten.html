@@ -7131,6 +7131,38 @@
 
     //   1 是丑数。
     // n 不超过1690。
+    // 丑数= 之前某个丑数*(2/3/5)
+    // M = dp[i-1] 当前dp里最大丑数，是要找比M大的,
+    // M2 从最能满足条件的小丑数开始都*2，第1个大于M的丑数，ptr2指向*2的最小丑数
+    // M3 从最能满足条件的小丑数开始都*3，第1个大于M的丑数，ptr3指向*3的最小丑数
+    // M5 从最能满足条件的小丑数开始都*5，第1个大于M的丑数，ptr5指向*5的最小丑数
+    // dp[i] = min(M2,M3,M5);
+    //动态规划
+    var nthUglyNumber = function (n) {
+      const res = new Array(n);
+      res[0] = 1;
+
+      let ptr2 = 0, // 下个数字永远 * 2
+        ptr3 = 0, // 下个数字永远 * 3
+        ptr5 = 0; // 下个数字永远 * 5
+
+      for (let i = 1; i < n; ++i) {
+        res[i] = Math.min(res[ptr2] * 2, res[ptr3] * 3, res[ptr5] * 5);
+        // 说明前ptr2个丑数*2也不可能产生比i更大的丑数了
+        // 所以移动ptr2
+        if (res[i] === res[ptr2] * 2) {
+          ++ptr2;
+        }
+        if (res[i] === res[ptr3] * 3) {
+          ++ptr3;
+        }
+        if (res[i] === res[ptr5] * 5) {
+          ++ptr5;
+        }
+      }
+
+      return res[n - 1];
+    };
 
 
     // 263. 丑数
