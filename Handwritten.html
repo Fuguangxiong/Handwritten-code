@@ -7553,6 +7553,44 @@
 
     // 数组的长度为[1, 20, 000]。
     // 数组中元素的范围是[-1000, 1000]，且整数 k 的范围是[-1e7, 1e7]。
+    //方法一 暴力解法
+    // var subarraySum = function (nums, k) {
+    //   if (nums.length <= 0) return 0;
+    //   let count = 0;
+    //   for (let start = 0; start < nums.length; start++) {
+    //     let sum = 0;
+    //     for (let end = start; end < nums.length; end++) {
+    //       sum += nums[end];
+    //       if (sum === k) {
+    //         count++;
+    //       }
+    //     }
+    //   }
+    //   return count;
+    // };
+    //hash法
+    var subarraySum = function (nums, k) {
+      if (nums.length <= 0) return 0;
+      let map = new Map([
+        [0, 1]
+      ]);
+      let sum = 0,
+        count = 0;
+      for (let i = 0; i < nums.length; i++) {
+        sum += nums[i];
+        // 注意顺序，要先判断存不存在sum - k
+        // 然后再设置map
+        if (map.has(sum - k)) {
+          count += map.get(sum - k);
+        }
+        if (!map.has(sum)) {
+          map.set(sum, 1);
+        } else {
+          map.set(sum, map.get(sum) + 1);
+        }
+      }
+      return count;
+    };
   </script>
 </body>
 
