@@ -29,10 +29,8 @@
             if (n <= 1) {
                 return n;
             }
-        
             let tail = new Array(n);
             tail[0] = nums[0];
-       
             let end = 0;
             for (let i = 1; i < n; i++) {
                 if (nums[i] > tail[end]) {
@@ -41,7 +39,6 @@
                 } else {
                     let left = 0;
                     let right = end;
-                  
                     while (left < right) {
                         let mid = left + ((right - left) >> 1);
                         if (tail[mid] < nums[i]) {
@@ -50,8 +47,7 @@
                             right = mid;
                         }
                     }
-                    tail[left] = nums[i];
-                    console.log(tail)
+                    tail[left] = nums[i];     
                 }
             }
            

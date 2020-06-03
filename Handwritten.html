@@ -7075,7 +7075,6 @@
           right = str.length - 1
         while (left < right) {
           if (str.charAt(left) !== str.charAt(right)) return false
-
           right--
           left++
         }
@@ -7088,9 +7087,7 @@
         if (str.length === 0) {
           res.push(tempRes.concat())
         }
-
         for (let i = 1; i <= str.length; i++) {
-
           if (isPalidrome(str.substring(0, i))) {
             tempRes.push(str.substring(0, i))
             backTrack(res, str.substring(i, str.length), tempRes)
