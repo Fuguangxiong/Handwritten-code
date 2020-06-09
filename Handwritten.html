@@ -7733,7 +7733,7 @@
       let res = []
       for (let i = 0; i < arr.length; i++) {
         if (map.has(arr[i])) {
-           console.log(arr[i])
+          console.log(arr[i])
         } else {
           map.set(arr[i], i)
         }
@@ -7775,6 +7775,30 @@
     //   return cache[n];
     // }
     // console.log(fib(5));//5
+    
+    //大数据优化
+    //如果一个函数的运行时间过长，那么可以把它拆分为一系列能在较短时间内完成的子函数。
+    //同上，可把参数相同的一系列函数调用分割到不同的定时器中执行，通用方法如下：
+    function multistep(steps, args, callback) {
+      var tasks = steps.concat();
+      setTimeout(function () {
+        var task = tasks.shift();
+        task.apply(null, args || []);
+
+        if (tasks.length > 0) {
+          setTimeout(arguments.callee, 25);
+        } else {
+          callback();
+        }
+      }, 25);
+    }
+
+    function saveDocument(id) {
+      var tasks = [open, write, close];
+      multistep(tasks, [id], function () {
+        console.log('finished!');
+      })
+    }
   </script>
 </body>
 
