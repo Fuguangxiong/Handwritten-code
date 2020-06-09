@@ -7732,9 +7732,14 @@
       return Fibonacci(n - 1) + Fibonacci(n - 2);
     }
     // 递归（优化版）
-    function Fibonacci2(n, ac1 = 1, ac2 = 1) {
-      if (n <= 1) { return ac2 };
-      return Fibonacci2(n - 1, ac2, ac1 + ac2);
+    // 在ES6规范中，有一个尾调用优化，可以实现高效的尾递归方案。
+    // ES6的尾调用优化只在严格模式下开启，正常模式是无效的。
+    'use strict'
+    function fib(n, current = 0, next = 1) {
+      if (n == 0) return 0;
+      if (n == 1) return next; // return next
+      console.log(`fibonacci(${n}, ${next}, ${current + next})`);
+      return fib(n - 1, next, current + next);
     }
     // var cache = [];
     // function fib(n) {
