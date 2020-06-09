@@ -7736,6 +7736,19 @@
       if (n <= 1) { return ac2 };
       return Fibonacci2(n - 1, ac2, ac1 + ac2);
     }
+    // var cache = [];
+    // function fib(n) {
+    //   if (cache[n] !== undefined) {
+    //     return cache[n];
+    //   }
+    //   if (n <= 2) {
+    //     cache[n] = 1;
+    //     return 1;
+    //   }
+    //   cache.push(fib(n - 1) + fib(n - 2));
+    //   return cache[n];
+    // }
+    // console.log(fib(5));//5
 
   </script>
 </body>
