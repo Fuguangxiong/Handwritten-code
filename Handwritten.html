@@ -7817,6 +7817,25 @@
       }
     }
 
+    //     如何避免给每个 async 写 try/catch
+    // 写一个辅助函数：
+    async function errorCaptured(asyncFunc) {
+      try {
+        let res = await asyncFunc()
+        return [null, res]
+      } catch (e) {
+        return [e, null]
+      }
+    }
+    //复制代码使用方式:
+    async function func() {
+      let [err, res] = await errorCaptured(asyncFunc)
+      if (err) {
+        //... 错误捕获
+      }
+      //...
+    }
+
   </script>
 </body>
 
