@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3276,13 +3276,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3473,7 +3473,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -5535,13 +5535,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-          if (i === 0 && j > 0) {
-            dp[i][j] = 1
-          } else if (i > 0 && j === 0) {
-            dp[i][j] = 1
-          } else {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-          }
+            if (i === 0 && j > 0) {
+              dp[i][j] = 1
+            } else if (i > 0 && j === 0) {
+              dp[i][j] = 1
+            } else {
+              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+            }
 
         }
       }
@@ -7775,7 +7775,7 @@
     //   return cache[n];
     // }
     // console.log(fib(5));//5
-    
+
     //大数据优化
     //如果一个函数的运行时间过长，那么可以把它拆分为一系列能在较短时间内完成的子函数。
     //同上，可把参数相同的一系列函数调用分割到不同的定时器中执行，通用方法如下：
@@ -7799,6 +7799,24 @@
         console.log('finished!');
       })
     }
+
+
+    //find和findIndex的实现原理
+    Array.prototype.myFind = function (conditionFunc) {
+      for (var i = 0; i < this.length; i++) {
+        if (conditionFunc(this[i], i)) {
+          return this[i]
+        }
+      }
+    }
+    Array.prototype.myFindIndex = function (conditionFunc) {
+      for (var i = 0; i < this.length; i++) {
+        if (conditionFunc(this[i], i)) {
+          return i
+        }
+      }
+    }
+
   </script>
 </body>
 
