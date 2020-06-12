@@ -7197,13 +7197,18 @@
     };
     //有脑二分法
     var searchMatrix = function (matrix, target) {
-      if (matrix === null || matrix.length === 0 || matrix[0].length === 0) return false;
+      if (!(matrix && matrix.length > 0 && typeof matrix[0][0] === 'number')) {
+        return false;
+      }
+      if (target < matrix[0][0]) {
+        return false;
+      }
+      let row = matrix.length - 1;
       let col = 0;
-      let row = matrix[0].length - 1;
-      while (col < matrix.length && row >= 0) {
-        if (matrix[col][row] > target) {
+      while (col < matrix[0].length && row >= 0) {
+        if (matrix[row][col] > target) {
           row--;
-        } else if (matrix[col][row] < target) {
+        } else if (matrix[row][col] < target) {
           col++
         } else {
           return true;
@@ -7211,6 +7216,7 @@
       }
       return false;
     };
+
     // 50. Pow(x, n)
     // 实现 pow(x, n)， 即计算 x 的 n 次幂函数。
 
