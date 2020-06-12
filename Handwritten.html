@@ -7928,6 +7928,18 @@
 
     //如何计算浏览器的localStorage容量
     (function () {
+      function getStr(count) {
+        return new Array(count + 1).join('a');
+      }
+
+      function formatSize(byte) {
+        if (byte > 1024 * 1024) {
+          return `${(byte / 1024 / 1024)}MB`;
+        } else {
+          return `${(byte / 1024).toFixed(2)}KB`;
+        }
+      }
+
       // 清空
       window.localStorage.clear();
 
@@ -7956,9 +7968,11 @@
           }
         }
       }
+
       // 要算上 KEY 的长度
       console.log('total capacity: ', `${formatSize((text.length + KEY.length) * 2)}`);
-    })()
+    })();
+
 
     /* 根据窗口宽度自动计算html基准字体大小，用于移动端弹性布局 */
     (function () {
