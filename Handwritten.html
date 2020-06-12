@@ -7837,37 +7837,38 @@
     }
 
     //如何计算浏览器的localStorage容量
-    // 清空
-    window.localStorage.clear();
+    (function () {
+      // 清空
+      window.localStorage.clear();
 
-    const KEY = 'a';
-    // 开始每次增加 1MB，512 个字符 1KB
-    let appendedSize = 512 * 1024;
-    let appendedText = '';
-    let text = '';
+      const KEY = 'a';
+      // 开始每次增加 1MB，512 个字符 1KB
+      let appendedSize = 512 * 1024;
+      let appendedText = '';
+      let text = '';
 
-    while (true) {
-      try {
-        appendedText = getStr(appendedSize);
-        text += appendedText;
+      while (true) {
+        try {
+          appendedText = getStr(appendedSize);
+          text += appendedText;
 
-        window.localStorage.removeItem(KEY);
-        window.localStorage.setItem(KEY, text);
-      } catch (e) {
-        // 如果插入报错，尝试减少增加量，直至少于1个字符
-        text = text.slice(0, -appendedText.length);
+          window.localStorage.removeItem(KEY);
+          window.localStorage.setItem(KEY, text);
+        } catch (e) {
+          // 如果插入报错，尝试减少增加量，直至少于1个字符
+          text = text.slice(0, -appendedText.length);
 
-        appendedSize /= 2;
-      } finally {
-        // 如果增加量少于1个字符，则退出循环
-        if (appendedSize < 1) {
-          break;
+          appendedSize /= 2;
+        } finally {
+          // 如果增加量少于1个字符，则退出循环
+          if (appendedSize < 1) {
+            break;
+          }
         }
       }
-    }
 
-    // 要算上 KEY 的长度
-    console.log('total capacity: ', `${formatSize((text.length + KEY.length) * 2)}`);
+      // 要算上 KEY 的长度
+      console.log('total capacity: ', `${formatSize((text.length + KEY.length) * 2)}`);
     })();
   </script>
 </body>
