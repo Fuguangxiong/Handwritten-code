@@ -7308,10 +7308,7 @@
     //  任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。
     //  如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
 
-    /**
-     * @param {character[][]} board
-     * @return {void} Do not return anything, modify board in-place instead.
-     */
+
     var solve = function (board) {
       let m = board.length;
       if (m == 0) {
@@ -7869,6 +7866,30 @@
 
       // 要算上 KEY 的长度
       console.log('total capacity: ', `${formatSize((text.length + KEY.length) * 2)}`);
+    /* 根据窗口宽度自动计算html基准字体大小，用于移动端弹性布局 */
+    (function () {
+      var docEl = document.documentElement,
+        docBody = document.body,
+        baseFontSize = 100,//为了方便，这样rem=px/100
+        pageMaxWidth = 750,
+        rootHtml = document.getElementsByTagName('html')[0],
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        recalc = function () {
+          var clientWidth = clientWidth = docEl.clientWidth || docBody.clientWidht;
+
+          //最大宽度显示为750的宽度
+          if (clientWidth > pageMaxWidth) {
+            clientWidth = pageMaxWidth
+          }
+
+          if (!clientWidth) return;
+          rootHtml.style.fontSize = baseFontSize * (clientWidth / pageMaxWidth) + 'px';
+        };
+      if (!window.addEventListener) return;
+
+      window.addEventListener(resizeEvt, recalc, false);
+
+      recalc();
     })();
   </script>
 </body>
