@@ -8036,6 +8036,40 @@
         }
       }
     }
+
+    // 题目：给出一个N个学生身高的有序数组，
+    // 计算最少出列多少位同学，使得剩下的同学排成合唱队形。
+    // 合唱队队形指的是身高从低到高再到低。例：[186, 186, 150, 200, 160, 130, 197, 200]，
+    // 最少出列四个同学186，186，200，130使得剩下的同学呈合唱队排列[]。
+    function f(arr) {
+      let arrLen = arr.length;
+      let dp1 = [],
+        dp2 = [],
+        dp3 = [];
+      for (let i = 0; i < arrLen; i++) {
+        dp1[i] = 1 // 至少有自身1个作为递增序列
+        for (let j = 0; j < i; j++) {
+          if (arr[j] < arr[i] && dp1[j] >= dp1[i]) {
+            dp1[i] = dp1[j] + 1;
+          }
+        }
+      }
+      arr.reverse(); // 将数组倒过来，以递增计算递减序列
+      for (let i = 0; i < arrLen; i++) {
+        dp2[i] = 1 // 至少有自身1个作为递增序列
+        for (let j = 0; j < i; j++) {
+          if (arr[j] < arr[i] && dp2[j] >= dp2[i]) {
+            dp2[i] = dp2[j] + 1;
+          }
+        }
+      }
+      dp2.reverse(); // 反过来作为递减序列
+      for (let i = 0; i < arrLen; i++) {
+        dp3[i] = dp1[i] + dp2[i] - 1;
+      }
+
+      return (arrLen - Math.max(...dp3)); // 计算最少出列的数量
+    }
   </script>
 </body>
 
