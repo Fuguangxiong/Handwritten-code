@@ -162,7 +162,7 @@
       let obj = Array.from(arguments)[0]
       let args = Array.from(arguments).slice(1)
       let symbol = new Symbol()
-      if (obj === null || obj === null) {
+      if (obj === undefined || obj === null) {
         obj = window
       } else {
         obj[symbol] = this
@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3276,13 +3276,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3473,7 +3473,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -5535,13 +5535,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-          if (i === 0 && j > 0) {
-            dp[i][j] = 1
-          } else if (i > 0 && j === 0) {
-            dp[i][j] = 1
-          } else {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-          }
+            if (i === 0 && j > 0) {
+              dp[i][j] = 1
+            } else if (i > 0 && j === 0) {
+              dp[i][j] = 1
+            } else {
+              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+            }
 
         }
       }
@@ -8000,52 +8000,86 @@
       recalc();
     })();
 
-    (function () {
-      function getStr(count) {
-        return new Array(count + 1).join('a');
+    //洋葱模型
+    //所以对koa的洋葱模型进行一探究竟，不管是koa1还是koa2的中间件都是基于koa-compose进行编写的，这种V型结构的实现就来源于koa-compose。
+    function compose(middleware) {
+      //  参数middleware 是一个中间件数组，存放我们用app.use()一个个串联起来的中间件
+      //  判断中间件列表是否为数组，如果不为数组，则抛出类型错误
+      if (!Array.isArray(middleware)) throw new TypeError('Middleware stack must be an array!')
+      // 判断中间件是否为函数，如果不为函数，则抛出类型错误
+      for (const fn of middleware) {
+        if (typeof fn !== 'function') throw new TypeError('Middleware must be composed of functions!')
       }
 
-      function formatSize(byte) {
-        if (byte > 1024 * 1024) {
-          return `${(byte / 1024 / 1024)}MB`;
-        } else {
-          return `${(byte / 1024).toFixed(2)}KB`;
-        }
-      }
+      return function (context, next) {
+        // 这里next指的是洋葱模型的中心函数
+        // context是一个配置对象，保存着一些配置，当然也可以利用context将一些参数往下一个中间传递
 
-      //如何计算浏览器的localStorage容量
-      // 清空
-      window.localStorage.clear();
+        // last called middleware #
+        let index = -1 // index是记录执行的中间件的索引
+        return dispatch(0) // 执行第一个中间件  然后通过第一个中间件递归调用下一个中间件
 
-      const KEY = 'a';
-      // 开始每次增加 1MB，512 个字符 1KB
-      let appendedSize = 512 * 1024;
-      let appendedText = '';
-      let text = '';
-
-      while (true) {
-        try {
-          appendedText = getStr(appendedSize);
-          text += appendedText;
-
-          window.localStorage.removeItem(KEY);
-          window.localStorage.setItem(KEY, text);
-        } catch (e) {
-          // 如果插入报错，尝试减少增加量，直至少于1个字符
-          text = text.slice(0, -appendedText.length);
-
-          appendedSize /= 2;
-        } finally {
-          // 如果增加量少于1个字符，则退出循环
-          if (appendedSize < 1) {
-            break;
+        function dispatch(i) {
+          // 这里是保证同个中间件中一个next（）不被调用多次调用 
+          // 当next()函数被调用两次的时候，i会小于index,然后抛出错误
+          if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+          index = i
+          let fn = middleware[i] // 取出要执行的中间件
+          if (i === middleware.length) fn = next // 如果i 等于 中间件的长度，即到了洋葱模型的中心（最后一个中间件）
+          if (!fn) return Promise.resolve() // 如果中间件为空，即直接resolve
+          try {
+            //  递归执行下一个中间件 （下面会重点分析这个）
+            return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+          } catch (err) {
+            return Promise.reject(err)
           }
         }
       }
+    }
 
-      // 要算上 KEY 的长度
-      console.log('total capacity: ', `${formatSize((text.length + KEY.length) * 2)}`);
-    })();
+    // 题目：给出一个N个学生身高的有序数组，
+    // 计算最少出列多少位同学，使得剩下的同学排成合唱队形。
+    // 合唱队队形指的是身高从低到高再到低。例：[186, 186, 150, 200, 160, 130, 197, 200]，
+    // 最少出列四个同学186，186，200，130使得剩下的同学呈合唱队排列[]。
+    function f(arr) {
+      let arrLen = arr.length;
+      let dp1 = [],
+        dp2 = [],
+        dp3 = [];
+      for (let i = 0; i < arrLen; i++) {
+        dp1[i] = 1 // 至少有自身1个作为递增序列
+        for (let j = 0; j < i; j++) {
+          if (arr[j] < arr[i] && dp1[j] >= dp1[i]) {
+            dp1[i] = dp1[j] + 1;
+          }
+        }
+      }
+      arr.reverse(); // 将数组倒过来，以递增计算递减序列
+      for (let i = 0; i < arrLen; i++) {
+        dp2[i] = 1 // 至少有自身1个作为递增序列
+        for (let j = 0; j < i; j++) {
+          if (arr[j] < arr[i] && dp2[j] >= dp2[i]) {
+            dp2[i] = dp2[j] + 1;
+          }
+        }
+      }
+      dp2.reverse(); // 反过来作为递减序列
+      for (let i = 0; i < arrLen; i++) {
+        dp3[i] = dp1[i] + dp2[i] - 1;
+      }
+
+      return (arrLen - Math.max(...dp3)); // 计算最少出列的数量
+    }
+
+    //生成 UUID
+    function uuid() {
+      var blob = new Blob()
+      var temp_url = URL.createObjectURL(blob);
+      var uuid = temp_url.toString(); // blob:https://xxx.com/b250d159-e1b6-4a87-9002-885d90033be3
+      URL.revokeObjectURL(temp_url);
+      console.log(blob,temp_url)
+      return uuid.substr(uuid.lastIndexOf("/") + 1);
+    }
 
   </script>
 </body>
