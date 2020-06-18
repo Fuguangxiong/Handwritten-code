@@ -8174,6 +8174,16 @@
      * var param_5 = obj.isEmpty()
      * var param_6 = obj.isFull()
      */
+
+    //JS中的pipe原理
+    function pipe(x, ...fns) {
+      let accu = x;
+      for (let f in fns) {
+        accu = f(accu)
+      }
+      return accu;
+    }
+
   </script>
 </body>
 
