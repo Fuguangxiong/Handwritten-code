@@ -8184,6 +8184,41 @@
       return accu;
     }
 
+    //UMD（兼容全局变量、AMD、CMD和CommonJS）
+    ; (function (global, factory) {
+      'use strict';
+
+      if (typeof module === 'object' && typeof module.exports === 'object') {
+        module.exports = global.document ? factory(global, true) : function (w) {
+          if (!w.document) {
+            throw new Error('jQuery requires a window with a document');
+          }
+          return factory(w);
+        };
+      } else if (define && define.cmd) {
+        define(function () {
+          return factory(global);
+        });
+      } else {
+        factory(global);
+      }
+    })(typeof window !== 'undefined' ? window : this, function (window, noGlobal) {
+      // 核心逻辑代码
+
+      // 使代码支持 amd 模块加载
+      if (typeof define === 'function' && define.amd) {
+        define('jquery', [], function () {
+          return jQuery;
+        });
+      }
+
+      return {
+        add: function (a, b) {
+          return a + b;
+        }
+      }
+    });
+
   </script>
 </body>
 
