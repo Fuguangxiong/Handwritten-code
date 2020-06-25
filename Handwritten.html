@@ -8178,7 +8178,8 @@
     }
 
     //UMD（兼容全局变量、AMD、CMD和CommonJS）
-    ; (function (global, factory) {
+    ;
+    (function (global, factory) {
       'use strict';
 
       if (typeof module === 'object' && typeof module.exports === 'object') {
@@ -8213,49 +8214,66 @@
     });
 
     //数组中数字出现的次数
-//     一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
-// 示例 1：
-// 输入：nums = [4,1,4,6]
-// 输出：[1,6] 或 [6,1]
-// 示例 2：
-// 输入：nums = [1,2,10,4,1,4,3,3]
-// 输出：[2,10] 或 [10,2]
-// 限制：
+    //一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+    // 示例 1：
+    // 输入：nums = [4,1,4,6]
+    // 输出：[1,6] 或 [6,1]
+    // 示例 2：
+    // 输入：nums = [1,2,10,4,1,4,3,3]
+    // 输出：[2,10] 或 [10,2]
+    // 限制：
 
-// 2 <= nums.length <= 10000
-
- var singleNumbers = function(nums) {
-  // 定义一个 mask，表示要找的两个数字的异或
-  // 因为出现了两次的数字的异或为 0，也就不会被记录在 mask 中
-  let mask = 0
-  for (let num of nums) {
-    mask ^= num
-  }
-  // 获取到 mask 后，此时的任务就是找到其中一个只出现过一次的数字，记为 num1
-  // 将 mask 与 num1 进行异或计算，就能获得第二个数字，记为 num2
-
-  // 异或结果的某一位是 1，表示当前位的运算数字一个是 1 ，一个是 0
-  // 即找到了不同的一位，以下取最低位的 1
-
-  // 获取最低位的 1，记为 diff
-  const diff = mask & -mask
-  let num1 = 0
-  for (let num of nums) {
-    // 若 num 与 diff 的与运算结果为 1，则说明这些 num 是一组的
-    // 与此同时，结果为 0 的表示另外一组
-    // 原因是：异或为 1，表示运算数分别是 0 / 1
-    if (num & diff) {
-      // 此时的过程就相当于 在一堆数字(除了一个数字外其它成对)中找个唯一的一个
-      num1 ^= num
+    // 2 <= nums.length <= 10000
+    var singleNumbers = function (nums) {
+      // res为抑或的结果
+      let res = 0
+      for (let n of nums) {
+        res ^= n
+      }
+      // console.log(res)
+      // div为a、b抑或结果的末尾出现的第一个1，通过将nums数组与div进行抑或，可将nums分成两组，每组只有一个a或b，其他的都是成对的。
+      let div = 1
+      while ((div & res) === 0) {
+        div <<= 1
+      }
+      let a = 0,
+        b = 0
+      for (let n of nums) {
+        if (div & n) {
+          a ^= n
+        } else {
+          b ^= n
+        }
+      }
+      return [a, b]
     }
-  }
-  // 此时 num1 就是其中一个只出现一次的数字
 
-  // 将 num1 与 mask 异或，得到另外一个
-  const num2 = mask ^ num1
-  return [num1, num2]
-};
+    // 三步问题
 
+    // 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
+
+    // 示例1:
+
+    //  输入：n = 3 
+    //  输出：4
+    //  说明: 有四种走法
+    // 示例2:
+
+    //  输入：n = 5
+    //  输出：13
+    // 提示:
+
+    // n范围在[1, 1000000]之间
+    var waysToStep = function (n) {
+      let m = 1e9 + 7
+      let dp = [0, 1, 2, 4]
+      for (let i = 4; i < n + 1; i++) {
+        dp[i] = (dp[i - 1] + dp[i - 2] + dp[i - 3]) % m
+      }
+      return dp[n]
+    };
+
+    
   </script>
 </body>
 
