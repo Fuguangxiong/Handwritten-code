@@ -8305,15 +8305,13 @@ const dailyTemperatures = (T) => {
  var dailyTemperatures = function(T) {
     let { length } = T
     let res = new Array(length).fill(0)
-    let stack = []
+    let stack = []  //利用单调栈储存索引
     for(let i = 0; i < length; i++) {
-
         while(stack.length && T[i] > T[stack[stack.length - 1]]) {
             let index = stack.pop()
             res[index] = i - index
         }
         stack.push(i)
-
     }
     return res
 };

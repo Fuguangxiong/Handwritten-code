@@ -44,6 +44,24 @@
             return count;
         };
         subarraySum([1, 2, 3], 3)
+
+        var dailyTemperatures = function(T) {
+            debugger;
+    let { length } = T
+    let res = new Array(length).fill(0)
+    let stack = []
+    for(let i = 0; i < length; i++) {
+
+        while(stack.length && T[i] > T[stack[stack.length - 1]]) {
+            let index = stack.pop()
+            res[index] = i - index
+        }
+        stack.push(i)
+
+    }
+    return res
+};
+dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73])
     </script>
 </body>
 
