@@ -8315,6 +8315,9 @@ const dailyTemperatures = (T) => {
     }
     return res
 };
+
+//手写 Object.create
+const myCreate = function (obj) {  function F() {};  F.prototype = obj;  return new F();}
   </script>
 </body>
 
