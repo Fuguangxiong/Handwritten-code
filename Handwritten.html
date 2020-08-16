@@ -8314,13 +8314,17 @@
           res[index] = i - index
         }
         stack.push(i)
-    }
-    return res
-};
+      }
+      return res
+    };
 
-//手写 Object.create
-const myCreate = function (obj) {  function F() {};  F.prototype = obj;  return new F();}
-     
+    //手写 Object.create
+    const myCreate = function (obj) {
+      function F() {};
+      F.prototype = obj;
+      return new F();
+    }
+
     // 统计「优美子数组」
     // 给你一个整数数组 nums 和一个整数 k。
     // 如果某个 连续 子数组中恰好有 k 个奇数数字，我们就认为这个子数组是「优美子数组」。
