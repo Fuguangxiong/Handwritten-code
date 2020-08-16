@@ -8394,6 +8394,63 @@
       }
       return sum;
     };
+
+    // 一道价值25k的蚂蚁金服异步串行面试题
+    // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    // const subFlow = createFlow([() => delay(1000).then(() => log("c"))]);
+    // createFlow([
+    //   () => log("a"),
+    //   () => log("b"),
+    //   subFlow,
+    //   [() => delay(1000).then(() => log("d")), () => log("e")],
+    // ]).run(() => {
+    //   console.log("done");
+    // });
+    // 需要按照 a,b,延迟1秒,c,延迟1秒,d,e, done 的顺序打印
+
+    //大佬思路1
+    function createFlow(effects = []) {
+      return {
+        async run(callback) {
+          const flatEffects = effects.flat(Infinity)
+          for (let effect of flatEffects) {
+            if (typeof effect.run === 'function') {
+              await effect.run()
+            } else {
+              await effect()
+            }
+          }
+          if (typeof callback === 'function') {
+            await callback()
+          }
+        }
+      }
+    }
+
+    //大佬思路二
+    class Flow {
+      constructor(arr) {
+        this.q = arr
+      }
+      async run(cb) {
+        for (let i = 0; i < this.q.length; i++) {
+          const item = this.q[i];
+          if (item instanceof Flow) {
+            await item.run()
+          } else if (Array.isArray(item)) {
+            await createFlow(item)
+          } else {
+            await item()
+          }
+
+        }
+        //await cb ? .()   编辑器报错所以注释
+      }
+    }
+
+    function createFlow(arr) {
+      return new Flow(arr)
+    }
   </script>
 </body>
 
