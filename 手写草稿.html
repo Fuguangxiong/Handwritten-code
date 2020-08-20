@@ -9,59 +9,51 @@
 
 <body>
     <script>
-        // 和为K的子数组
-        // 给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
-
-        // 示例 1 :
-
-        // 输入: nums = [1, 1, 1], k = 2
-        // 输出: 2, [1, 1] 与[1, 1] 为两种不同的情况。
-        // 说明:
-
-        // 数组的长度为[1, 20, 000]。
-        // 数组中元素的范围是[-1000, 1000]，且整数 k 的范围是[-1e7, 1e7]。
-        var subarraySum = function (nums, k) {
-            if (nums.length <= 0) return 0;
-            let map = new Map([
-                [0, 1]
-            ]);
-            let sum = 0,
-                count = 0;
-            for (let i = 0; i < nums.length; i++) {
-                sum += nums[i];
-                // 注意顺序，要先判断存不存在sum - k
-                // 然后再设置map
-                if (map.has(sum - k)) {
-                    count += map.get(sum - k);
+      //深度遍历
+    const tree = {
+    name: 'root',
+    children: [
+        {
+            name: 'c1',
+            children: [
+                {
+                        name: 'c11',
+                    children: []        
+                    },
+                    {
+                        name: 'c12',
+                    children: []        
                 }
-                if (!map.has(sum)) {
-                    map.set(sum, 1);
-                } else {
-                    map.set(sum, map.get(sum) + 1);
+            ]
+        },
+        {
+            name: 'c2',
+            children: [
+                {
+                        name: 'c21',
+                    children: []        
+                    },
+                    {
+                        name: 'c22',
+                    children: []        
                 }
-            }
-            console.log(map)
-            return count;
-        };
-        subarraySum([1, 2, 3], 3)
-
-        var dailyTemperatures = function(T) {
-            debugger;
-    let { length } = T
-    let res = new Array(length).fill(0)
-    let stack = []
-    for(let i = 0; i < length; i++) {
-
-        while(stack.length && T[i] > T[stack[stack.length - 1]]) {
-            let index = stack.pop()
-            res[index] = i - index
+            ]
         }
-        stack.push(i)
+    ]
+}
 
-    }
-    return res
-};
-dailyTemperatures([73, 74, 75, 71, 69, 72, 76, 73])
+// 深度优先的方式遍历 打印 name
+// ['root', 'c1','c11', 'c12', 'c2', 'c21', 'c22'] 
+function resolve(tree){
+   console.log(tree.name)
+   if(tree.children.length>0){
+       for (let i = 0; i < tree.children.length; i++) {
+           const element = tree.children[i];
+           resolve(element)
+       }
+   }
+}
+resolve(tree)
     </script>
 </body>
 
