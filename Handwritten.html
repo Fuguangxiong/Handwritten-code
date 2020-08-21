@@ -8715,6 +8715,32 @@
       return ans;
     };
 
+
+    //原生JS实现复制小尾巴
+    //  复制小尾巴，保留版权信息
+    // 监听复制事件
+    body.addEventListener("copy", (e) => {
+      //  阻止默认行为
+      e.preventDefault();
+      // 获取当前网址和复制的内容
+      let url = window.location.href;
+      let copyText = window.getSelection().toString();
+      // 整合，注意弄好格式
+      let returnText =
+        `${copyText}
+原文出自余烬的小舟 [ ${url} ] 转载请保留原文链接
+        `
+      // 如果超出规定长度，则添加小尾巴
+      if (copyText.length >= 50) {
+        // 将文本添加到剪切板中
+        e.clipboardData.setData('text/plain', returnText);
+      }
+      else {
+        e.clipboardData.setData('text/plain', copyText);
+      }
+    });    
+
+    
   </script>
 </body>
 
