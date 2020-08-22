@@ -3148,7 +3148,35 @@
       arr[j] = temp;
     }
 
-    //函数组合
+    //函数组合  compose函数
+    /**
+ * @param  funcs 存储按照顺序执行的函数(数组) => [fn1, fn3, fn2, fn4]
+ * @param  args 存储第一个函数执行需要传递的实参信息(数组) => [5]
+ */
+    // function compose(...funcs) {
+    //   return function anonymous(...args) {
+    //     if (funcs.length === 0) return args;
+    //     if (funcs.length === 1) return funcs[0](...args);
+    //     // funcs 里有 多个函数时
+    //     return funcs.reduce((n, func) => {
+    //       // 第一次执行：
+    //       // n：第一个函数执行的实参 func：第一个函数
+    //       // 第二次执行：
+    //       // n的值：上一次func执行后的返回值，作为实参传递给下一个函数执行 func：第二个函数
+    //       return Array.isArray(n) ? func(...n) : func(n);
+    //     }, args)
+    //   }
+    // }
+
+    // let res = compose(fn1, fn3, fn2, fn4)(5)
+
+    // // 执行过程：
+    // console.log(compose()(5)); //=>5
+    // console.log(compose(fn1)(5)); //=>5+10 = 15
+    // console.log(compose(fn1, fn3)(5)); //=>fn1(5)=15  fn3(15)=150
+    // console.log(compose(fn1, fn3, fn2)(5)); //=>fn1(5)=15  fn3(15)=150 fn2(150)=140
+    // console.log(compose(fn1, fn3, fn2, fn4)(5)); //=>fn1(5)=15  fn3(15)=150 fn2(150)=140 fn4(140)=14
+
     function compose(...fns) {
       return subArgs => {
         return fns.reverse().reduce((total, func, index) => {
@@ -3156,6 +3184,8 @@
         }, subArgs);
       }
     }
+
+
 
     //实现json.parse
     // var json = '{"name":"cxk", "age":25}';
@@ -8791,6 +8821,30 @@
     let fn1 = currying(add, 1, 2) // 3
     let fn2 = fn1(3)  // 6
     let fn3 = fn2(4)  // 10
+
+//reduce的理解
+// 情况1：reduce没有第二个参数时
+// let Array = [10, 20, 30, 40, 50];
+// Array.reduce(previousValue, currentValue, currentIndex, arr){
+//   return previousValue + currentValue;
+// }
+
+// 第一次触发函数时，previousValue为第一项(10)，currentValue为第二项(20)
+// 第二次触发函数时，previousValue为回调函数的返回值(30)，currentValue为第三项(30)
+// 第X次触发函数时，previousValue为回调函数的返回值，currentValue为第X+1项
+// currentIndex：对应的就是currentValue的索引值
+// arr：是个常量 数组本身
+// 情况2：reduce有第二个参数时
+// let Array = [10, 20, 30, 40, 50];
+// Array.reduce((previousValue, currentValue, currentIndex, arr){
+//   return previousValue + currentValue;
+// }, 0)
+
+// 第一次触发函数时，previousValue为第二个参数(0)，currentValue为第一项(10)
+// 第二次触发函数时，previousValue为回调函数的返回值(10)，currentValue为第二项(20)
+// 第X次触发函数时，previousValue为回调函数的返回值，currentValue为第X项
+// currentIndex：对应的就是currentValue的索引值
+// arr：是个常量 数组本身
 
 
   </script>
