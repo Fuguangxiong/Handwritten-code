@@ -8822,31 +8822,56 @@
     let fn2 = fn1(3)  // 6
     let fn3 = fn2(4)  // 10
 
-//reduce的理解
-// 情况1：reduce没有第二个参数时
-// let Array = [10, 20, 30, 40, 50];
-// Array.reduce(previousValue, currentValue, currentIndex, arr){
-//   return previousValue + currentValue;
-// }
+    //reduce的理解
+    // 情况1：reduce没有第二个参数时
+    // let Array = [10, 20, 30, 40, 50];
+    // Array.reduce(previousValue, currentValue, currentIndex, arr){
+    //   return previousValue + currentValue;
+    // }
 
-// 第一次触发函数时，previousValue为第一项(10)，currentValue为第二项(20)
-// 第二次触发函数时，previousValue为回调函数的返回值(30)，currentValue为第三项(30)
-// 第X次触发函数时，previousValue为回调函数的返回值，currentValue为第X+1项
-// currentIndex：对应的就是currentValue的索引值
-// arr：是个常量 数组本身
-// 情况2：reduce有第二个参数时
-// let Array = [10, 20, 30, 40, 50];
-// Array.reduce((previousValue, currentValue, currentIndex, arr){
-//   return previousValue + currentValue;
-// }, 0)
+    // 第一次触发函数时，previousValue为第一项(10)，currentValue为第二项(20)
+    // 第二次触发函数时，previousValue为回调函数的返回值(30)，currentValue为第三项(30)
+    // 第X次触发函数时，previousValue为回调函数的返回值，currentValue为第X+1项
+    // currentIndex：对应的就是currentValue的索引值
+    // arr：是个常量 数组本身
+    // 情况2：reduce有第二个参数时
+    // let Array = [10, 20, 30, 40, 50];
+    // Array.reduce((previousValue, currentValue, currentIndex, arr){
+    //   return previousValue + currentValue;
+    // }, 0)
 
-// 第一次触发函数时，previousValue为第二个参数(0)，currentValue为第一项(10)
-// 第二次触发函数时，previousValue为回调函数的返回值(10)，currentValue为第二项(20)
-// 第X次触发函数时，previousValue为回调函数的返回值，currentValue为第X项
-// currentIndex：对应的就是currentValue的索引值
-// arr：是个常量 数组本身
+    // 第一次触发函数时，previousValue为第二个参数(0)，currentValue为第一项(10)
+    // 第二次触发函数时，previousValue为回调函数的返回值(10)，currentValue为第二项(20)
+    // 第X次触发函数时，previousValue为回调函数的返回值，currentValue为第X项
+    // currentIndex：对应的就是currentValue的索引值
+    // arr：是个常量 数组本身
 
+    // 反转链表 II
+    // 反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
 
+    // 说明:
+    // 1 ≤ m ≤ n ≤ 链表长度。
+
+    // 示例:
+
+    // 输入: 1->2->3->4->5->NULL, m = 2, n = 4
+    // 输出: 1->4->3->2->5->NULL
+    /**
+     * Definition for singly-linked list.
+     * function ListNode(val) {
+     *     this.val = val;
+     *     this.next = null;
+     * }
+     */
+    /**
+     * @param {ListNode} head
+     * @param {number} m
+     * @param {number} n
+     * @return {ListNode}
+     */
+    var reverseBetween = function (head, m, n) {
+        
+    };
   </script>
 </body>
 
