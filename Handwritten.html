@@ -8738,9 +8738,41 @@
       else {
         e.clipboardData.setData('text/plain', copyText);
       }
-    });    
+    });
+
+    //惰性函数
+    //1.使用前
+    function getCss(element, attr) {
+      if ('getComputedStyle' in window) {
+        return window.getComputedStyle(element)[attr];
+      }
+      return element.currentStyle[attr];
+    }
+
+    getCss(document.body, 'margin');
+    getCss(document.body, 'padding');
+    getCss(document.body, 'width');
+
+    //2.使用后
+    function getCss(element, attr) {
+      if ('getComputedStyle' in window) {
+        getCss = function (element, attr) {
+          return window.getComputedStyle(element)[attr];
+        };
+      } else {
+        getCss = function (element, attr) {
+          return element.currentStyle[attr];
+        };
+      }
+      // 为了第一次也能拿到值
+      return getCss(element, attr);
+    }
+    getCss(document.body, 'margin');
+    getCss(document.body, 'padding');
+    getCss(document.body, 'width');
 
     
+
   </script>
 </body>
 
