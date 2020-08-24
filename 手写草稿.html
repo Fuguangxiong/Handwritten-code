@@ -9,51 +9,74 @@
 
 <body>
     <script>
-      //深度遍历
-    const tree = {
-    name: 'root',
-    children: [
-        {
-            name: 'c1',
-            children: [
-                {
-                        name: 'c11',
-                    children: []        
-                    },
-                    {
-                        name: 'c12',
-                    children: []        
-                }
-            ]
-        },
-        {
-            name: 'c2',
-            children: [
-                {
-                        name: 'c21',
-                    children: []        
-                    },
-                    {
-                        name: 'c22',
-                    children: []        
-                }
-            ]
-        }
-    ]
-}
+        var arr = [{
+                'id': 1,
+                'parentid': 0
+            },
+            {
+                'id': 4,
+                'parentid': 2
+            },
+            {
+                'id': 3,
+                'parentid': 1
+            },
+            {
+                'id': 5,
+                'parentid': 0
+            },
+            {
+                'id': 6,
+                'parentid': 0
+            },
+            {
+                'id': 2,
+                'parentid': 1
+            },
+            {
+                'id': 7,
+                'parentid': 4
+            },
+            {
+                'id': 8,
+                'parentid': 1
+            }
+        ];
 
-// 深度优先的方式遍历 打印 name
-// ['root', 'c1','c11', 'c12', 'c2', 'c21', 'c22'] 
-function resolve(tree){
-   console.log(tree.name)
-   if(tree.children.length>0){
-       for (let i = 0; i < tree.children.length; i++) {
-           const element = tree.children[i];
-           resolve(element)
-       }
-   }
-}
-resolve(tree)
+        function unflatten(arr) {
+            debugger;
+            var tree = [],
+                mappedArr = {},
+                arrElem,
+                mappedElem;
+
+            // First map the nodes of the array to an object -> create a hash table.
+            for (var i = 0, len = arr.length; i < len; i++) {
+                arrElem = arr[i];
+                mappedArr[arrElem.id] = arrElem;
+                mappedArr[arrElem.id]['children'] = [];
+            }
+
+            console.log(mappedArr,'-----------mappedArr')
+            for (var id in mappedArr) {
+                if (mappedArr.hasOwnProperty(id)) {
+                    console.log(id,'-----------id')
+                    mappedElem = mappedArr[id];
+                    // If the element is not at the root level, add it to its parent array of children.
+                    if (mappedElem.parentid) {
+                        mappedArr[mappedElem.parentid].children.push(mappedElem);
+                    }
+                    // If the element is at the root level, add it to first level elements array.
+                    else {
+                        tree.push(mappedElem);
+                    }
+                }
+            }
+            return tree;
+        }
+
+        var tree = unflatten(arr);
+        console.log(tree,'...............tree')
     </script>
 </body>
 
