@@ -8982,6 +8982,33 @@
     function strToCamel(str) {
       return str.replace(/(^|_)(\w)/g, (m, $1, $2) => $2.toUpperCase());
     }
+
+    //obj.a===1 && obj.a===2 && obj.a===3
+    let obj = {
+      value: 1
+    }
+    Object.defineProperty(obj, 'a', {
+      get() {
+        return this.value++
+      }
+    })
+    console.log(obj.a === 1) // true
+    console.log(obj.a === 2) // true
+    console.log(obj.a === 3) // true
+
+    let obj = {
+      value: 1
+    }
+    let proxy = new Proxy(obj, {
+      get(target, key, receiver) {
+        if (key === 'a') {
+          return target.value++
+        }
+      }
+    })
+    console.log(proxy.a === 1) // true
+    console.log(proxy.a === 2) // true
+    console.log(proxy.a === 3) // true
   </script>
 </body>
 
