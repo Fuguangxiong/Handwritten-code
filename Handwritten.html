@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1188,7 +1188,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1786,7 +1786,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3306,13 +3306,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3503,7 +3503,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -5537,6 +5537,130 @@
       return Math.max(dp[n - 1][0], dp[n - 1][1]);
     };
 
+    //213. 打家劫舍 II
+    // 你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都围成一圈，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+
+    // 给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+
+    // 示例 1:
+
+    // 输入: [2,3,2]
+    // 输出: 3
+    // 解释: 你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+    // 示例 2:
+
+    // 输入: [1,2,3,1]
+    // 输出: 4
+    // 解释: 你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+    //      偷窃到的最高金额 = 1 + 3 = 4 。
+    /**
+     * @param {number[]} nums
+     * @return {number}
+     */
+    // 偷第一家，不能偷最后一家
+    // 不偷第一家，能偷最后一家
+    var rob = function (nums) {
+      var n = nums.length;
+      if (n == 1) {
+        return nums[0];
+      } else if (n == 0) {
+        return 0;
+      }
+      function dpGO(nums) {
+        var n = nums.length;
+        var dp = Array.from(new Array(n), () => new Array(n));
+        dp[0][0] = 0;
+        dp[0][1] = nums[0];
+        for (var i = 1; i < nums.length; i++) {
+          dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+          dp[i][1] = nums[i] + dp[i - 1][0];
+        }
+        return Math.max(dp[n - 1][0], dp[n - 1][1]);
+      }
+      var need1 = dpGO(nums.slice(1));
+      var need2 = dpGO(nums.slice(0, nums.length - 1));
+      return Math.max(need1, need2);
+    };
+
+    //337. 打家劫舍 III
+    // 在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
+
+    // 计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+
+    // 示例 1:
+
+    // 输入: [3,2,3,null,3,null,1]
+
+    //      3
+    //     / \
+    //    2   3
+    //     \   \ 
+    //      3   1
+
+    // 输出: 7 
+    // 解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+    // 示例 2:
+
+    // 输入: [3,4,5,1,3,null,1]
+
+    //      3
+    //     / \
+    //    4   5
+    //   / \   \ 
+    //  1   3   1
+
+    // 输出: 9
+    // 解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
+
+    // 递归 思路
+    // 打不打劫根节点，会影响打劫一棵树的收益：
+    // 打劫根节点，则不能打劫左右子节点，但是能打劫左右子节点的四个子树（如果有）。
+    // 不打劫根节点，则能打劫左子节点和右子节点，收益是打劫左右子树的收益之和。
+    const rob = (root) => { // 打劫以root为根节点的子树的最大收益
+      if (root == null) return 0;
+      // 打劫包括根节点的收益，保底是root.val
+      let robIncludeRoot = root.val;
+      if (root.left) {
+        robIncludeRoot += rob(root.left.left) + rob(root.left.right);
+      }
+      if (root.right) {
+        robIncludeRoot += rob(root.right.left) + rob(root.right.right);
+      }
+      // 打劫不包括根节点的收益
+      const robExcludeRoot = rob(root.left) + rob(root.right);
+      // 二者取其大
+      return Math.max(robIncludeRoot, robExcludeRoot);
+    };
+    // 记忆化递归
+    // 刚才哪里做了重复计算？
+    // 我们计算了 root 的四个孙子子树，又计算了 root 的左右子树，而后者会把 root 的孙子子树重复计算一遍。
+    // 我们把计算过的结果存到 map。下次遇到相同的子问题时直接拿过来用，不用做重复的计算。
+    const rob = (root) => {
+      const memo = new Map();
+
+      const helper = (root) => {
+        if (root == null) return 0;
+        // memo中有缓存的结果，直接返回它
+        if (memo.has(root)) return memo.get(root);
+
+        let robIncludeRoot = root.val;
+        if (root.left) {
+          robIncludeRoot += helper(root.left.left) + helper(root.left.right);
+        }
+        if (root.right) {
+          robIncludeRoot += helper(root.right.left) + helper(root.right.right);
+        }
+
+        const robExcludeRoot = helper(root.left) + helper(root.right);
+
+        const res = Math.max(robIncludeRoot, robExcludeRoot);
+        // 保存当前子树的计算结果
+        memo.set(root, res);
+        return res;
+      };
+      return helper(root);
+    };
+
     //不同路径
     // 一个机器人位于一个 m x n 网格的左上角（ 起始点在下图中标记为“ Start”）。
 
@@ -5565,13 +5689,13 @@
           if (i === 0 && j === 0) {
             dp[i][j] = 1
           } else
-          if (i === 0 && j > 0) {
-            dp[i][j] = 1
-          } else if (i > 0 && j === 0) {
-            dp[i][j] = 1
-          } else {
-            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
-          }
+            if (i === 0 && j > 0) {
+              dp[i][j] = 1
+            } else if (i > 0 && j === 0) {
+              dp[i][j] = 1
+            } else {
+              dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+            }
 
         }
       }
@@ -8350,7 +8474,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() {};
+      function F() { };
       F.prototype = obj;
       return new F();
     }
@@ -8417,7 +8541,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-              ++k;
+            ++k;
             ++start;
           }
         }
@@ -8486,29 +8610,29 @@
     const tree = {
       name: 'root',
       children: [{
-          name: 'c1',
-          children: [{
-              name: 'c11',
-              children: []
-            },
-            {
-              name: 'c12',
-              children: []
-            }
-          ]
+        name: 'c1',
+        children: [{
+          name: 'c11',
+          children: []
         },
         {
-          name: 'c2',
-          children: [{
-              name: 'c21',
-              children: []
-            },
-            {
-              name: 'c22',
-              children: []
-            }
-          ]
+          name: 'c12',
+          children: []
         }
+        ]
+      },
+      {
+        name: 'c2',
+        children: [{
+          name: 'c21',
+          children: []
+        },
+        {
+          name: 'c22',
+          children: []
+        }
+        ]
+      }
       ]
     }
 
@@ -8880,37 +9004,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-        'id': 1,
-        'parentid': 0
-      },
-      {
-        'id': 4,
-        'parentid': 2
-      },
-      {
-        'id': 3,
-        'parentid': 1
-      },
-      {
-        'id': 5,
-        'parentid': 0
-      },
-      {
-        'id': 6,
-        'parentid': 0
-      },
-      {
-        'id': 2,
-        'parentid': 1
-      },
-      {
-        'id': 7,
-        'parentid': 4
-      },
-      {
-        'id': 8,
-        'parentid': 1
-      }
+      'id': 1,
+      'parentid': 0
+    },
+    {
+      'id': 4,
+      'parentid': 2
+    },
+    {
+      'id': 3,
+      'parentid': 1
+    },
+    {
+      'id': 5,
+      'parentid': 0
+    },
+    {
+      'id': 6,
+      'parentid': 0
+    },
+    {
+      'id': 2,
+      'parentid': 1
+    },
+    {
+      'id': 7,
+      'parentid': 4
+    },
+    {
+      'id': 8,
+      'parentid': 1
+    }
     ];
 
     function unflatten(arr) {
