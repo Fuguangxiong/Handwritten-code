@@ -155,7 +155,7 @@
         obj[symbol] = this
       }
       let result = obj[symbol](...arg)
-      delete result[symbol]
+      delete obj[symbol]
       return result
     }
     Function.prototype.myApply = function () {
