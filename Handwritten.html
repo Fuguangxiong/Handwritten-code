@@ -657,6 +657,21 @@
     }
 
     //希尔排序 (对插入排序的升级)
+    // function shellSort(arr) {
+    //   let len = arr.length;
+    //   // gap 即为增量
+    //   for (let gap = Math.floor(len / 2); gap > 0; gap = Math.floor(gap / 2)) {
+    //     for (let i = gap; i < len; i++) {
+    //       let j = i;
+    //       let current = arr[i];
+    //       while (j - gap >= 0 && current < arr[j - gap]) {
+    //         arr[j] = arr[j - gap];
+    //         j = j - gap;
+    //       }
+    //       arr[j] = current;
+    //     }
+    //   }
+    // }
     var shellSort = function () {
       if (this.array === null || this.array.length < 2) return this.array
       let length = this.array.length
@@ -679,25 +694,32 @@
 
     // console.log(insertSort([1, 5, 9, 7, 5, 3, 2, 4]))
     //快速排序
-    //方法一优化版
-    // function quickSort(arr, left, right) { //这个left和right代表分区后“新数组”的区间下标，因为这里没有新开数组，所以需要left/right来确认新数组的位置
-    //     if (left < right) {
-    //         let pos = left - 1 //pos即“被置换的位置”，第一趟为-1
-    //         for (let i = left; i <= right; i++) { //循环遍历数组，置换元素
-    //             let pivot = arr[right] //选取数组最后一位作为基准数，
-    //             if (arr[i] <= pivot) { //若小于等于基准数，pos++，并置换元素, 这里使用小于等于而不是小于, 其实是为了避免因为重复数据而进入死循环
-    //                 pos++
-    //                 let temp = arr[pos]
-    //                 arr[pos] = arr[i]
-    //                 arr[i] = temp
-    //             }
-    //         }
-    //         //一趟排序完成后，pos位置即基准数的位置，以pos的位置分割数组
-    //         quickSort(arr, left, pos - 1)
-    //         quickSort(arr, pos + 1, right)
-    //     }
-    //     return arr //数组只包含1或0个元素时(即left>=right)，递归终止
-    // }
+    // 我们都知道快排的时间复杂度是 O(nlogn) ，遇到最差的情况会退化成为 O(n ^ 2) ，但什么情况最差？
+    // 最差的情况：
+    // 数组已经是排好序的，并且你每次基准 pivot 选的是数组最左面或者是最右面
+    // 所有元素都相同
+    //方法一优化版(避免每趟都选中极值)
+    // 1. 快速排序如果选择的基准bai值为最小值的话，划du分的结果序列只有一个，皆位于基准值zhi的一侧（具体哪侧需要dao视序列的升序或降序情况而定）。但是其特征不变，即通过该趟排序基准值在最终序列的位置即被确定。
+    // 2. 快速排序若每趟排序选取的基准值都为数组中的最小值，则其排序效率会降到最低
+    // 3. 快速排序基准值的选定并非是一定的，可以采用随机选择，取中间位置、或加入其它算法进行选择，这些方式可以降低每趟皆选中极值的情况。
+    function quickSort(arr, left, right) { //这个left和right代表分区后“新数组”的区间下标，因为这里没有新开数组，所以需要left/right来确认新数组的位置
+      if (left < right) {
+        let pos = left - 1 //pos即“被置换的位置”，第一趟为-1
+        for (let i = left; i <= right; i++) { //循环遍历数组，置换元素
+          let pivot = arr[right] //选取数组最后一位作为基准数，
+          if (arr[i] <= pivot) { //若小于等于基准数，pos++，并置换元素, 这里使用小于等于而不是小于, 其实是为了避免因为重复数据而进入死循环
+            pos++
+            let temp = arr[pos]
+            arr[pos] = arr[i]
+            arr[i] = temp
+          }
+        }
+        //一趟排序完成后，pos位置即基准数的位置，以pos的位置分割数组
+        quickSort(arr, left, pos - 1)
+        quickSort(arr, pos + 1, right)
+      }
+      return arr //数组只包含1或0个元素时(即left>=right)，递归终止
+    }
     // //使用
     // var arr = [5, 1, 4, 2, 3]
     // var start = 0;
