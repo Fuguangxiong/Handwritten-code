@@ -2608,15 +2608,15 @@
 
     // console.log(getSumIndex([2, 7, 11, 15], 9), '两数之和')
     //阿里算法题：编写一个函数计算多个数组的交集
+    // accumulator 正如翻译的那样，它是 reduce 方法多次执行的累积结果，accumulator 的初始值分两种情况：
+    // 若有提供 initialValue 初始值，第一次循环时 accumulator 的值便为 initialValue，后续循环时 accumulator 为上次循环的返回值。
+    // 若未提供initialValue，第一次循环时 accumulator 的值为数组第一项arr[0]，后续循环时为上次循环的返回值。
+    // 3.currentValue [ˈkɜːrənt] [ˈvæljuː] 当前值
+    // 这个应该不难理解，数组循环当前处理的值。currentValue 的初始值也受到initialValue的影响：
+    // 若有提供 initialValue 初始值，第一次循环currentValue 的值为数组第一项arr[0]，后续变化随索引递增变化。
+    // 若未提供initialValue，第一次循环由于arr[0]成了accumulator 的值，所以currentValue 只能从arr[1]开始，后续变化随索引递增。
     function intersection() {
       let arr = Array.from(arguments)
-      // accumulator 正如翻译的那样，它是 reduce 方法多次执行的累积结果，accumulator 的初始值分两种情况：
-      // 若有提供 initialValue 初始值，第一次循环时 accumulator 的值便为 initialValue，后续循环时 accumulator 为上次循环的返回值。
-      // 若未提供initialValue，第一次循环时 accumulator 的值为数组第一项arr[0]，后续循环时为上次循环的返回值。
-      // 3.currentValue [ˈkɜːrənt] [ˈvæljuː] 当前值
-      // 这个应该不难理解，数组循环当前处理的值。currentValue 的初始值也受到initialValue的影响：
-      // 若有提供 initialValue 初始值，第一次循环currentValue 的值为数组第一项arr[0]，后续变化随索引递增变化。
-      // 若未提供initialValue，第一次循环由于arr[0]成了accumulator 的值，所以currentValue 只能从arr[1]开始，后续变化随索引递增。
       return arr.reduce(function (total, cur, index, arr) {
         //  console.log(total, cur, '.....')
         return cur.filter(function (item) {
@@ -2627,6 +2627,8 @@
 
 
     //最长公共前缀
+    // 输入: ["flower", "flow", "flight"]
+    // 输出: "fl"
     //常规方法 第一个与第二个比较 得到一个公共前缀 再依次跟后面的比较
     // function lengthOfLongestSubstrings (strs) {
     //   if (strs.length === 0 || !strs) {
