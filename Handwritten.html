@@ -2048,22 +2048,22 @@
         this.next = null
         this.val = val
       }
-      // function merge(left, right) {  //方法1:合并两个有序链表
-      //   let res = new ListNode(0);
-      //   let pre = res;   //因为pre一直跟着链表移动所以需要 用一个res记录链表的起点
-      //   while (left && right) {
-      //     if (left.val <= right.val) {
-      //       pre.next = left;
-      //       left = left.next;
-      //     } else {
-      //       pre.next = right;
-      //       right = right.next;
-      //     }
-      //     pre = pre.next;
-      //   }
-      //   pre.next = left ? left : right;
-      //   return res.next;
-      // }
+      function merge(left, right) {  //方法1:合并两个有序链表
+        let res = new ListNode(0);
+        let pre = res;   //因为pre一直跟着链表移动所以需要 用一个res记录链表的起点
+        while (left && right) {
+          if (left.val <= right.val) {
+            pre.next = left;
+            left = left.next;
+          } else {
+            pre.next = right;
+            right = right.next;
+          }
+          pre = pre.next;
+        }
+        pre.next = left ? left : right;
+        return res.next;
+      }
 
       function merge(l1, l2) { //方法2:合并两个有序链表
         if (l1 === null) {
