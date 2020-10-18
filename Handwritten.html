@@ -5335,34 +5335,19 @@
 
     // 代码
 
-    // var getKthFromEnd = function(head, k) {
-    //     let p = head, q = head;
+    var getKthFromEnd = function(head, k) {
+        let p = head, q = head;
 
-    //     let i = 0;
-    //     while (p) {
-    //         if (i >= k) {
-    //             q = q.next;
-    //         }
-    //         p = p.next;
-    //         i++;
-    //     }
-    //     return i < k ? null : q;
-    // };
-
-    function FindKthToTail(head, k) {
-      if (!head || !k) return null;
-      let front = head;
-      let behind = head;
-      let index = 1;
-      while (front.next) {
-        index++;
-        front = front.next;
-        if (index > k) {
-          behind = behind.next;
+        let i = 0;
+        while (p) {
+            if (i >= k) {
+                q = q.next;
+            }
+            p = p.next;
+            i++;
         }
-      }
-      return (k <= index) && behind;
-    }
+        return i < k ? null : q;
+    };
 
     //反转链表
     var reverseList = function (head) {
@@ -5737,8 +5722,7 @@
         for (j = 0; j <= n - 1; j++) {
           if (i === 0 && j === 0) {
             dp[i][j] = 1
-          } else
-          if (i === 0 && j > 0) {
+          } else if (i === 0 && j > 0) {
             dp[i][j] = 1
           } else if (i > 0 && j === 0) {
             dp[i][j] = 1
