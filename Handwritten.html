@@ -2668,33 +2668,33 @@
     }
 
     //归并分治的思想  有点类似于归并排序
-    // var longestCommonPrefix = function (strs) {
-    //   if (strs.length === 0 || strs[0].length === 0) {
-    //     return "";
-    //   }
-    //   return divide(strs, 0, strs.length - 1);
-    // }
-    //
-    // function divide (strs, l, r) {
-    //   if (l === r) {
-    //     return strs[l];
-    //   } else {
-    //     let mid = Math.floor((l + r) / 2);
-    //     let leftPre = divide(strs, l, mid),
-    //       rightPre = divide(strs, mid + 1, r);
-    //     return compare(leftPre, rightPre);
-    //   }
-    // }
-    //
-    // function compare (left, right) {
-    //   let min = Math.min(left.length, right.length);
-    //   for (let i = 0; i < min; i++) {
-    //     if (left.charAt(i) !== right.charAt(i)) {
-    //       return left.substring(0, i);
-    //     }
-    //   }
-    //   return left.substring(0, min);
-    // }
+    var longestCommonPrefix = function (strs) {
+      if (strs.length === 0 || strs[0].length === 0) {
+        return "";
+      }
+      return divide(strs, 0, strs.length - 1);
+    }
+    
+    function divide (strs, l, r) {
+      if (l === r) {
+        return strs[l];
+      } else {
+        let mid = Math.floor((l + r) / 2);
+        let leftPre = divide(strs, l, mid),
+          rightPre = divide(strs, mid + 1, r);
+        return compare(leftPre, rightPre);
+      }
+    }
+    
+    function compare (left, right) {
+      let min = Math.min(left.length, right.length);
+      for (let i = 0; i < min; i++) {
+        if (left.charAt(i) !== right.charAt(i)) {
+          return left.substring(0, i);
+        }
+      }
+      return left.substring(0, min);
+    }
     // console.log(lengthOfLongestSubstrings(['abshfkshfkhs', 'abcsdkfhkshfk', 'abeifgsgfs']), '最长公共前缀');
     //最长公共子序列
     var longestCommonSubsequence = function (text1, text2) {
