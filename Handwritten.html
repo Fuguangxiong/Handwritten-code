@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1812,7 +1812,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3205,6 +3205,13 @@
     // console.log(compose(fn1, fn3)(5)); //=>fn1(5)=15  fn3(15)=150
     // console.log(compose(fn1, fn3, fn2)(5)); //=>fn1(5)=15  fn3(15)=150 fn2(150)=140
     // console.log(compose(fn1, fn3, fn2, fn4)(5)); //=>fn1(5)=15  fn3(15)=150 fn2(150)=140 fn4(140)=14
+    function compose(...funcs) {
+      return function (x) {
+        return funcs.reduce(function (arg, fn) {
+          return fn(arg);
+        }, x);
+      };
+    }
 
     function compose(...fns) {
       return subArgs => {
@@ -3335,13 +3342,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3532,7 +3539,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -8169,7 +8176,7 @@
         rootHtml = document.getElementsByTagName('html')[0],
         resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
         recalc = function () {
-          var clientWidth = clientWidth = docEl.clientWidth || docBody.clientWidht;
+          var clientWidth = docEl.clientWidth || docBody.clientWidth;
 
           //最大宽度显示为750的宽度
           if (clientWidth > pageMaxWidth) {
@@ -8506,7 +8513,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() {};
+      function F() { };
       F.prototype = obj;
       return new F();
     }
@@ -8573,7 +8580,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-              ++k;
+            ++k;
             ++start;
           }
         }
@@ -8642,29 +8649,29 @@
     const tree = {
       name: 'root',
       children: [{
-          name: 'c1',
-          children: [{
-              name: 'c11',
-              children: []
-            },
-            {
-              name: 'c12',
-              children: []
-            }
-          ]
+        name: 'c1',
+        children: [{
+          name: 'c11',
+          children: []
         },
         {
-          name: 'c2',
-          children: [{
-              name: 'c21',
-              children: []
-            },
-            {
-              name: 'c22',
-              children: []
-            }
-          ]
+          name: 'c12',
+          children: []
         }
+        ]
+      },
+      {
+        name: 'c2',
+        children: [{
+          name: 'c21',
+          children: []
+        },
+        {
+          name: 'c22',
+          children: []
+        }
+        ]
+      }
       ]
     }
 
@@ -8946,6 +8953,23 @@
           return element.currentStyle[attr];
         };
       }
+      //3.用自调用函数实现
+      const addHandler = (function () {
+        if (document.addEventListener) {
+          return function (element, type, handler) {
+            element.addEventListener(type, handler, false);
+          };
+        } else if (document.attachEvent) {
+          return function (element, type, handler) {
+            element.attachEvent("on" + type, handler);
+          };
+        } else {
+          return function (element, type, handler) {
+            element["on" + type] = handler;
+          };
+        }
+      })();
+
       // 为了第一次也能拿到值
       return getCss(element, attr);
     }
@@ -9036,37 +9060,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-        'id': 1,
-        'parentid': 0
-      },
-      {
-        'id': 4,
-        'parentid': 2
-      },
-      {
-        'id': 3,
-        'parentid': 1
-      },
-      {
-        'id': 5,
-        'parentid': 0
-      },
-      {
-        'id': 6,
-        'parentid': 0
-      },
-      {
-        'id': 2,
-        'parentid': 1
-      },
-      {
-        'id': 7,
-        'parentid': 4
-      },
-      {
-        'id': 8,
-        'parentid': 1
-      }
+      'id': 1,
+      'parentid': 0
+    },
+    {
+      'id': 4,
+      'parentid': 2
+    },
+    {
+      'id': 3,
+      'parentid': 1
+    },
+    {
+      'id': 5,
+      'parentid': 0
+    },
+    {
+      'id': 6,
+      'parentid': 0
+    },
+    {
+      'id': 2,
+      'parentid': 1
+    },
+    {
+      'id': 7,
+      'parentid': 4
+    },
+    {
+      'id': 8,
+      'parentid': 1
+    }
     ];
 
     function unflatten(arr) {
@@ -9234,6 +9258,38 @@
 
 
     //今日头条:合并乱序区间
+
+    //偏函数
+    // 在计算机科学中，偏函数应用（Partial Application）是指固定一个函数的某些参数，然后产生另一个更小元的函数。而所谓的元是指函数参数的个数，比如含有一个参数的函数被称为一元函数。
+    // 偏函数应用（Partial Application）很容易与函数柯里化混淆，它们之间的区别是：
+    // 偏函数应用是固定一个函数的一个或多个参数，并返回一个可以接收剩余参数的函数；
+    // 柯里化是将函数转化为多个嵌套的一元函数，也就是每个函数只接收一个参数。
+    //Lodash 提供的 partial 函数
+    function partial(fn) {
+      let args = [].slice.call(arguments, 1);
+      return function () {
+        const newArgs = args.concat([].slice.call(arguments));
+        return fn.apply(this, newArgs);
+      };
+    }
+
+    //缓存函数
+    //let complexCalc = (a, b) => {
+    //   // 执行复杂的计算
+    // };
+
+    // let memoCalc = memorize(complexCalc);
+    // memoCalc(666, 888);
+    // memoCalc(666, 888); // 从缓存中获取
+
+    function memorize(fn) {
+      const cache = Object.create(null); // 存储缓存数据的对象
+      return function (...args) {
+        const _args = JSON.stringify(args);
+        return cache[_args] || (cache[_args] = fn.apply(fn, args));
+      };
+    };
+
   </script>
 </body>
 
