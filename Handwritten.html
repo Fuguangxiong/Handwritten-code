@@ -9264,21 +9264,21 @@
     // 加入 ) 的时候，受到 ( 的限制，如果已选择的结果里的 ( 小于等于已选择里的 ) 时，此时是不能选择 ) 的，例如如果当前是 () ，继续选择 ) 就是 ()) ，是不合法的
     // 代码实现：
     const generateParenthesis = (n) => {
-        const res = []
-        const dfs = (path, left, right) => {
-            // 肯定不合法，提前结束
-            if (left > n || left < right) return
-            // 到达结束条件
-            if (left + right === 2 * n) {
-                res.push(path)
-                return
-            }
-            // 选择
-            dfs(path + '(', left + 1, right)
-            dfs(path + ')', left, right + 1)
+      const res = []
+      const dfs = (path, left, right) => {
+        // 肯定不合法，提前结束
+        if (left > n || left < right) return
+        // 到达结束条件
+        if (left + right === 2 * n) {
+          res.push(path)
+          return
         }
-        dfs('', 0, 0)
-        return res
+        // 选择
+        dfs(path + '(', left + 1, right)
+        dfs(path + ')', left, right + 1)
+      }
+      dfs('', 0, 0)
+      return res
     }
 
     // 45. 跳跃游戏 II
@@ -9297,11 +9297,72 @@
     // 说明:
 
     // 假设你总是可以到达数组的最后一个位置。
+    var jump = function (nums) {
+      let curr = 0; // 当前位置
+      let next = 0; // 跳跃后的位置
+      let stepNum = 0; // 跳跃次数
+      let length = nums.length - 1;
+      for (let i = 0; i < length; i++) {
+        next = Math.max(next, i + nums[i]);// 跳一次的最远跳跃距离 = 当前位置 + 可跳跃的最大数
+        if (curr >= length) break;
+        if (curr === i) {
+          curr = next;
+          stepNum++;
+        }
+      }
+      return stepNum;
+    };
+
 
     //今日头条:转化为36进制
+    function getNums36() {
+      var nums36 = [];
+      for (var i = 0; i < 36; i++) {
+        if (i >= 0 && i <= 9) {
+          nums36.push(i);
+        } else {
+          nums36.push(String.fromCharCode(i + 87));
+        }
+      }
+      return nums36;
+    }
 
+    //十进制数转成36进制
+    function scale36(n) {
+      var arr = [];
+      var nums36 = getNums36();
+      while (n) {
+        var res = n % 36;
+        //作为下标，对应的36进制数，转换成
+        arr.unshift(nums36[res]);
+        //去掉个位
+        n = parseInt(n / 36);
+      }
+      return arr.join("");
+    }
 
     //今日头条:合并乱序区间
+    // let arr = [[1,3],[2,6],[8,10],[15,18]]
+    // [ [ 1, 6 ], [ 8, 10 ], [ 15, 18 ] ]
+    function merge(arg) {
+      let arr = arg, result = [];
+      arg.sort((a, b) => a[0] - b[0]); // 先根据第一位进性排序
+      for (let i = 0; i < arr.length; i++) {
+        if (result.length) {
+          let res = result[result.length - 1];
+          if (res[1] > arr[i][0]) {
+            if (res[1] < arr[i][1]) {
+              result[result.length - 1][1] = arr[i][1]; // 如果前一个的第二位大于下一个的第一位,小于第二位,那么被下一个第二位代替
+            }
+          } else {
+            result.push(arr[i])
+          }
+        } else {
+          result.push(arr[i])
+        }
+      }
+      return result
+    }
 
     //偏函数
     // 在计算机科学中，偏函数应用（Partial Application）是指固定一个函数的某些参数，然后产生另一个更小元的函数。而所谓的元是指函数参数的个数，比如含有一个参数的函数被称为一元函数。
