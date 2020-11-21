@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1812,7 +1812,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3342,13 +3342,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3539,7 +3539,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -8513,7 +8513,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8580,7 +8580,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8649,29 +8649,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9060,37 +9060,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -9303,7 +9303,7 @@
       let stepNum = 0; // 跳跃次数
       let length = nums.length - 1;
       for (let i = 0; i < length; i++) {
-        next = Math.max(next, i + nums[i]);// 跳一次的最远跳跃距离 = 当前位置 + 可跳跃的最大数
+        next = Math.max(next, i + nums[i]); // 跳一次的最远跳跃距离 = 当前位置 + 可跳跃的最大数
         if (curr >= length) break;
         if (curr === i) {
           curr = next;
@@ -9344,7 +9344,8 @@
     // let arr = [[1,3],[2,6],[8,10],[15,18]]
     // [ [ 1, 6 ], [ 8, 10 ], [ 15, 18 ] ]
     function merge(arg) {
-      let arr = arg, result = [];
+      let arr = arg,
+        result = [];
       arg.sort((a, b) => a[0] - b[0]); // 先根据第一位进性排序
       for (let i = 0; i < arr.length; i++) {
         if (result.length) {
@@ -9478,7 +9479,10 @@
     // -10^6 <= arr[i] <= 10^6
     var minimumAbsDifference = function (arr) {
       arr.sort((a, b) => a - b);
-      let left = 0, right = 1, res = [], c = Number.MAX_SAFE_INTEGER;
+      let left = 0,
+        right = 1,
+        res = [],
+        c = Number.MAX_SAFE_INTEGER;
 
       while (right < arr.length) {
         let k = arr[right] - arr[left];
@@ -9496,7 +9500,58 @@
       return res;
     };
 
-    //字符串的最大公因子
+    //剑指 Offer 56 - II. 数组中数字出现的次数 II
+    // 在一个数组 nums 中除一个数字只出现一次之外，其他数字都出现了三次。请找出那个只出现一次的数字。
+    // 示例 1：
+    // 输入：nums = [3,4,3,3]
+    // 输出：4
+    // 示例 2：
+    // 输入：nums = [9,1,7,9,7,9,7]
+    // 输出：1
+    // 限制：
+    // 1 <= nums.length <= 10000
+    // 1 <= nums[i] < 2^31
+    var singleNumber = function (nums) {
+      const set = new Set(nums);
+      let sum1 = 0;
+      for (let num of set.values()) {
+        sum1 += num;
+      }
+      let sum2 = 0;
+      for (let num of nums) {
+        sum2 += num;
+      }
+
+      return Math.floor((3 * sum1 - sum2) / 2);
+    };
+
+    // 最大公约数
+    function maxDivisor(num1, num2) {
+      let max = num1 > num2 ? num1 : num2,
+        min = num1 > num2 ? num2 : num1;
+      for (var i = min; i >= 1; i--) {
+        if (max % i == 0 && min % i == 0) {
+          return i;
+        }
+      }
+    }
+
+    console.log(maxDivisor(60, 30)); // 30
+
+    // 最小公倍数
+    function minDivisor(num1, num2) {
+      let max = num1 > num2 ? num1 : num2,
+        min = num1 > num2 ? num2 : num1,
+        result = 0;
+      // 这个循环，当两数同为质数时，终止的最大条件值为 i = min
+      for (var i = 1; i <= min; i++) {
+        result = i * max;
+        if (result % max == 0 && result % min == 0) {
+          return result;
+        }
+      }
+    }
+    console.log(minDivisor(6, 8)); // 24
   </script>
 </body>
 
