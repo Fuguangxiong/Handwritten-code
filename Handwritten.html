@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1812,7 +1812,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3342,13 +3342,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3539,7 +3539,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -8513,7 +8513,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() {};
+      function F() { };
       F.prototype = obj;
       return new F();
     }
@@ -8580,7 +8580,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-              ++k;
+            ++k;
             ++start;
           }
         }
@@ -8649,29 +8649,29 @@
     const tree = {
       name: 'root',
       children: [{
-          name: 'c1',
-          children: [{
-              name: 'c11',
-              children: []
-            },
-            {
-              name: 'c12',
-              children: []
-            }
-          ]
+        name: 'c1',
+        children: [{
+          name: 'c11',
+          children: []
         },
         {
-          name: 'c2',
-          children: [{
-              name: 'c21',
-              children: []
-            },
-            {
-              name: 'c22',
-              children: []
-            }
-          ]
+          name: 'c12',
+          children: []
         }
+        ]
+      },
+      {
+        name: 'c2',
+        children: [{
+          name: 'c21',
+          children: []
+        },
+        {
+          name: 'c22',
+          children: []
+        }
+        ]
+      }
       ]
     }
 
@@ -9060,37 +9060,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-        'id': 1,
-        'parentid': 0
-      },
-      {
-        'id': 4,
-        'parentid': 2
-      },
-      {
-        'id': 3,
-        'parentid': 1
-      },
-      {
-        'id': 5,
-        'parentid': 0
-      },
-      {
-        'id': 6,
-        'parentid': 0
-      },
-      {
-        'id': 2,
-        'parentid': 1
-      },
-      {
-        'id': 7,
-        'parentid': 4
-      },
-      {
-        'id': 8,
-        'parentid': 1
-      }
+      'id': 1,
+      'parentid': 0
+    },
+    {
+      'id': 4,
+      'parentid': 2
+    },
+    {
+      'id': 3,
+      'parentid': 1
+    },
+    {
+      'id': 5,
+      'parentid': 0
+    },
+    {
+      'id': 6,
+      'parentid': 0
+    },
+    {
+      'id': 2,
+      'parentid': 1
+    },
+    {
+      'id': 7,
+      'parentid': 4
+    },
+    {
+      'id': 8,
+      'parentid': 1
+    }
     ];
 
     function unflatten(arr) {
@@ -9632,6 +9632,131 @@
       }
       return letters[0]
     };
+
+    // 作用：同valueOf()和toString()一样，但是优先级要高于这两者；
+    // 该函数被调用时，会被传递一个字符串参数hint，表示当前运算的模式，一共有三种模式：
+    // string：字符串类型
+    // number：数字类型
+    // default：默认
+    class A {
+      constructor(count) {
+        this.count = count
+      }
+      valueOf() {
+        return 2
+      }
+      toString() {
+        return '哈哈哈'
+      }
+      // 我在这里
+      [Symbol.toPrimitive](hint) {
+        if (hint == "number") {
+          return 10;
+        }
+        if (hint == "string") {
+          return "Hello Libai";
+        }
+        return true;
+      }
+    }
+
+    const a = new A(10)
+
+    console.log(`${a}`)     // 'Hello Libai' => (hint == "string")
+    console.log(String(a))  // 'Hello Libai' => (hint == "string")
+    console.log(+a)         // 10            => (hint == "number")
+    console.log(a * 20)     // 200           => (hint == "number")
+    console.log(a / 20)     // 0.5           => (hint == "number")
+    console.log(Number(a))  // 10            => (hint == "number")
+    console.log(a + '22')   // 'true22'      => (hint == "default")
+    console.log(a == 10)     // false        => (hint == "default")
+
+    // 1. a===1&&a===2&&a===3 为 true
+    // 双等号(==)：会触发隐式类型转换，所以可以使用 valueOf 或者 toString 来实现。
+    // 每次判断都会触发valueOf方法，同时让value+1，才能使得下次判断成立。
+    class A {
+      constructor(value) {
+        this.value = value;
+      }
+      valueOf() {
+        return this.value++;
+      }
+    }
+    const a = new A(1);
+    if (a == 1 && a == 2 && a == 3) {
+      console.log("Hi Libai!");
+    }
+    // 全等(===)：严格等于不会进行隐式转换，这里使用 Object.defineProperty 数据劫持的方法来实现
+    let value = 1;
+    Object.defineProperty(window, 'a', {
+      get() {
+        return value++
+      }
+    })
+    if (a === 1 && a === 2 && a === 3) {
+      console.log("Hi Libai!")
+    }
+
+    // 字节跳动:实现一个无限累加函数
+    // 问题：用 JS 实现一个无限累加的函数 add，示例如下：
+
+    // add(1); // 1
+    // add(1)(2);  // 3
+    // add(1)(2)(3) ； // 6
+    // add(1)(2)(3)(4) ； // 10 
+    // function add(a) {
+    // 	function sum(b) { // 使用闭包
+    //     	a = b ? a + b : a; // 累加
+    //     	return sum;
+    //  	}
+    //  	sum.toString = function() { // 只在最后一次调用
+    //         return a;
+    //     }
+    //  	return sum; // 返回一个函数
+    // }
+
+    // add(1)				// 1
+    // add(1)(2)  			// 3
+    // add(1)(2)(3) 		// 6
+    // add(1)(2)(3)(4)	 	// 10 
+    // 复制代码
+
+    // add函数内部定义sum函数并返回，实现连续调用
+    // sum函数形成了一个闭包，每次调用进行累加值，再返回当前函数sum
+    // add()每次都会返回一个函数sum，直到最后一个没被调用，默认会触发toString方法，所以我们这里重写toString方法，并返回累计的最终值a
+
+    // 柯里化实现多参累加
+    // 这里是上面累加的升级版，实现多参数传递累加。
+
+    // add(1)(3,4)(3,5)	// 16
+    // add(2)(2)(3,5)		// 12
+    function add() {
+      // 1 把所有参数转换成数组
+      let args = Array.prototype.slice.call(arguments)
+      // 2 再次调用add函数，传递合并当前与之前的参数
+      let fn = function () {
+        let arg_fn = Array.prototype.slice.call(arguments)
+        return add.apply(null, args.concat(arg_fn))
+      }
+      // 3 最后默认调用，返回合并的值
+      fn.toString = function () {
+        return args.reduce(function (a, b) {
+          return a + b
+        })
+      }
+      return fn
+    }
+
+    // ES6写法
+    function add() {
+      let args = [...arguments];
+      let fn = function () {
+        return add.apply(null, args.concat([...arguments]))
+      }
+      fn.toString = () => args.reduce((a, b) => a + b)
+      return fn;
+    }
+
   </script>
 </body>
 
