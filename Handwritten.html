@@ -9895,8 +9895,70 @@
     // 两数之和
     // 合并有序数组【便利蜂、快手、美团】
     // 字符串全排列 【头条】
+    // 剑指 Offer 38. 字符串的排列
+    // 输入一个字符串， 打印出该字符串中字符的所有排列。
+    // 你可以以任意顺序返回这个字符串数组， 但里面不能有重复元素。
+    // 示例:
+    // 输入： s = "abc"
+    // 输出：["abc", "acb", "bac", "bca", "cab", "cba"]
+    // 限制：
+    // 1 <= s 的长度 <=8
+    var permutation = function (s) {
+      const res = new Set()
+      const visit = {}
+
+      function dfs(path) {
+        if (path.length === s.length) return res.add(path)
+        for (let i = 0; i < s.length; i++) {
+          if (visit[i]) continue
+          visit[i] = true
+          dfs(path + s[i])
+          visit[i] = false
+        }
+      }
+      dfs('')
+      return [...res]
+    };
     // 实现一个dialog 【快手】
     // 实现一个并发控制的request【快手】
+    async function eachLimit(limit, arr, iteratorFn) {
+      const res = [];
+      const activeList = [];
+      for (const item of arr) {
+        const p = iteratorFn(item);
+        res.push(p);
+        const e = p.then(() =>
+          activeList.splice(activeList.indexOf(e), 1)
+        );
+        activeList.push(e)
+        while (activeList.length >= limit) {
+          await Promise.race(activeList)
+        }
+      }
+      return Promise.all(res);
+    }
+    async function asyncLoop(limit, arr, iteratorFn) {
+      const queues = new Array(limit).fill(0).map(() => Promise.resolve());
+      let index = 0;
+      const add = cb => {
+        index = (index + 1) % limit;
+        return queues[index] = queues[index].then(() => cb());
+      };
+      let results = [];
+      for (let v of arr) {
+        results.push(add(() => iteratorFn(v)));
+      }
+      return await Promise.all(results);
+    };
+
+    // 第一种方法： 主要是利用了 Promise.race , 以及包装原来的 promise 实例进一个新的promise 实例，在 then 里面处理队列，即是把完成的自己移除队列。
+    // 第二种方法： 使用了 N 个序列，每个序列都是 promise.then 的链式调用。
+
+    // 作者：22earth
+    // 链接：https://juejin.cn/post/6844903972776460301
+    // 来源：掘金
+    // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
     // 实现一个多维数组代理器 【快手】
     // 实现一个lazyman 【阿里】
     // 深克隆
