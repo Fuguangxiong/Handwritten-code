@@ -9950,6 +9950,12 @@
       }
       return await Promise.all(results);
     };
+    //测试代码
+    async function test() {
+      const timeout = i => new Promise(resolve => setTimeout(() => resolve(i), i));
+      const results = await eachLimit(2, [1000, 5000, 3000, 2000], timeout);
+      console.log(results);
+    }
 
     // 第一种方法： 主要是利用了 Promise.race , 以及包装原来的 promise 实例进一个新的promise 实例，在 then 里面处理队列，即是把完成的自己移除队列。
     // 第二种方法： 使用了 N 个序列，每个序列都是 promise.then 的链式调用。
