@@ -10652,6 +10652,53 @@
       return isSameTree(A.left, B.left) && isSameTree(A.right, B.right);
     };
 
+    // 剑指 Offer 29. 顺时针打印矩阵
+    // 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+    // 示例 1：
+
+    // 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+    // 输出：[1,2,3,6,9,8,7,4,5]
+    // 示例 2：
+
+    // 输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+    // 输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+
+    // 限制：
+
+    // 0 <= matrix.length <= 100
+    // 0 <= matrix[i].length <= 100
+
+
+    // 剑指 Offer 39. 数组中出现次数超过一半的数字
+    // 数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+
+    // 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+
+    // 示例 1:
+
+    // 输入: [1, 2, 3, 2, 2, 2, 5, 4, 2]
+    // 输出: 2
+
+    // 限制：
+
+    // 1 <= 数组长度 <= 50000
+    var majorityElement = function (nums) {
+      let count = 1;
+      let majority = nums[0];
+      for (let i = 1; i < nums.length; i++) {
+        if (count === 0) {
+          majority = nums[i];
+        }
+        if (nums[i] === majority) {
+          count++;
+        } else {
+          count--;
+        }
+      }
+      return majority;
+    };
+
   </script>
 </body>
 
