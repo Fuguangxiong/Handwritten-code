@@ -10231,6 +10231,93 @@
       }
     };
 
+    // 剑指 Offer 04. 二维数组中的查找
+    // 在一个 n * m 的二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+    // 示例:
+    // 现有矩阵 matrix 如下：
+    // [
+    //   [1,   4,  7, 11, 15],
+    //   [2,   5,  8, 12, 19],
+    //   [3,   6,  9, 16, 22],
+    //   [10, 13, 14, 17, 24],
+    //   [18, 21, 23, 26, 30]
+    // ]
+    // 给定 target = 5，返回 true。
+    // 给定 target = 20，返回 false。
+    // 限制：
+    // 0 <= n <= 1000
+    // 0 <= m <= 1000
+    /**
+     * @param {number[][]} matrix
+     * @param {number} target
+     * @return {boolean}
+     */
+    方法一: 循环 + 二分
+    每一行是递增的, 所以可以用二分查找每行
+
+
+    /**
+     * @param {number[][]} matrix
+     * @param {number} target
+     * @return {boolean}
+     */
+    var findNumberIn2DArray = function (matrix, target) {
+      let m = matrix.length
+      if (!m) return false
+      let n = matrix[0].length
+      for (let i = 0; i < m; i++) {
+        let item = matrix[i]
+        if (target >= item[0]) {
+          if (bs(item, target)) return true
+        } else {
+          return false
+        }
+      }
+      return false
+    };
+    // 二分查找
+    function bs(arr, t) {
+      let i = 0
+      let j = arr.length
+      while (i < j) {
+        let m = i + ((j - i) >> 1)
+        if (arr[m] === t) {
+          return true
+        } else if (arr[m] > t) {
+          j = m
+        } else {
+          i = m + 1
+        }
+      }
+      return false
+    }
+    // 时间O(mlogn)
+    // 但这样好像没有充分利用题目的纵向也是递增的, 所以有更加快捷的方法
+
+    // 方法二: 从右上角 往左下找
+    // 横纵都是递增的, 所以从矩阵的 右上角 往 左下查找
+    // 当前比目标大, 如果目标存在, 只能在左下边, 此时范围缩小一列
+    // 当前比目标小, 目标存在的话, 只能在下边, 当前行不存在目标值, 此时范围缩小一行
+
+    var findNumberIn2DArray = function (matrix, target) {
+      let m = matrix.length
+      if (!m) return false
+      let n = matrix[0].length
+      let i = 0, j = n - 1
+      while (i < m && j >= 0) {  // 从右上角 往左下找
+        let t = matrix[i][j]
+        if (t === target) {
+          return true
+        } else if (t > target) { // 大于目标, 说明在左/下边
+          j--
+        } else {                 // 小于目标, 说明在下边
+          i++
+        }
+      }
+      return false
+    };
+//时间O(m + n)
+
   </script>
 </body>
 
