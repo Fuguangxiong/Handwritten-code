@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() {}
+      function F() { }
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () {}
+      clone.sayHi = function () { }
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() {}
+      function Single() { }
 
       return function () {
         if (instance) {
@@ -1812,7 +1812,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) {}
+      LinkList.prototype.prefind = function (data) { }
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3342,13 +3342,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-            return a + b
-          }, 0)) {
+          return a + b
+        }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3539,7 +3539,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () {};
+      this.route[path] = cb || function () { };
     }
 
     Router.prototype.freshRoute = function () {
@@ -8513,7 +8513,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() {};
+      function F() { };
       F.prototype = obj;
       return new F();
     }
@@ -8580,7 +8580,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-              ++k;
+            ++k;
             ++start;
           }
         }
@@ -8649,29 +8649,29 @@
     const tree = {
       name: 'root',
       children: [{
-          name: 'c1',
-          children: [{
-              name: 'c11',
-              children: []
-            },
-            {
-              name: 'c12',
-              children: []
-            }
-          ]
+        name: 'c1',
+        children: [{
+          name: 'c11',
+          children: []
         },
         {
-          name: 'c2',
-          children: [{
-              name: 'c21',
-              children: []
-            },
-            {
-              name: 'c22',
-              children: []
-            }
-          ]
+          name: 'c12',
+          children: []
         }
+        ]
+      },
+      {
+        name: 'c2',
+        children: [{
+          name: 'c21',
+          children: []
+        },
+        {
+          name: 'c22',
+          children: []
+        }
+        ]
+      }
       ]
     }
 
@@ -9060,37 +9060,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-        'id': 1,
-        'parentid': 0
-      },
-      {
-        'id': 4,
-        'parentid': 2
-      },
-      {
-        'id': 3,
-        'parentid': 1
-      },
-      {
-        'id': 5,
-        'parentid': 0
-      },
-      {
-        'id': 6,
-        'parentid': 0
-      },
-      {
-        'id': 2,
-        'parentid': 1
-      },
-      {
-        'id': 7,
-        'parentid': 4
-      },
-      {
-        'id': 8,
-        'parentid': 1
-      }
+      'id': 1,
+      'parentid': 0
+    },
+    {
+      'id': 4,
+      'parentid': 2
+    },
+    {
+      'id': 3,
+      'parentid': 1
+    },
+    {
+      'id': 5,
+      'parentid': 0
+    },
+    {
+      'id': 6,
+      'parentid': 0
+    },
+    {
+      'id': 2,
+      'parentid': 1
+    },
+    {
+      'id': 7,
+      'parentid': 4
+    },
+    {
+      'id': 8,
+      'parentid': 1
+    }
     ];
 
     function unflatten(arr) {
@@ -9865,31 +9865,61 @@
 
     // 数组转树形对象【头条】
     // 数组拍平和对象拍平【快手】
-    JSON.flatten = function (data) {
+    //{a:"1",b:{c:"1",d:"1"}} => {a: "1", b.c: "1", b.d: "1"}
+    // JSON.flatten = function (data) {
+    //   var result = {};
+    //   function recurse(cur, prop) {
+    //     if (Object(cur) !== cur) {
+    //       result[prop] = cur;
+    //     } else if (Array.isArray(cur)) {
+    //       for (var i = 0, l = cur.length; i < l; i++)
+    //         recurse(cur[i], prop + "[" + i + "]");
+    //       if (l == 0)
+    //         result[prop] = [];
+    //     } else {
+    //       var isEmpty = true;
+    //       for (var p in cur) {
+    //         isEmpty = false;
+    //         recurse(cur[p], prop ? prop + "." + p : p);
+    //       }
+    //       if (isEmpty && prop)
+    //         result[prop] = {};
+    //     }
+    //   }
+    //   recurse(data, "");
+    //   return result;
+    // };
 
+    Object.flatten = function (obj) {
       var result = {};
-
-      function recurse(cur, prop) {
-        if (Object(cur) !== cur) {
-          result[prop] = cur;
-        } else if (Array.isArray(cur)) {
-          for (var i = 0, l = cur.length; i < l; i++)
-            recurse(cur[i], prop + "[" + i + "]");
-          if (l == 0)
-            result[prop] = [];
-        } else {
+      function recurse(src, prop) {
+        var toString = Object.prototype.toString;
+        if (toString.call(src) == '[object Object]') {
           var isEmpty = true;
-          for (var p in cur) {
+          for (var p in src) {
             isEmpty = false;
-            recurse(cur[p], prop ? prop + "." + p : p);
+            recurse(src[p], prop ? prop + '.' + p : p)
           }
-          if (isEmpty && prop)
+          if (isEmpty && prop) {
             result[prop] = {};
+          }
+        } else if (toString.call(src) == '[object Array]') {
+          var len = src.length;
+          if (len > 0) {
+            src.forEach(function (item, index) {
+              recurse(item, prop ? prop + '.[' + index + ']' : index);
+            })
+          } else {
+            result[prop] = [];
+          }
+        } else {
+          result[prop] = src;
         }
       }
-      recurse(data, "");
+      recurse(obj, '');
+
       return result;
-    };
+    }
     // 数组乱序
     // 手写一个简易版的redux
     // 两数之和
@@ -9966,8 +9996,190 @@
     // 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
     // 实现一个多维数组代理器 【快手】
-    // 实现一个lazyman 【阿里】
-    // 深克隆
+    /**
+ * 对象、数组变化监听(增删改)
+ * @author w-bing
+ * @date 2020-04-22
+ * @param {Object} obj
+ * @param {Function} cb
+ * @return {Proxy}
+ */
+    function deepProxy(obj, cb) {
+
+      if (typeof obj === 'object') {
+
+        for (let key in obj) {
+          if (typeof obj[key] === 'object') {
+            obj[key] = deepProxy(obj[key], cb);
+          }
+        }
+
+      }
+
+      return new Proxy(obj, {
+
+        /**
+         * @param {Object, Array} target 设置值的对象
+         * @param {String} key 属性
+         * @param {any} value 值
+         * @param {Object} receiver this
+         */
+        set: function (target, key, value, receiver) {
+
+          if (typeof value === 'object') {
+            value = deepProxy(value, cb);
+          }
+
+          let cbType = target[key] == undefined ? 'create' : 'modify';
+
+          //排除数组修改length回调
+          if (!(Array.isArray(target) && key === 'length')) {
+            cb(cbType, { target, key, value });
+          }
+          return Reflect.set(target, key, value, receiver);
+
+        },
+        deleteProperty(target, key) {
+          cb('delete', { target, key });
+          return Reflect.deleteProperty(target, key);
+        }
+
+      });
+
+    }
+
+    // 实现一个lazyman 【阿里】  
+    // LazyMan('Hank');
+    // // 输出:
+    // // Hi! This is Hank!
+
+    // LazyMan('Hank').sleep(3).eat('dinner')
+    // // 输出:
+    // // Hi! This is Hank!
+    // // //等待3秒..
+    // // Wake up after 3
+    // // Eat dinner~
+
+    // LazyMan('Hank').eat('dinner').eat('supper')
+    // // 输出:
+    // // Hi This is Hank!
+    // // Eat dinner~
+    // // Eat supper~
+
+    // LazyMan('Hank').sleepFirst(2).eat('dinner').sleep(3).eat('supper')
+    // // 输出:
+    // // //等待2秒..
+    // // Wake up after 2
+    // // Hi This is Hank!
+    // // Eat dinner~
+    // // //等待3秒..
+    // // Wake up after 2
+    // // Eat supper~
+
+    // // 以此类推
+    // class _LazyMan {
+    //   queue: any[] = [];
+    //   constructor(name: string) {
+    //     this.sayName(name);
+
+    //     setTimeout(() => {
+    //       this.next();
+    //     })
+    //   }
+
+    //   next() {
+    //     const fn = this.queue.shift();
+    //     fn && fn();
+    //   }
+
+    //   _holdOn(time) {
+    //     return () => {
+    //       setTimeout(() => {
+    //         console.log(`Wake up after ${time} second`)
+    //         this.next()
+    //       }, time * 1000)
+    //     }
+    //   }
+
+    //   sayName(name) {
+    //     const fn = () => {
+    //       console.log(`Hi! This is ${name}!`);
+    //       this.next();
+    //     }
+    //     this.queue.push(fn);
+    //   }
+
+    //   sleep(time: number) {
+    //     this.queue.push(this._holdOn(time));
+    //     return this;
+    //   }
+
+    //   eat(some: string) {
+    //     const fn = () => {
+    //       console.log(`Eat ${some}~`);
+    //       this.next();
+    //     }
+    //     this.queue.push(fn);
+    //     return this;
+    //   }
+
+    //   sleepFirst(time: number) {
+    //     this.queue.unshift(this._holdOn(time));
+    //     return this;
+    //   }
+    // }
+
+    // const LazyMan = (name: string) => new _LazyMan(name);
+
+    // LazyMan('Hank').sleepFirst(2).eat('dinner').sleep(3).eat('supper');
+
+
+
+    // 深克隆(深拷贝 面试官惊艳版)
+    function deepClone(obj, hash = new WeakMap()) {
+      if (obj === null) return obj; // 如果是null或者undefined我就不进行拷贝操作
+      if (obj instanceof Date) return new Date(obj);
+      if (obj instanceof RegExp) return new RegExp(obj);
+      // 可能是对象或者普通的值  如果是函数的话是不需要深拷贝
+      if (typeof obj !== "object") return obj;
+      // 是对象的话就要进行深拷贝
+      if (hash.get(obj)) return hash.get(obj);
+      let cloneObj = new obj.constructor();
+      // 找到的是所属类原型上的constructor,而原型上的 constructor指向的是当前类本身
+      hash.set(obj, cloneObj);
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          // 实现一个递归拷贝
+          cloneObj[key] = deepClone(obj[key], hash);
+        }
+      }
+      return cloneObj;
+    }
+    let obj = { name: 1, address: { x: 100 } };
+    obj.o = obj; // 对象存在循环引用的情况
+    let d = deepClone(obj);
+    obj.address.x = 200;
+    console.log(d);
+
+    //proxy实现节流/防抖
+    function workSomething(i) {
+      console.log(new Date().getTime(), i); // 最终打印 1553181456163 4
+    }
+    function makeThrottle(fn, delay) {
+      let makeTimer = null;
+      return new Proxy(fn, {
+        apply(target, thisArg, argumentList) {
+          clearTimeout(makeTimer);
+          makeTimer = setTimeout(() => {
+            Reflect.apply(target, thisArg, argumentList);
+          }, delay);
+        }
+      });
+    }
+    const workSomethingProxy = makeThrottle(workSomething, 100);
+    for (let i = 0; i < 5; i++) {
+      workSomethingProxy(i);
+    }
   </script>
 </body>
 
