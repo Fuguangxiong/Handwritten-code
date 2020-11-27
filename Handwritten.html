@@ -10778,6 +10778,36 @@
     const myClear = mySetInterVal(() => { console.log('test') }, 1000, 500);
     // 清除定时器
     myClear()
+
+    // 2.合并二维有序数组成一维有序数组，归并排序的思路
+    // 公司：头条
+    //[[1,2,3],[4,5,6],[7,8,9],[1,2,3],[4,5,6]].flat(Infinity).sort((a,b)=>{ return a-b;})
+    function merge(arr1, arr2) {
+      var result = [];
+      while (arr1.length > 0 && arr2.length > 0) {
+        if (arr1[0] < arr2[0]) {
+          /*shift()方法用于把数组的第一个元素从其中删除，并返回第一个元素的值。*/
+          result.push(arr1.shift());
+        } else {
+          result.push(arr2.shift());
+        }
+      }
+      return result.concat(arr1).concat(arr2);
+    }
+
+    function mergeSort(arr) {
+      let lengthArr = arr.length;
+      if (lengthArr === 0) {
+        return [];
+      }
+      while (arr.length > 1) {
+        let arrayItem1 = arr.shift();
+        let arrayItem2 = arr.shift();
+        let mergeArr = merge(arrayItem1, arrayItem2);
+        arr.push(mergeArr);
+      }
+      return arr[0];
+    }
   </script>
 </body>
 
