@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1812,7 +1812,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3342,13 +3342,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3539,7 +3539,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -8513,7 +8513,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8580,7 +8580,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8649,29 +8649,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9060,37 +9060,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -10482,7 +10482,7 @@
       board[x][y] = '-';
       let res = findFun(board, word, x - 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y + 1, k + 1, xLen,
         yLen) || findFun(board, word, x + 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y - 1, k + 1, xLen,
-          yLen); //上 右 下 左
+        yLen); //上 右 下 左
       // board[x][y] = word[k];
       board[x][y] = temp;
       return res;
@@ -10775,7 +10775,9 @@
       }
     }
     //测试
-    const myClear = mySetInterVal(() => { console.log('test') }, 1000, 500);
+    const myClear = mySetInterVal(() => {
+      console.log('test')
+    }, 1000, 500);
     // 清除定时器
     myClear()
 
@@ -10809,9 +10811,75 @@
       return arr[0];
     }
 
-// 有一堆整数，请把他们分成三份，确保每一份和尽量相等（11，42，23，4，5，6 4 5 6 11 23 42 56 78 90）
-// 公司：滴滴
+    // 有一堆整数，请把他们分成三份，确保每一份和尽量相等（11，42，23，4，5，6 4 5 6 11 23 42 56 78 90）
+    // 公司：滴滴
 
+    // 面试题 01.02. 判定是否互为字符重排
+    // 给定两个字符串 s1 和 s2，请编写一个程序，确定其中一个字符串的字符重新排列后，能否变成另一个字符串。
+
+    // 示例 1：
+
+    // 输入: s1 = "abc", s2 = "bca"
+    // 输出: true 
+    // 示例 2：
+
+    // 输入: s1 = "abc", s2 = "bad"
+    // 输出: false
+    // 说明：
+
+    // 0 <= len(s1) <= 100
+    // 0 <= len(s2) <= 100
+    /**
+     * @param {string} s1
+     * @param {string} s2
+     * @return {boolean}
+     */
+    // var CheckPermutation = function(s1, s2) {
+    // return s1.split('').sort().toString()===s2.split('').sort().toString();
+    // };
+    var CheckPermutation = function (s1, s2) {
+      //长度不对等,肯定不行的
+      if (s1.length != s2.length) {
+        return false;
+      }
+      s2 = s2.split('');
+      //直接循环
+      for (let s of s1) {
+        if (s2.indexOf(s) == -1) {
+          return false;
+        } else {
+          s2.splice(s2.indexOf(s), 1);
+        }
+      }
+      return true;
+    };
+
+    // 面试题 01.04. 回文排列
+    // 给定一个字符串，编写一个函数判定其是否为某个回文串的排列之一。
+
+    // 回文串是指正反两个方向都一样的单词或短语。排列是指字母的重新排列。
+
+    // 回文串不一定是字典当中的单词。
+
+    // 示例1：
+
+    // 输入："tactcoa"
+    // 输出：true（排列有"tacocat"、"atcocta"，等等）
+    /**
+     * @param {string} s
+     * @return {boolean}
+     */
+    var canPermutePalindrome = function (s) {
+      let obj = {};
+      for (let i = 0; i < s.length; i++) {
+        let char = s[i];
+        if (obj[char])
+          delete obj[char]
+        else
+          obj[char] = 1;
+      }
+      return Object.keys(obj).length <= 1;
+    };
   </script>
 </body>
 
