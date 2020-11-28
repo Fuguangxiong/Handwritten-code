@@ -10605,6 +10605,45 @@
       return head
     };
 
+    // 面试题 02.01. 移除重复节点
+    // 编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+    // 示例1:
+
+    // 输入：[1, 2, 3, 3, 2, 1]
+    // 输出：[1, 2, 3]
+    // 示例2:
+
+    // 输入：[1, 1, 1, 1, 2]
+    // 输出：[1, 2]
+    // 提示：
+
+    // 链表长度在[0, 20000]范围内。
+    // 链表元素在[0, 20000]范围内。
+    // 进阶：
+
+    // 如果不得使用临时缓冲区，该怎么解决？
+    // 设置缓冲区arr, 把链表的每个节点val作为arr的key, 将value设置为1
+    // 查找arr[current.val]. 如果有值为1的元素, 说明重复, 需要删除
+    var removeDuplicateNodes = function (head) {
+      // 缓冲区
+      let arr = [];
+      let prev = null;
+      let current = head;
+      while (current !== null) {
+        if (arr[current.val] > 0) {
+          // 有重复的
+          prev.next = current.next;
+          current = prev.next;
+        } else {
+          arr[current.val] = 1;
+          prev = current;
+          current = current.next;
+        }
+      }
+      return head;
+    };
+
     // 剑指 Offer 26. 树的子结构
     // 输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
 
@@ -10948,6 +10987,103 @@
         }
       }
       return false
+    };
+
+    // 面试题 01.06. 字符串压缩
+    // 字符串压缩。利用字符重复出现的次数，编写一种方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a2b1c5a3。若“压缩”后的字符串没有变短，则返回原先的字符串。你可以假设字符串中只包含大小写英文字母（a至z）。
+
+    // 示例1:
+
+    //  输入："aabcccccaaa"
+    //  输出："a2b1c5a3"
+    // 示例2:
+
+    //  输入："abbccd"
+    //  输出："abbccd"
+    //  解释："abbccd"压缩后为"a1b2c2d1"，比原字符串长度更长。
+    // 提示：
+
+    // 字符串长度在[0, 50000]范围内。
+    var compressString = function (S) {
+      let count = 1;
+      let str = new String();
+      for (let i = 1; i < S.length + 1; i++) {
+        if (S[i - 1] === S[i]) {
+          count++
+        } else {
+          str += S.slice(i - 1, i) + count
+          count = 1
+        }
+      }
+      return S.length > str.length ? str : S
+    };
+
+    // 面试题 01.07. 旋转矩阵
+    // 给你一幅由 N × N 矩阵表示的图像，其中每个像素的大小为 4 字节。请你设计一种算法，将图像旋转 90 度。
+
+    // 不占用额外内存空间能否做到？
+
+    // 示例 1:
+
+    // 给定 matrix =
+    // [
+    // [1,2,3],
+    // [4,5,6],
+    // [7,8,9]
+    // ],
+
+    // 原地旋转输入矩阵，使其变为:
+    // [
+    // [7,4,1],
+    // [8,5,2],
+    // [9,6,3]
+    // ]
+    // 示例 2:
+
+    // 给定 matrix =
+    // [
+    // [ 5, 1, 9,11],
+    // [ 2, 4, 8,10],
+    // [13, 3, 6, 7],
+    // [15,14,12,16]
+    // ],
+
+    // 原地旋转输入矩阵，使其变为:
+    // [
+    // [15,13, 2, 5],
+    // [14, 3, 4, 1],
+    // [12, 6, 8, 9],
+    // [16, 7,10,11]
+    // ]
+    //一、倒序倒置法
+    let rotate = (matrix) => {
+      for (let i = 0; i < matrix.length; i++) {
+        for (let j = i; j < matrix[i].length; j++) {
+          [matrix[i][j], matrix[j][i]] = [matrix[j][i], matrix[i][j]]
+        }
+      }
+      matrix.forEach(row => row.reverse())
+    };
+
+    // 面试题 01.09. 字符串轮转
+    // 字符串轮转。给定两个字符串s1和s2，请编写代码检查s2是否为s1旋转而成（比如，waterbottle是erbottlewat旋转后的字符串）。
+
+    // 示例1:
+
+    //  输入：s1 = "waterbottle", s2 = "erbottlewat"
+    //  输出：True
+    // 示例2:
+
+    //  输入：s1 = "aa", s2 = "aba"
+    //  输出：False
+    // 提示：
+
+    // 字符串长度在[0, 100000]范围内。
+    // 说明:
+
+    // 你能只调用一次检查子串的方法吗？
+    var isFlipedString = function (s1, s2) {
+      return s1.length === s2.length && (s2 + s2).includes(s1)
     };
   </script>
 </body>
