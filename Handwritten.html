@@ -11148,6 +11148,31 @@
       return res;
     };
 
+    //在什么情况下 a === a - 1 ？
+    // console.log(Infinity + Infinity); // Infinity
+    // console.log(Infinity - Infinity); // NaN
+    // console.log(Infinity * Infinity); // Infinity
+    // console.log(Infinity / Infinity); // NaN
+    // console.log(Infinity * 0); // NaN
+
+
+    // 方法一:
+    let a = Infinity;
+    console.log(a === a - 1); // true
+    let b = -Infinity;
+    console.log(b === b - 1);  // true
+    let a = Number.MIN_SAFE_INTEGER - 1;
+    console.log(a === a - 1); // true
+    //方法二:
+    let bValue = 1
+    Object.defineProperty(window, 'a', {
+      get() {
+        return bValue++
+      }
+    });
+    console.log(a === a - 1)
+
+
   </script>
 </body>
 
