@@ -11346,6 +11346,13 @@
     }
     let b = a()
     console.log(b) //undefined
+
+    //将 aabb 变为 bbaa
+    var reg = /(\w)\1(\w)\2/g
+    var str = "aabb"
+    console.log(str.replace(reg, "$2$2$1$1"))
+
+    
   </script>
 </body>
 
