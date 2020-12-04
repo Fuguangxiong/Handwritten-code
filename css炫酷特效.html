@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /* 1、立方盒子特效 */
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    /*   html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        perspective: 1000px;
+        background: #0A0A0A;
+    }
+
+    .wrap {
+        width: 200px;
+        height: 200px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -100px;
+        margin-top: -100px;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        -webkit-transform: rotateY(0deg) rotateZ(45deg) rotateX(45deg);
+        transform: rotateY(0deg) rotateZ(45deg) rotateX(45deg);
+        -webkit-transition: all 50000s;
+        transition: all 50000s;
+        transition-timing-function: linear;
+
+    }
+
+    img {
+        width: 200px;
+        height: 200px;
+        opacity: 1;
+        border-radius: 50px;
+    }
+
+    .wrap:hover {
+        -webkit-transform: rotateY(-1000000deg) rotateZ(45deg) rotateX(45deg);
+        transform: rotateY(-1000000deg) rotateZ(45deg) rotateX(45deg);
+    }
+
+    .wrap div {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 200px;
+        border-radius: 50px;
+    
+        box-shadow: inset 10px 10px 200px yellow, 0 0 150px #6F6;
+    }
+
+    .wrap div {
+        -webkit-transform: rotateY(0deg) translate3d(0, 0, 100px);
+        transform: rotateY(0deg) translate3d(0, 0, 100px);
+    }
+
+    .wrap div:nth-child(2) {
+        background: #000;
+        -webkit-transform: rotateY(90deg) translate3d(0, 0, 100px);
+        transform: rotateY(90deg) translate3d(0, 0, 100px);
+    }
+
+    .wrap div:nth-child(3) {
+        background: pink;
+        -webkit-transform: rotateY(180deg) translate3d(0, 0, 100px);
+        transform: rotateY(180deg) translate3d(0, 0, 100px);
+    }
+
+    .wrap div:nth-child(4) {
+        background: skyblue;
+        -webkit-transform: rotateY(270deg) translate3d(0, 0, 100px);
+        transform: rotateY(270deg) translate3d(0, 0, 100px);
+    }
+
+    .wrap div:nth-child(5) {
+        background: yellow;
+        -webkit-transform: rotateX(90deg) translate3d(0, 0, 100px);
+        transform: rotateX(90deg) translate3d(0, 0, 100px);
+    }
+
+    .wrap div:nth-child(6) {
+        background: green;
+        -webkit-transform: rotateX(270deg) translate3d(0, 0, 100px);
+        transform: rotateX(270deg) translate3d(0, 0, 100px);
+    } */
+
+    /* 3D立体投影  */
+    /* body {
+        background: black;
+    }
+
+    .wrap {
+        width: 200px;
+        margin: 100px auto;
+        position: relative;
+        transform-style: preserve-3d;
+        perspective: 3000px;
+
+        animation: rotateView 10s 4s infinite alternate;
+
+    }
+
+  
+    @keyframes rotateView {
+        from {
+            transform: rotateY(0) rotateX(0);
+        }
+
+        to {
+            transform: rotateY(-360deg) rotateX(-35deg)
+        }
+    }
+
+    .wrap div {
+        width: 200px;
+        height: 300px;
+        position: absolute;
+        -webkit-box-reflect: below 10px -webkit-linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+    }
+
+    .wrap div img {
+        transition: 0.5s;
+        box-shadow: 0px 0px 10px 1px white
+    }
+
+    .wrap div:nth-child(9) {
+        animation: has_rotate9 0.5s forwards;
+    }
+
+    @keyframes has_rotate9 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(400deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(8) {
+        animation: has_rotate8 0.5s 0.5s forwards;
+    }
+
+    @keyframes has_rotate8 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(440deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(7) {
+        animation: has_rotate7 0.5s 1s forwards;
+    }
+
+    @keyframes has_rotate7 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(480deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(6) {
+        animation: has_rotate6 0.5s 1.5s forwards;
+    }
+
+    @keyframes has_rotate6 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(520deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(5) {
+        animation: has_rotate5 0.5s 2s forwards;
+    }
+
+    @keyframes has_rotate5 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(560deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(4) {
+        animation: has_rotate4 0.5s 2.5s forwards;
+    }
+
+    @keyframes has_rotate4 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(600deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(3) {
+        animation: has_rotate3 0.5s 3s forwards;
+    }
+
+    @keyframes has_rotate3 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(640deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(2) {
+        animation: has_rotate2 0.5s 3.5s forwards;
+    }
+
+    @keyframes has_rotate2 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(680deg) translateZ(380px);
+        }
+    }
+
+    .wrap div:nth-child(1) {
+        animation: has_rotate1 0.5s 4s forwards;
+    }
+
+    @keyframes has_rotate1 {
+        from {
+            transform: rotateY(0deg) translateZ(0px);
+        }
+
+        to {
+            transform: rotateY(720deg) translateZ(380px);
+        }
+    } */
+
+    /* 手风琴菜单 */
+    * {
+        margin: 0;
+        padding: 0
+    }
+
+    ul {
+        list-style: none;
+        width: 840px;
+        border: 5px solid black;
+        margin: auto;
+        overflow: hidden;
+    }
+
+    li {
+        float: left;
+        width: 168px;
+        transition: 1s;
+    }
+
+    img {
+        vertical-align: top;
+    }
+
+    ul:hover li {
+        width: 50px;
+    }
+
+    /*这个跟上面的位置不能调转，因为优先级一样。*/
+    ul li:hover {
+        width: 640px;
+    }
+
+    /* 颜色渐变 */
+    p {
+        width: 800px;
+        height: 300px;
+        background: -webkit-linear-gradient(-30deg, red 30px, orange 150px, yellow 280px, pink 500px, blue);
+        /*-webkit-background-clip: text;*/
+        color: rgba(255, 255, 255, 0.3);
+        text-align: center;
+        line-height: 300px;
+        font-size: 100px;
+        transition: 4s;
+
+    }
+
+    p:hover {
+        background-position: 400px;
+    }
+</style>
+
+<body>
+    <!-- 1、立方盒子特效 -->
+    <!-- <div class="wrap">
+        <div>
+            <img src="./图片/01.jpg" alt="">
+        </div>
+        <div>
+            <img src="./图片/02.jpg" alt="">
+        </div>
+        <div>
+            <img src="./图片/03.jpg" alt="">
+        </div>
+        <div>
+            <img src="./图片/04.jpg" alt="">
+        </div>
+        <div>
+            <img src="./图片/05.jpg" alt="">
+        </div>
+        <div>
+            <img src="./图片/06.jpg" alt="">
+        </div>
+    </div> -->
+    <!-- 3D立体投影 -->
+    <!--  <div class="wrap">
+        <div><img src="./图片/01.jpg" alt=""></div>
+        <div><img src="./图片/02.jpg" alt=""></div>
+        <div><img src="./图片/03.jpg" alt=""></div>
+        <div><img src="./图片/04.jpg" alt=""></div>
+        <div><img src="./图片/05.jpg" alt=""></div>
+        <div><img src="./图片/06.jpg" alt=""></div>
+        <div><img src="./图片/07.jpg" alt=""></div>
+        <div><img src="./图片/08.jpg" alt=""></div>
+        <div><img src="./图片/09.jpg" alt=""></div>
+    </div> -->
+    <!-- 手风琴菜单 -->
+    <!-- <ul>
+		<li><img src="./图片/01.jpg" alt=""></li>
+		<li><img src="./图片/01.jpg" alt=""></li>
+		<li><img src="./图片/01.jpg" alt=""></li>
+		<li><img src="./图片/01.jpg" alt=""></li>
+		<li><img src="./图片/01.jpg" alt=""></li>
+	</ul> -->
+
+    <!-- 彩色渐变 -->
+    <p>I am Vincent</p>
+</body>
+
+</html>
