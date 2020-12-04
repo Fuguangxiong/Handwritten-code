@@ -11325,6 +11325,18 @@
 
     // react项目中，constructor(){ this.target = this.func.bind(this); },JSX里onChange={this.target}的写法，为什么要比非bind的func = () => {}的写法效率高 请解释其中的原理
     // bind之后锁定了上下文，不用向上查找
+
+    //tx小笔试
+    Promise.reject("error").then(() => {
+      console.log("success1")
+    }, () => {
+      console.log("error1")
+    }).then(() => {
+      console.log("success2")
+    }, () => {
+      console.log("error2")
+    })
+    //error1 success2
   </script>
 </body>
 
