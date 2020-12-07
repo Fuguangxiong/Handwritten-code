@@ -10119,6 +10119,38 @@
 
 
     // 深克隆(深拷贝 面试官惊艳版)
+    //深拷贝考虑 DOM Node  RegExp Date Array Object克隆版
+    // function deepClone(obj) {
+    //   var _toString = Object.prototype.toString;
+    //   // null, undefined, non-object, function
+    //   if (!obj || typeof obj !== 'object') {
+    //     return obj;
+    //   }
+    //   // DOM Node
+    //   if (obj.nodeType && 'cloneNode' in obj) {
+    //     return obj.cloneNode(true);
+    //   }
+    //   // Date
+    //   if (_toString.call(obj) === '[object Date]') {
+    //     return new Date(obj.getTime());
+    //   }
+    //   // RegExp
+    //   if (_toString.call(obj) === '[object RegExp]') {
+    //     var flags = [];
+    //     if (obj.global) { flags.push('g'); }
+    //     if (obj.multiline) { flags.push('m'); }
+    //     if (obj.ignoreCase) { flags.push('i'); }
+    //     return new RegExp(obj.source, flags.join(''));
+    //   }
+    //   var result = Array.isArray(obj) ? [] :
+    //     obj.constructor ? new obj.constructor() : {};
+
+    //   for (var key in obj) {
+    //     result[key] = deepClone(obj[key]);
+    //   }
+
+    //   return result;
+    // }
     function deepClone(obj, hash = new WeakMap()) {
       if (obj === null) return obj; // 如果是null或者undefined我就不进行拷贝操作
       if (obj instanceof Date) return new Date(obj);
