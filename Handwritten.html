@@ -11424,6 +11424,75 @@
     })
     console.log(arr);
 
+    //实现一个带并发限制的异步调度器Scheduler，最多同时运行两个任务
+    //异步调度器
+    class Scheduler {
+      constructor(maxNum) {
+        //等待执行的任务队列
+        this.taskList = []
+        //当前任务数
+        this.count = 0
+        //最大任务数
+        this.maxNum = maxNum
+      }
+
+      async add(promiseCreator) {
+        //当当前任务数超出最大任务数就将其加入等待执行的任务队列
+        if (this.count >= this.maxNum) {
+          await new Promise(resolve => {
+            this.taskList.push(resolve)
+          })
+        }
+        this.count++
+        const result = await promiseCreator()
+        this.count--
+        //当其它任务执行完任务队列中还有任务没执行就将其出队并执行
+        if (this.taskList.length > 0) {
+          this.taskList.shift()()
+        }
+        return result
+      }
+    }
+
+    const timeout = time => {
+      return new Promise(resolve => {
+        setTimeout(resolve, time)
+      })
+    }
+
+    const scheduler = new Scheduler(2)
+    const addTask = (time, value) => {
+      scheduler.add(() => {
+        return timeout(time).then(() => {
+          console.log(value)
+        })
+      })
+    }
+
+    addTask(1000, "1")
+    addTask(500, "2")
+    addTask(300, "3")
+    addTask(400, "4")
+
+    //此处输出2 -> 3 ->1 -> 4
+    //一开始1、2两个任务进入队列
+    //500ms时，2完成，输出2，任务3进入队列
+    //800ms时，3完成，输出3，任务4进入队列
+    //1000ms时，1完成，输出1
+    //1200ms时，4完成，输出4
+
+    //如何在ES5环境下实现const
+    function _const(key, value) {
+      const desc = {
+        value,
+        writable: false
+      }
+      Object.defineProperty(window, key, desc)
+    }
+
+    _const('obj', { a: 1 }) //定义obj
+    obj = {} //重新赋值不生效
+
   </script>
 </body>
 
