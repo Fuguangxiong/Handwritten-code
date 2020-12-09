@@ -11437,6 +11437,27 @@
     // }
     [...iterTree(tree)] // ["a", "b", "c", "d", "e"]
 
+    // 栈思想
+    function flat(arr) {
+      const newArr = [];
+      const stack = [].concat(arr);  // 将数组元素拷贝至栈，直接赋值会改变原数组
+      //如果栈不为空，则循环遍历
+      while (stack.length !== 0) {
+        const val = stack.pop(); // 删除数组最后一个元素，并获取它
+        if (Array.isArray(val)) {
+          stack.push(...val); // 如果是数组再次入栈，并且展开了一层
+        } else {
+          newArr.unshift(val); // 如果不是数组就将其取出来放入结果数组中
+        }
+      }
+      return newArr;
+    }
+
+    let arr = [12, 23, [34, 56, [78, 90, 100, [110, 120, 130, 140]]]];
+    console.log(flat(arr));
+    // [12, 23, 34, 56, 78, 90, 100, 110, 120, 130, 140]
+
+
     //数组乱序
     var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     arr.sort(function () {
