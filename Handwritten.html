@@ -11549,7 +11549,44 @@
     // 34+5*6-就是后缀表达式
     // 虽然人的大脑很容易理解与分析中缀表达式，但是对于计算机来说中缀表达式确是很复杂的，因此计算表达式的值时通常需要把中置表达式转换为前置或者后置表达式，然后再进行求值。对于计算机来说，计算前缀表达式或者后置表达式非常简单。
     // 中缀表达式转后缀表达式:https://www.cnblogs.com/tylerdonet/p/5816464.html
-    
+    /*-------------------栈将中缀表达式转换成后缀表达式-------------------*/
+    function suffixExpression() {
+      var str = 'a+b*c+(d*e+f)*g';
+      var stack = new Stack();
+      var outStack = new Array();
+      for (var i = 0; i < str.length; ++i) {
+        if (')' == str[i]) {
+          while (true) {
+            var top = stack.peek();
+            stack.pop();
+            if ('(' != top) {
+              outStack[outStack.length] = top;
+            } else {
+              break;
+            }
+          }
+        } else if (['-', '+'].indexOf(str[i]) > -1) {
+          if (['*', '/'].indexOf(stack.peek()) > -1) {
+            while (['*', '/'].indexOf(stack.peek()) > -1) {
+              outStack[outStack.length] = stack.peek();
+              stack.pop();
+            }
+            outStack[outStack.length] = str[i];
+          } else {
+            stack.push(str[i]);
+          }
+        } else if (['(', '*', '/'].indexOf(str[i]) > -1) {
+          stack.push(str[i]);
+        } else {
+          outStack[outStack.length] = str[i];
+        }
+      }
+
+      for (var i = 0; i < outStack.length; i++) {
+        document.write(outStack[i]);
+      }
+    }
+    suffixExpression();
 
     // 逆波兰表达式求值(后辍表达式求职算法)
     // 根据 逆波兰表示法，求表达式的值。
