@@ -11728,6 +11728,10 @@
     // 我们发现一个有意思的用法 -?, 这里很好理解就是将可选项代表的 ? 去掉, 从而让这个类型变成必选项. 与之对应的还有个+? , 这个含义自然与-?之前相反, 它是用来把属性变成可选项的.
     //Readonly
     //type Readonly<T> = { readonly [P in keyof T]: T[P] };
+    //Mutable (未包含)
+    // type Mutable < T > = {
+    //   -readonly[P in keyof T]: T[P]
+    // }
     //Record  该类型可以将 K 中所有的属性的值转化为 T 类型，源码实现如下：
     // type Record < K extends keyof any, T > = {
     //   [P in K]: T;
@@ -11749,7 +11753,16 @@
     //Omit
     //type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
     //type Foo = Omit<{name: string, age: number}, 'name'> // -> { age: number }
-    
+    //ReturnType 用于提取函数类型的返回值类型
+    //type ReturnType<T> = T extends (...args: any[]) => infer P ? P : any;
+    //NonNullable NonNullable<T> 的作用是用来过滤类型中的 null 及 undefined 类型。
+    //  type NonNullable<T> = T extends null | undefined ? never : T;
+    // InstanceType  InstanceType 的作用是获取构造函数类型的实例类型。
+    // type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+    //Parameters  Parameters<T> 的作用是用于获得函数的参数类型组成的元组类型。
+    //  type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;  
+
+
     //枚举的相互映射
     // enum Colors { Red, Yellow, Blue }
     // Colors['Red'] === 0 // true  从0开始递增
@@ -11762,7 +11775,6 @@
       Color[Color["Yellow"] = 1] = "Yellow";
       Color[Color["Blue"] = 2] = "Blue";
     })(Color || (Color = {}));
-
   </script>
 </body>
 
