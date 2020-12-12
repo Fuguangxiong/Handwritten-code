@@ -11749,6 +11749,20 @@
     //Omit
     //type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
     //type Foo = Omit<{name: string, age: number}, 'name'> // -> { age: number }
+    
+    //枚举的相互映射
+    // enum Colors { Red, Yellow, Blue }
+    // Colors['Red'] === 0 // true  从0开始递增
+    // Colors[0] === 'Red' // 相互映射
+
+    // 枚举事实上会编译成如下
+    var Color;
+    (function (Color) {
+      Color[Color["Red"] = 0] = "Red";
+      Color[Color["Yellow"] = 1] = "Yellow";
+      Color[Color["Blue"] = 2] = "Blue";
+    })(Color || (Color = {}));
+
   </script>
 </body>
 
