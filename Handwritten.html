@@ -11775,6 +11775,97 @@
       Color[Color["Yellow"] = 1] = "Yellow";
       Color[Color["Blue"] = 2] = "Blue";
     })(Color || (Color = {}));
+
+    //实现一个对象被for of 遍历
+    // let es6 = {
+    // edition: 6,
+    // committee: "TC39",
+    // standard: "ECMA-262"
+    // };
+
+    // for (let e in es6) {
+    // console.log(e);
+    // }
+    // // edition
+    // // committee
+    // // standard
+
+    // for (let e of es6) {
+    // console.log(e);
+    // }
+    // // TypeError: es6[Symbol.iterator] is not a function
+    //方法1:
+    for (var key of Object.keys(someObject)) {
+      console.log(key + ': ' + someObject[key]);
+    }
+    //方法2:
+    function* entries(obj) {
+      for (let key of Object.keys(obj)) {
+        yield [key, obj[key]];
+      }
+    }
+    for (let [key, value] of entries(obj)) {
+      console.log(key, '->', value);
+    }
+
+    var myObject = {
+      a: 1,
+      b: 2,
+      c: 3
+    };
+
+    //方法3：简单写法
+    myObject[Symbol.iterator] = function () {
+      const _this = this
+      //也可使用: keys = Object.getOwnPropertyNames(this)
+      const keys = Object.keys(this)
+      let index = 0
+      return {
+        next() {
+          return {
+            value: _this[keys[index++]],
+            done: index > keys.length
+          }
+        }
+      }
+    }
+
+    //方法3：标准写法，可以指定属性描述符
+    Object.defineProperty(myObject, Symbol.iterator, {
+      enumerable: false,
+      writable: false,
+      configurable: true,
+      value: function () {
+        const _this = this
+        //也可使用: keys = Object.getOwnPropertyNames(this)
+        const keys = Object.keys(this)
+        let index = 0
+        return {
+          next() {
+            return {
+              value: _this[keys[index++]],
+              done: index > keys.length
+            }
+          }
+        }
+      }
+    });
+
+    //方法3: 手动遍历 myObject
+    var it = myObject[Symbol.iterator]();
+    it.next(); // { value:1, done:false }
+    it.next(); // { value:2, done:false }
+    it.next(); // { value:3, done:false }
+    it.next(); // { value:undefined, done:true }
+
+    //方法3: 用 for..of 遍历 myObject
+    //不要指望遍历结果总是(1，2，3)，因为Object.keys()的无序性
+    for (var v of myObject) {
+      console.log(v);
+    }
+    // 1
+    // 2
+    // 3
   </script>
 </body>
 
