@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1812,7 +1812,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3342,13 +3342,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3539,7 +3539,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -8513,7 +8513,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8580,7 +8580,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8649,29 +8649,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9060,37 +9060,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -10534,7 +10534,7 @@
       board[x][y] = '-';
       let res = findFun(board, word, x - 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y + 1, k + 1, xLen,
         yLen) || findFun(board, word, x + 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y - 1, k + 1, xLen,
-          yLen); //上 右 下 左
+        yLen); //上 右 下 左
       // board[x][y] = word[k];
       board[x][y] = temp;
       return res;
@@ -11440,7 +11440,7 @@
     // 栈思想
     function flat(arr) {
       const newArr = [];
-      const stack = [].concat(arr);  // 将数组元素拷贝至栈，直接赋值会改变原数组
+      const stack = [].concat(arr); // 将数组元素拷贝至栈，直接赋值会改变原数组
       //如果栈不为空，则循环遍历
       while (stack.length !== 0) {
         const val = stack.pop(); // 删除数组最后一个元素，并获取它
@@ -11627,7 +11627,7 @@
      */
     var evalRPN = function (tokens) {
       let stack = [];
-      let num;//由于减法和除法的存在顺序问题
+      let num; //由于减法和除法的存在顺序问题
       for (let char of tokens) {
         switch (char) {
           case "+":
@@ -11655,7 +11655,7 @@
     class PromisePool {
       constructor(max, fn) {
         this.max = max; // 最大并发数
-        this.fn = fn;   // 自定义的请求函数
+        this.fn = fn; // 自定义的请求函数
         this.pool = []; // 并发池
         this.urls = []; // 剩余的请求地址
       }
@@ -11718,6 +11718,37 @@
 
     const pool = new PromisePool(5, requestFn); // 并发数为3
     pool.start(URLs);
+
+    //ts工具泛型 
+    //type Keys = "a" | "b" type Obj =  {  [p in Keys]: any} // -> { a: any, b: any }
+    //Partial
+    //type Partial<T> = { [P in keyof T]?: T[P] };
+    //Required
+    //type Required<T> = { [P in keyof T]-?: T[P] };
+    // 我们发现一个有意思的用法 -?, 这里很好理解就是将可选项代表的 ? 去掉, 从而让这个类型变成必选项. 与之对应的还有个+? , 这个含义自然与-?之前相反, 它是用来把属性变成可选项的.
+    //Readonly
+    //type Readonly<T> = { readonly [P in keyof T]: T[P] };
+    //Record  该类型可以将 K 中所有的属性的值转化为 T 类型，源码实现如下：
+    // type Record < K extends keyof any, T > = {
+    //   [P in K]: T;
+    // };
+    //type T11 = Record<'a' | 'b' | 'c', Person>; // -> { a: Person; b: Person; c: Person; }
+    //Pick
+    //type Pick<T,K> = {[P in keyof K]:T[P]}  (我的写法,有问题!! 如果K的类型在T里面没有呢?)
+    // type Pick < T, K extends keyof T > = {  (官方写法)
+    //   [P in K]: T[P];
+    // };
+    //Exclude 将某个类型中属于另一个的类型移除掉。
+    //T extends U ? X : Y
+    //以上语句的意思就是 如果 T 是 U 的子类型的话，那么就会返回 X，否则返回 Y
+    // 对于联合类型来说会自动分发条件，例如 T extends U ? X : Y, T 可能是 A | B 的联合类型,
+    //  那实际情况就变成(A extends U ? X : Y) | (B extends U ? X : Y)
+    //type Exclude<T, U> = T extends U ? never : T;
+    // Extract  从 T 中提取出 U
+    // type Extract<T, U> = T extends U ? T : never;
+    //Omit
+    //type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+    //type Foo = Omit<{name: string, age: number}, 'name'> // -> { age: number }
   </script>
 </body>
 
