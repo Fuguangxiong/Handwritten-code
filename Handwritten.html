@@ -11908,33 +11908,97 @@
     // })
     // console.log(obj.name, obj.age) // 张三, 18
     //Object.getOwnPropertyDescriptor()
-//     var person = {
-//     name: '张三',
-//     age: 18
-// }
+    //     var person = {
+    //     name: '张三',
+    //     age: 18
+    // }
 
-// var desc = Object.getOwnPropertyDescriptor(person, 'name'); 
-// console.log(desc)  结果如下
-// {
-//     configurable: true,
-//     enumerable: true,
-//     writable: true,
-//     value: "张三"
-// }
+    // var desc = Object.getOwnPropertyDescriptor(person, 'name'); 
+    // console.log(desc)  结果如下
+    // {
+    //     configurable: true,
+    //     enumerable: true,
+    //     writable: true,
+    //     value: "张三"
+    // }
 
-//Object. getOwnPropertyDescriptors()
-// var person = {
-//     name: '张三',
-//     age: 18
-// }
-// var desc = Object.getOwnPropertyDescriptors(person, 'name');
-// console.log(desc) 
-//{
-//    configurable: true,
-//    enumerable: true,
-//    value: '张三',
-//    writable: true
-//}
+    //Object. getOwnPropertyDescriptors()
+    // var person = {
+    //     name: '张三',
+    //     age: 18
+    // }
+    // var desc = Object.getOwnPropertyDescriptors(person, 'name');
+    // console.log(desc) 
+    //{
+    //    configurable: true,
+    //    enumerable: true,
+    //    value: '张三',
+    //    writable: true
+    //}
+
+    //字节跳动实现
+    let a = Foo() // a.id -> 1
+    let b = new Foo() // b.id -> 2
+    let c = new Foo() // c.id -> 3
+    let d = Foo() // d.id -> 4
+    const Foo = (function () {
+      let index = 1;
+      return function () {
+        if (this instanceof Foo) {
+          // 使用new
+          this.id = index++;
+        } else {
+          // 没有使用new, 直接返回一个对象
+          return {
+            id: index++
+          }
+        }
+      }
+    })();
+
+    // URL处理
+    // 实现效果：将地址栏中的URL中问号后面的内容变为对象的形式：http://www.baidu.com/search?name=li&age=18#student
+    // =>
+    // {HASH: "student", name: "li", age: "18"}
+    // let str = 'http://www.baidu.com/search?name=li&age=18#student';
+    // function urlQuery(str) {
+    //   // 获取？和#的索引
+    //   let askIndex = str.indexOf('?'),
+    //     polIndex = str.indexOf('#'),
+    //     askText = '',
+    //     polText = '';
+    //   //存储最后我们想要的结果    
+    //   let obj = {};
+    //   // 把# ?后面的内容给polText 和 askText
+    //   polIndex != -1 ? polText = str.substring(polIndex + 1) : null;
+    //   askIndex != -1 ? askText = str.substring(askIndex + 1, polIndex) : null;
+    //   //存储到对象中
+    //   polText ? obj['HASH'] = polText : null;
+    //   if (askText) {
+    //     askText.split('&').forEach((item, index) => {
+    //       item = item.split('=');
+    //       obj[item[0]] = item[1];
+    //     });
+    //   }
+    //   return obj;
+    // }
+    // console.log(urlQuery(str));  //=> {HASH: "student", name: "li", age: "18"} 
+
+    let str = 'http://www.baidu.com/search?name=li&age=18#student';
+    function urlQuery(str) {
+      let obj = {};
+      //正则匹配=两边的
+      //[^abc]：查找不在方括号内的字符。
+      str.replace(/([^=?&#]+)=([^=?&#]+)/g, (_, group1, group2) => {
+        obj[group1] = group2;
+      });
+      //正则匹配#后边的
+      str.replace(/#([^=?&#]+)/g, (_, group1) => {
+        obj['HASH'] = group1;
+      });
+      return obj;
+    }
+    console.log(urlQuery(str));  //=> {name: "li", age: "18", HASH: "student"}
 
   </script>
 </body>
