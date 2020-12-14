@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1558,6 +1558,27 @@
       return Math.max(leftDepth, rightDepth) + 1
     }
 
+    function getBinaryTreeHeigth(node) {
+      if (!node) {
+        return 0;
+      }
+      const queue = [node];
+      let deep = 0;
+      while (queue.length) {
+        deep++;
+        for (let i = 0; i < queue.length; i++) {
+          const cur = queue.pop();
+          if (cur.l) {
+            queue.unshift(cur.l);
+          }
+          if (cur.r) {
+            queue.unshift(cur.r);
+          }
+        }
+      }
+      return deep;
+    }
+
     // console.log(maxDepth(Binary.root), '二叉树最大深度')
     //二叉树的最小深度
     // 1.如果根节点为空，则最小深度为0
@@ -1812,7 +1833,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3342,13 +3363,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3539,7 +3560,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -8513,7 +8534,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8596,7 +8617,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8665,29 +8686,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9076,37 +9097,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -10550,7 +10571,7 @@
       board[x][y] = '-';
       let res = findFun(board, word, x - 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y + 1, k + 1, xLen,
         yLen) || findFun(board, word, x + 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y - 1, k + 1, xLen,
-          yLen); //上 右 下 左
+        yLen); //上 右 下 左
       // board[x][y] = word[k];
       board[x][y] = temp;
       return res;
@@ -11985,6 +12006,7 @@
     // console.log(urlQuery(str));  //=> {HASH: "student", name: "li", age: "18"} 
 
     let str = 'http://www.baidu.com/search?name=li&age=18#student';
+
     function urlQuery(str) {
       let obj = {};
       //正则匹配=两边的
@@ -11998,7 +12020,7 @@
       });
       return obj;
     }
-    console.log(urlQuery(str));  //=> {name: "li", age: "18", HASH: "student"}
+    console.log(urlQuery(str)); //=> {name: "li", age: "18", HASH: "student"}
 
     // var a = ?;
     // if (a == 1 && a == 2 && a == 3) {
@@ -12034,8 +12056,8 @@
     // 小数位：如果有小数位，那么小数位后面至少有一位数字，也可以没有小数位
     let reg = /^[+-]?(\d|[1-9]\d+)(\.\d+)?$/;
     console.log(reg.test('0.2')); //true
-    console.log(reg.test('02.1'));  //false
-    console.log(reg.test('20.'));  //false
+    console.log(reg.test('02.1')); //false
+    console.log(reg.test('20.')); //false
 
     //正则表达式反向引用和禁止反向引用
     var s = "<h1>title<h1><p>text<p>";
@@ -12044,15 +12066,15 @@
 
     var s = "abc";
     var r = /(a(b(c)))/;
-    var a = s.match(r);  //返回数组["abc","abc","bc","c"]  
+    var a = s.match(r); //返回数组["abc","abc","bc","c"]  
 
     //在正则表达式对象的 test() 方法中，以及字符串对象的 match() 和 search() 等方法中使用。在这些方法中，反向引用的值可以从 RegExp() 构造函数中获得。
     var s = "abcdefghijklmn";
     var r = /(\w)(\w)(\w)/;
     r.test(s);
-    console.log(RegExp.$1);  //返回第1个子表达式匹配的字符a
-    console.log(RegExp.$2);  //返回第2个子表达式匹配的字符b
-    console.log(RegExp.$3);  //返回第3个子表达式匹配的字符c
+    console.log(RegExp.$1); //返回第1个子表达式匹配的字符a
+    console.log(RegExp.$2); //返回第2个子表达式匹配的字符b
+    console.log(RegExp.$3); //返回第3个子表达式匹配的字符c
 
     //反向引用会占用一定的系统资源，在较长的正则表达式中，反向引用会降低匹配速度。如果分组仅仅是为了方便操作，可以禁止反向引用。
     //实现方法：在左括号的后面加上一个问号和冒号。
@@ -12086,7 +12108,8 @@
     let str = "hello";
     let ary = [...new Set(str.split(''))];
     let max = 0;
-    let code = ''; for (let i = 0; i < ary.length; i++) {
+    let code = '';
+    for (let i = 0; i < ary.length; i++) {
       //创建正则匹配字符 
       let reg = new RegExp(ary[i], 'g');
       //利用match找出对应字符在中字符串中出现的地方，取匹配的返回数组的长度，即是对应字符串出现的次数 
@@ -12099,7 +12122,7 @@
         code = `${code}、${ary[i]}`;
       }
     }
-    console.log(`出现次数最多的字符是：${code},次数为：${max}`);  //=> 出现次数最多的字符是：l,次数为：2
+    console.log(`出现次数最多的字符是：${code},次数为：${max}`); //=> 出现次数最多的字符是：l,次数为：2
 
     //手写cookie
     // 简单分析：
@@ -12197,6 +12220,7 @@
           }
         });
       }
+
       function reject(reason) { // reason失败态时接收的拒因
         setTimeout(() => {
           // 调用reject 回调对应onRejected函数
@@ -12303,6 +12327,20 @@
     }
 
     factorial(6) //6
+
+    //js中只有词法作用域，也就是说在定义时而不是执行时确定作用域。例如：
+    var value = 1;
+
+    function foo() {
+      console.log(value);
+    }
+
+    function bar() {
+      var value = 2;
+      foo();
+    }
+    bar(); //1
+    //复制代码注意： with和eval可以修改词法作用域
   </script>
 </body>
 
