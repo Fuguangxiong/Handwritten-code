@@ -12101,6 +12101,60 @@
     }
     console.log(`出现次数最多的字符是：${code},次数为：${max}`);  //=> 出现次数最多的字符是：l,次数为：2
 
+    //手写cookie
+    // 简单分析：
+    // getCookie
+
+    // document.cookie可以获取到对应cookie的值(非httpOnly:true的情况可以拿到)
+    // match匹配正则
+
+    // 如age=41，它前面可能是空格,也可能是age为开头的字符，对应(^| )
+    // key的后面跟着是=号，=号后面跟着是除了;号外的任意字符([^;]*)
+    // ([^;]*)的*表示0到多次，因为会出现有key没有value值的情况
+    // 最后会以;结尾或者value结尾的情况，对应(;|$)
+
+
+    // 返回解码后匹配到的第2个分组，就是key对应的value值
+    // 没找到就返回null
+
+    // setCookie
+
+    // 设置一个数组arr用来存放所有要设置的参数
+    // httpOnly设置为true，通过document.cookie拿不到设置对应key的cookie
+    // max-age用来设置cookie过期时间，以秒为单位
+    // domain设置域名，指定域名可以接受cookie，包含子域名(如.baidu.com设置，下面子域都可以接受cookie)
+    // path指定路径接受cookie(如path=/web,那么/web/fe,/web/login子路径也可以接受)
+    // secure指定只能在https协议下接受cookie
+    // sameSite在跨域的时候可以不发送cookie
+    // document.cookie直接设置对应的key和value以及配置参数即可
+
+    const Cookie = {
+      getCookie(key) {
+        let match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]*)(;|$)'));
+
+        if (match && match.length) {
+          return decodeURIComponent(match[2]);
+        }
+        return null;
+      },
+      setCookie(key, value, opts = {}) {
+        let arr = [];
+        if (opts.httpOnly) {
+          arr.push('httpOnly=true');
+        }
+        if (opts.maxAge) {
+          arr.push(`max-age=${opts.maxAge}`);
+        }
+        if (opts.domain) {
+          arr.push(`domain=${opts.domain}`);
+        }
+        if (opts.path) {
+          arr.push(`path=${opts.path}`);
+        }
+        // secure|sameSite等就省略了
+        document.cookie = `${key}=${encodeURIComponent(value)}; ${arr.join('; ')}`;
+      }
+    };
 
   </script>
 </body>
