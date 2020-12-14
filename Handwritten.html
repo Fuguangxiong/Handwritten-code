@@ -12060,6 +12060,48 @@
     var r = /(?:\w*?)|(?:\d*?)/;
     var a = r.test(s);
 
+    //验证密码
+    // 规则：
+    // 6-16 位组成
+    // 必须由数字字母组成
+    //必须包含大小写字母
+    let reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\d(a-z)(A-Z)]{6,16}$/;
+
+    //时间格式字符串
+    // 月日不足十位补零
+    // 换成年月日的格式
+    let time = '2020-5-27';
+    String.prototype.formatTime = function formatTime(template) {
+      let arr = this.match(/\d+/g).map(item => {
+        return item.length < 2 ? '0' + item : item;
+      });
+      template = template || '{0}年{1}月{2}日 {3}时{4}分{5}秒';
+      return template.replace(/\{(\d+)\}/g, (_, group) => {
+        return arr[group] || "00";
+      });
+    };
+    console.log(time.formatTime()); //=> 2020年05月27日 00时00分00秒
+
+    //字符串中出现次数最多的字符以及次数
+    let str = "hello";
+    let ary = [...new Set(str.split(''))];
+    let max = 0;
+    let code = ''; for (let i = 0; i < ary.length; i++) {
+      //创建正则匹配字符 
+      let reg = new RegExp(ary[i], 'g');
+      //利用match找出对应字符在中字符串中出现的地方，取匹配的返回数组的长度，即是对应字符串出现的次数 
+      let val = str.match(reg).length; //更新出现次数最高的字符与次数 
+      if (val > max) {
+        max = val;
+        code = ary[i];
+      } else if (val === max) {
+        //处理不同字符出现次数相同的情况  
+        code = `${code}、${ary[i]}`;
+      }
+    }
+    console.log(`出现次数最多的字符是：${code},次数为：${max}`);  //=> 出现次数最多的字符是：l,次数为：2
+
+
   </script>
 </body>
 
