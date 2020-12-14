@@ -8518,6 +8518,22 @@
       return new F();
     }
 
+    Object.ObjectCreate = (proto, propertiesObject) => {
+      // 对输入进行检测
+      if (typeof proto !== 'object' && typeof proto !== 'function' && proto !== null) {
+        throw new Error(`Object prototype may only be an Object or null:${proto}`);
+      }
+      // 新建一个对象
+      const result = {};
+      // 将该对象的原型设置为proto
+      Object.setPrototypeOf(result, proto);
+      // 将属性赋值给该对象
+      Object.defineProperties(result, propertiesObject);
+      // 返回该对象
+      return result;
+    }
+
+
     // 统计「优美子数组」
     // 给你一个整数数组 nums 和一个整数 k。
     // 如果某个 连续 子数组中恰好有 k 个奇数数字，我们就认为这个子数组是「优美子数组」。
