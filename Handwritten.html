@@ -11989,16 +11989,76 @@
       let obj = {};
       //正则匹配=两边的
       //[^abc]：查找不在方括号内的字符。
-      str.replace(/([^=?&#]+)=([^=?&#]+)/g, (_, group1, group2) => {
-        obj[group1] = group2;
+      str.replace(/([^=?&#]+)=([^=?&#]+)/g, ($, $1, $2) => {
+        obj[$1] = $2;
       });
       //正则匹配#后边的
-      str.replace(/#([^=?&#]+)/g, (_, group1) => {
-        obj['HASH'] = group1;
+      str.replace(/#([^=?&#]+)/g, ($, $1) => {
+        obj['HASH'] = $1;
       });
       return obj;
     }
     console.log(urlQuery(str));  //=> {name: "li", age: "18", HASH: "student"}
+
+    // var a = ?;
+    // if (a == 1 && a == 2 && a == 3) {
+    //     console.log('ok');
+    // }
+    //方案一 
+    var a = {
+      n: 0,
+      toString: function () {
+        return ++this.n;
+      }
+    }
+
+    //方案二
+    var a = [1, 2, 3];
+    a.toString = a.shift;
+
+    //方案三
+    var i = 0;
+    Object.defineProperty(window, 'a', {
+      get() {
+        //只有获取a的值，就一定会触发get方法执行
+        return ++i;
+      }
+    })
+
+    //验证是否是有效数字
+    // 规则：
+    // 开头可以有+ -
+    // 整数位：
+    // 如果是一位数可以是 0-9 任意数；
+    // 如果是多位数，首位不可以是 0；
+    // 小数位：如果有小数位，那么小数位后面至少有一位数字，也可以没有小数位
+    let reg = /^[+-]?(\d|[1-9]\d+)(\.\d+)?$/;
+    console.log(reg.test('0.2')); //true
+    console.log(reg.test('02.1'));  //false
+    console.log(reg.test('20.'));  //false
+
+    //正则表达式反向引用和禁止反向引用
+    var s = "<h1>title<h1><p>text<p>";
+    var r = /(<\/?\w+>).*\1/g;
+    var a = s.match(r); //返回数组["<h1>title<h1>","<p>text<p>"]
+
+    var s = "abc";
+    var r = /(a(b(c)))/;
+    var a = s.match(r);  //返回数组["abc","abc","bc","c"]  
+
+    //在正则表达式对象的 test() 方法中，以及字符串对象的 match() 和 search() 等方法中使用。在这些方法中，反向引用的值可以从 RegExp() 构造函数中获得。
+    var s = "abcdefghijklmn";
+    var r = /(\w)(\w)(\w)/;
+    r.test(s);
+    console.log(RegExp.$1);  //返回第1个子表达式匹配的字符a
+    console.log(RegExp.$2);  //返回第2个子表达式匹配的字符b
+    console.log(RegExp.$3);  //返回第3个子表达式匹配的字符c
+
+    //反向引用会占用一定的系统资源，在较长的正则表达式中，反向引用会降低匹配速度。如果分组仅仅是为了方便操作，可以禁止反向引用。
+    //实现方法：在左括号的后面加上一个问号和冒号。
+    var s = "abc";
+    var r = /(?:\w*?)|(?:\d*?)/;
+    var a = r.test(s);
 
   </script>
 </body>
