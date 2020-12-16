@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1833,7 +1833,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3363,13 +3363,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3560,7 +3560,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -8534,7 +8534,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8617,7 +8617,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8686,29 +8686,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9097,37 +9097,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -10589,7 +10589,7 @@
       board[x][y] = '-';
       let res = findFun(board, word, x - 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y + 1, k + 1, xLen,
         yLen) || findFun(board, word, x + 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y - 1, k + 1, xLen,
-          yLen); //上 右 下 左
+        yLen); //上 右 下 左
       // board[x][y] = word[k];
       board[x][y] = temp;
       return res;
@@ -12359,6 +12359,128 @@
     }
     bar(); //1
     //复制代码注意： with和eval可以修改词法作用域
+
+    // 392. 判断子序列
+    // 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
+    // 字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
+    // 进阶：
+    // 如果有大量输入的 S，称作 S1, S2, ... , Sk 其中 k >= 10亿，你需要依次检查它们是否为 T 的子序列。在这种情况下，你会怎样改变代码？
+    // 致谢：
+    // 特别感谢 @pbrother 添加此问题并且创建所有测试用例。
+    // 示例 1：
+    // 输入：s = "abc", t = "ahbgdc"
+    // 输出：true
+    // 示例 2：
+    // 输入：s = "axc", t = "ahbgdc"
+    // 输出：false
+    // 提示：
+    // 0 <= s.length <=100 // 0 <=t.length <=10^4 // 两个字符串都只由小写字符组成。
+    //双指针
+    const isSubsequence = (subStr, str) => {
+      if (subStr.length == 0) return true;
+      let index = 0;
+      let subIndex = 0;
+      while (index < str.length) {
+        if (subStr[subIndex] == str[index]) {
+          subIndex++;
+          if (subIndex > subStr.length - 1) {
+            return true;
+          }
+        }
+        index++;
+      }
+      return false;
+    };
+
+    //递归写法
+    const isSubsequence = (subStr, str) => {
+      if (subStr.length == 0) return true;
+      let i = 0;
+      while (i < str.length) {
+        if (subStr[0] == str[i]) {
+          const rest_sub = subStr.substring(1); // 剩余subStr
+          const rest_str = str.substring(i + 1); // 剩余str
+          return isSubsequence(rest_sub, rest_str); // 递归判断
+        }
+        i++;
+      }
+      return false;
+    };
+
+    //正则 低效率
+    var isSubsequence = function (s, t) {
+      return new RegExp([...s].join('[a-z]*')).test(t)
+    };
+
+    //栈
+    /**
+     * @param {string} s
+     * @param {string} t
+     * @return {boolean}
+     */
+    var isSubsequence = function (s, t) {
+      const sStack = s.split("");
+      const tArray = t.split("");
+
+      for (let i = 0; i < tArray.length; i++) {
+        if (tArray[i] === sStack[0]) {
+          sStack.shift();
+        }
+
+        if (sStack.length === 0) {
+          return true;
+        }
+      }
+      if (sStack.length === 0) {
+        return true;
+      }
+      return false;
+
+    };
+
+    //动态规划
+    //dp[i][j] = dp[i][j-1] || (dp[i-1][j-1] && s[i] == t[j])
+    var isSubsequence = function (s, t) {
+      if (s.length === 0) return true
+      let sn = s.length
+      let tn = t.length
+      let dp = Array.from(Array(sn + 1), () => Array(tn + 1).fill(false))
+      dp[0][0] = true
+      dp[0].fill(true)
+      for (let i = 1; i < sn + 1; i++) {
+        for (let j = i; j < tn + 1; j++) {
+          if (dp[i][j - 1] || (dp[i - 1][j - 1] && s[i - 1] === t[j - 1])) {
+            dp[i][j] = true
+          }
+        }
+      }
+      return dp[sn][tn]
+    }
+
+    //贪心算法
+    /**
+     * @param {string} s
+     * @param {string} t
+     * @return {boolean}
+     */
+    var isSubsequence = function (s, t) {
+
+      let flag = true;
+      let str = t;
+
+      for (let j = 0; j < s.length; j++) {
+        let i = str.indexOf(s[j]);
+        if (i > -1) {
+          str = str.substr(i + 1)
+        } else {
+          flag = false
+          break;
+        }
+
+      }
+
+      return flag
+    };
   </script>
 </body>
 
