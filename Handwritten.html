@@ -12826,6 +12826,30 @@
     Police.prototype = new Person();
     let p2 = new Police('xx', 12, 3)
 
+    // 对于大量处理的循环问题，先问两个问题：
+    // 该处理是否必须是同步完成的
+    // 数据是否必须按顺序完成
+    // 如果答案是否，那么就可以用定时器分割这个循环。这个技术叫做数组分块（array chucking）:
+    function chunk(array, process, context) {
+      setTimeout(function () {
+        var item = array.shift();
+        process.call(context, item);
+
+        if (array.length > 0) {
+          setTimeout(arguments.callee, 100);
+        };
+      }, 100)
+    };
+
+    var data = [12, 12, 1234, 453, 436, 23, 23, 5, 4123, 45, 346, 3563, 2234, 345, 342];
+
+    function printValue(item) {
+      var div = document.getElementById('myDiv');
+      div.innerHTML += item + "</br>";
+    };
+    chunk(data.concat(), printValue);
+
+
   </script>
 </body>
 
