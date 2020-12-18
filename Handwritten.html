@@ -12783,6 +12783,20 @@
       return head;
     };
 
+    //浅冻结只能冻结当前对象、数组等内部第一层,如果要深冻结，就需要通过递归去处理了。
+    /* * 深度冻结 */
+    function deepFreeze(o) {
+      var prop, propKey
+      Object.freeze(o) // 首先冻结第一层对象
+      for (propKey in o) {
+        prop = o[propKey];
+        if (!o.hasOwnProperty(propKey) || !(typeof prop === "object") || Object.isFrozen(prop)) {
+          continue;// 跳过原型链上的属性、基本类型和已冻结的对象.
+        }
+        deepFreeze(prop);//递归调用.
+      }
+    }
+
   </script>
 </body>
 
