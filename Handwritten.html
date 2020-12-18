@@ -12879,7 +12879,7 @@
     const source = { a: { b: { c: 1, d: 2 }, e: 3 }, f: { g: 2 } }
     console.log(objectFlat(source));
 
-    // 字节面试题，实现一个异步加法
+    // 字节面试题，实现一个异步加法(异步串行 | 异步并行)
     function asyncAdd(a, b, callback) {
       setTimeout(function () {
         callback(null, a + b);
