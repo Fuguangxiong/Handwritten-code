@@ -13010,6 +13010,31 @@
       console.log('待了时长：' + t)
     })
 
+    //三种自定义事件方式
+    var event = new Event('myEvent');
+    document.addEventListener("myEvent", function (e) {
+      console.log(e);
+    })
+    document.dispatchEvent(event);
+
+    var event = new CustomEvent('myEvent', { 'dataName': "ss" });
+    document.addEventListener("myEvent", function (e) {
+      console.log(e);
+    })
+    document.dispatchEvent(event);
+
+
+    document.body.addEventListener("veb", function (e) {
+      alert(e.eventType)
+    })
+    var event = document.createEvent('HTMLEvents');
+    // initEvent接受3个参数：
+    // 事件类型，是否冒泡，是否阻止浏览器的默认行为
+    event.initEvent("veb", false, true);
+    //通过eventType传递事件信息
+    event.eventType = "I love Veblen"
+    //触发document上绑定的click事件
+    document.body.dispatchEvent(event);
   </script>
 </body>
 
