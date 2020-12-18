@@ -12797,6 +12797,35 @@
       }
     }
 
+    //作用域安全的构造函数
+    function Person(name, age) {
+      if (this instanceof Person) {
+        this.name = name
+        this.age = age
+      } else {
+        return new Person(name, age)
+      }
+    }
+    let p1 = new Person('xiaoming', 123) //  ok
+    let p2 = Person('xiaoming', 3) // ok
+    //但是实现继承的时候会遇到坑 如下
+    function Person(name, age) {
+      if (this instanceof Person) {
+        this.name = name;
+        this.age = age;
+      } else {
+        return new Person(name, age);
+      }
+    }
+    function Police(name, age, number) {
+      Person.call(this, name, age);
+      this.number = number;
+    }
+    let p1 = new Police('xx', 12, 3) // 第一次this 是police  第二次是person ,导致p1 没继承到
+    // 加了这个，原型上可以 instanceof 是可以找到的。所以扩展了。
+    Police.prototype = new Person();
+    let p2 = new Police('xx', 12, 3)
+
   </script>
 </body>
 
