@@ -13119,6 +13119,39 @@
       }
       move(A.length, A, B, C);
     };
+
+    //JavaScript计算水仙花数【可自定义范围】阿姆斯壮数
+    function SelfPower(minnum, maxnum) {
+      var result = "";
+
+      for (var i = minnum; i < maxnum; i++) {
+        // 求每一位数字
+        var a = String(i).split('');
+        var ms = 0;
+        for (var m = 0; m < a.length; m++) {
+          var m1 = a[m];
+          for (var j = 0; j < a.length - 1; j++) {
+            m1 = m1 * a[m];
+          }
+          ms = ms + m1;
+        }
+        if (ms == i) {
+          result += ms + ",";
+          console.log(ms);
+        }
+      }
+      return result;
+    }
+
+    var num = 999999999;
+    for (var i = 100; i <= num; i++) {
+      var s = i.toString();
+      var count = 0;
+      for (var j = 0; j < s.length; j++) count += Math.pow(parseInt(s[j]), s.length);
+      if (count == i) {
+        console.log("find number:" + i);
+      }
+    }
   </script>
 </body>
 
