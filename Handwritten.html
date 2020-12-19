@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1833,7 +1833,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3363,13 +3363,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3560,7 +3560,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -5479,6 +5479,33 @@
       }
       return current.val;
     }
+
+    //数组解决
+    function countOff(num, m) {
+      let players = [];
+      for (let i = 1; i <= num; i++) {
+        players.push(i);
+      }
+      let flag = 0;
+      while (players.length > 1) { // 剩下一人，结束条件
+        let outPlayerNum = 0,
+          len = players.length;
+        for (let i = 0; i < len; i++) {
+          flag++;
+          if (flag === m) {
+            flag = 0;
+            console.log("出局：" + players[i - outPlayerNum]);
+            players.splice(i - outPlayerNum, 1);
+            outPlayerNum++;
+          }
+        }
+      }
+      // return players[0];
+      console.log("剩下：" + players[0]);
+    }
+    // console.log("剩下："+find(100,5))
+    countOff(100, 5)
+
 
     //求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
     function Sum_Solution(n) {
@@ -8534,7 +8561,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8617,7 +8644,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8686,29 +8713,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9097,37 +9124,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -10589,7 +10616,7 @@
       board[x][y] = '-';
       let res = findFun(board, word, x - 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y + 1, k + 1, xLen,
         yLen) || findFun(board, word, x + 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y - 1, k + 1, xLen,
-          yLen); //上 右 下 左
+        yLen); //上 右 下 左
       // board[x][y] = word[k];
       board[x][y] = temp;
       return res;
@@ -12593,7 +12620,8 @@
 
     //方法二:求和
     var findTheDifference = function (s, t) {
-      let as = 0, at = 0;
+      let as = 0,
+        at = 0;
       for (let i = 0; i < s.length; i++) {
         as += s[i].charCodeAt();
       }
@@ -12666,9 +12694,9 @@
 
     //双指针
     /**
- * @param {number[]} nums
- * @return {number[]}
- */
+     * @param {number[]} nums
+     * @return {number[]}
+     */
     var exchange = function (nums) {
       let i = 0;
       let j = nums.length - 1;
@@ -12712,7 +12740,7 @@
     var sortArrayByParityII = function (A) {
       let newA = new Array(A.length)
       let iEven = 0 //偶数索引
-      let iOdd = 1  //奇数索引
+      let iOdd = 1 //奇数索引
       for (let i = 0; i < A.length; i++) {
         if (A[i] % 2 === 0) {
           newA[iEven] = A[i]
@@ -12772,7 +12800,8 @@
         return head;
       }
       let evenHead = head.next;
-      let odd = head, even = evenHead;
+      let odd = head,
+        even = evenHead;
       while (even !== null && even.next !== null) {
         odd.next = even.next;
         odd = odd.next;
@@ -12791,9 +12820,9 @@
       for (propKey in o) {
         prop = o[propKey];
         if (!o.hasOwnProperty(propKey) || !(typeof prop === "object") || Object.isFrozen(prop)) {
-          continue;// 跳过原型链上的属性、基本类型和已冻结的对象.
+          continue; // 跳过原型链上的属性、基本类型和已冻结的对象.
         }
-        deepFreeze(prop);//递归调用.
+        deepFreeze(prop); //递归调用.
       }
     }
 
@@ -12817,6 +12846,7 @@
         return new Person(name, age);
       }
     }
+
     function Police(name, age, number) {
       Person.call(this, name, age);
       this.number = number;
@@ -12861,6 +12891,7 @@
     //对象扁平化
     function objectFlat(obj = {}) {
       const res = {}
+
       function flat(item, preKey = '') {
         Object.entries(item).forEach(([key, val]) => {
           const newKey = preKey ? `${preKey}.${key}` : key
@@ -12876,7 +12907,18 @@
     }
 
     // 测试
-    const source = { a: { b: { c: 1, d: 2 }, e: 3 }, f: { g: 2 } }
+    const source = {
+      a: {
+        b: {
+          c: 1,
+          d: 2
+        },
+        e: 3
+      },
+      f: {
+        g: 2
+      }
+    }
     console.log(objectFlat(source));
 
     // 字节面试题，实现一个异步加法(异步串行 | 异步并行)
@@ -12926,13 +12968,13 @@
 
     //异步并发数限制
     /**
- * 关键点
- * 1. new promise 一经创建，立即执行
- * 2. 使用 Promise.resolve().then 可以把任务加到微任务队列，防止立即执行迭代方法
- * 3. 微任务处理过程中，产生的新的微任务，会在同一事件循环内，追加到微任务队列里
- * 4. 使用 race 在某个任务完成时，继续添加任务，保持任务按照最大并发数进行执行
- * 5. 任务完成后，需要从 doingTasks 中移出
- */
+     * 关键点
+     * 1. new promise 一经创建，立即执行
+     * 2. 使用 Promise.resolve().then 可以把任务加到微任务队列，防止立即执行迭代方法
+     * 3. 微任务处理过程中，产生的新的微任务，会在同一事件循环内，追加到微任务队列里
+     * 4. 使用 race 在某个任务完成时，继续添加任务，保持任务按照最大并发数进行执行
+     * 5. 任务完成后，需要从 doingTasks 中移出
+     */
     function limit(count, array, iterateFunc) {
       const tasks = []
       const doingTasks = []
@@ -13017,7 +13059,9 @@
     })
     document.dispatchEvent(event);
 
-    var event = new CustomEvent('myEvent', { 'dataName': "ss" });
+    var event = new CustomEvent('myEvent', {
+      'dataName': "ss"
+    });
     document.addEventListener("myEvent", function (e) {
       console.log(e);
     })
