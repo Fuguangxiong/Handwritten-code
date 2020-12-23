@@ -296,11 +296,10 @@
     } */
 
     /* 颜色渐变 */
-    p {
+    /* p {
         width: 800px;
         height: 300px;
         background: -webkit-linear-gradient(-30deg, red 30px, orange 150px, yellow 280px, pink 500px, blue);
-        /*-webkit-background-clip: text;*/
         color: rgba(255, 255, 255, 0.3);
         text-align: center;
         line-height: 300px;
@@ -319,7 +318,27 @@
 
     .b {
         margin: 5px 0 -5px;
+    } */
+
+    /* .gradient-circular {
+        position: relative;
+        width: 4px;
+        height: 200px;
+
     }
+
+    .gradient-circular li {
+        --Θ: calc(var(--line-index) / var(--line-count) * 1turn);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #3c9;
+        filter: hue-rotate(var(--Θ));
+        transform-origin: center bottom;
+        transform: rotate(var(--Θ));
+    } */
 </style>
 
 <body>
@@ -366,9 +385,22 @@
 	</ul> -->
 
     <!-- 彩色渐变 -->
-    <p>I am Vincent</p>
+    <!-- <p>I am Vincent</p> -->
 
-    
+    <!--色相图-->>
+    <ul class="gradient-circular" style="--line-count: 360;">
+        <li style="--line-index: 1;"></li>
+        <li style="--line-index: 30;"></li>
+        <li style="--line-index: 60;"></li>
+        <li style="--line-index: 90;"></li>
+        <li style="--line-index: 180;"></li>
+        <li style="--line-index: 210;"></li>
+        <li style="--line-index: 270;"></li>
+        <li style="--line-index: 360;"></li>
+
+    </ul>
+
+
 </body>
 
 </html>
