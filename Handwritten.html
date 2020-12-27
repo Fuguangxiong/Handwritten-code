@@ -328,7 +328,7 @@
     //无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部。
     //原型式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -339,7 +339,7 @@
     //在传入一个参数的情况下，Object.create() 和 object() 方法的行为相同。
     //寄生式集成
     function object(o) {
-      function F() { }
+      function F() {}
 
       F.prototype = o
       return new F()
@@ -347,7 +347,7 @@
 
     function createAnother(original) {
       let clone = object(original)
-      clone.sayHi = function () { }
+      clone.sayHi = function () {}
       return clone
     }
 
@@ -1210,7 +1210,7 @@
     let single = (function single() {
       let instance
 
-      function Single() { }
+      function Single() {}
 
       return function () {
         if (instance) {
@@ -1833,7 +1833,7 @@
         let current = this.find(data)
         current.data = newdata
       }
-      LinkList.prototype.prefind = function (data) { }
+      LinkList.prototype.prefind = function (data) {}
       LinkList.prototype.delete = function (data) {
         if (data === this.head.value) {
           this.head = this.head.next
@@ -3363,13 +3363,13 @@
       let temp = [] //存放临时结果
       function backTrack(temp, target, index) {
         if (target === temp.reduce(function (a, b) {
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           res.push(temp)
         }
         if (target < temp.reduce(function (a, b) { //reduce遍历空数组一定需要一个初始值
-          return a + b
-        }, 0)) {
+            return a + b
+          }, 0)) {
           return
         }
         for (let i = index; i < candidates.length; i++) {
@@ -3560,7 +3560,7 @@
       this.init();
     }
     Router.prototype.router = function (path, cb) {
-      this.route[path] = cb || function () { };
+      this.route[path] = cb || function () {};
     }
 
     Router.prototype.freshRoute = function () {
@@ -8561,7 +8561,7 @@
 
     //手写 Object.create
     const myCreate = function (obj) {
-      function F() { };
+      function F() {};
       F.prototype = obj;
       return new F();
     }
@@ -8644,7 +8644,7 @@
           dp.push(i);
           if (dp[k + 1]) {
             sum += (dp[start + 1] - dp[start]) * (dp[k + 1] - dp[k])
-            ++k;
+              ++k;
             ++start;
           }
         }
@@ -8713,29 +8713,29 @@
     const tree = {
       name: 'root',
       children: [{
-        name: 'c1',
-        children: [{
-          name: 'c11',
-          children: []
+          name: 'c1',
+          children: [{
+              name: 'c11',
+              children: []
+            },
+            {
+              name: 'c12',
+              children: []
+            }
+          ]
         },
         {
-          name: 'c12',
-          children: []
+          name: 'c2',
+          children: [{
+              name: 'c21',
+              children: []
+            },
+            {
+              name: 'c22',
+              children: []
+            }
+          ]
         }
-        ]
-      },
-      {
-        name: 'c2',
-        children: [{
-          name: 'c21',
-          children: []
-        },
-        {
-          name: 'c22',
-          children: []
-        }
-        ]
-      }
       ]
     }
 
@@ -9124,37 +9124,37 @@
     // 拥有一个唯一的id
     // 拥有一个parentid, 这个id指向它父级的id
     var arr = [{
-      'id': 1,
-      'parentid': 0
-    },
-    {
-      'id': 4,
-      'parentid': 2
-    },
-    {
-      'id': 3,
-      'parentid': 1
-    },
-    {
-      'id': 5,
-      'parentid': 0
-    },
-    {
-      'id': 6,
-      'parentid': 0
-    },
-    {
-      'id': 2,
-      'parentid': 1
-    },
-    {
-      'id': 7,
-      'parentid': 4
-    },
-    {
-      'id': 8,
-      'parentid': 1
-    }
+        'id': 1,
+        'parentid': 0
+      },
+      {
+        'id': 4,
+        'parentid': 2
+      },
+      {
+        'id': 3,
+        'parentid': 1
+      },
+      {
+        'id': 5,
+        'parentid': 0
+      },
+      {
+        'id': 6,
+        'parentid': 0
+      },
+      {
+        'id': 2,
+        'parentid': 1
+      },
+      {
+        'id': 7,
+        'parentid': 4
+      },
+      {
+        'id': 8,
+        'parentid': 1
+      }
     ];
 
     function unflatten(arr) {
@@ -10616,7 +10616,7 @@
       board[x][y] = '-';
       let res = findFun(board, word, x - 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y + 1, k + 1, xLen,
         yLen) || findFun(board, word, x + 1, y, k + 1, xLen, yLen) || findFun(board, word, x, y - 1, k + 1, xLen,
-          yLen); //上 右 下 左
+        yLen); //上 右 下 左
       // board[x][y] = word[k];
       board[x][y] = temp;
       return res;
@@ -13325,6 +13325,71 @@
       return true
     }
 
+    // 面试题 02.01. 移除链表重复节点
+    // 编写代码，移除未排序链表中的重复节点。保留最开始出现的节点。
+
+    // 示例1:
+
+    //  输入：[1, 2, 3, 3, 2, 1]
+    //  输出：[1, 2, 3]
+    // 示例2:
+
+    //  输入：[1, 1, 1, 1, 2]
+    //  输出：[1, 2]
+    // 提示：
+
+    // 链表长度在[0, 20000]范围内。
+    // 链表元素在[0, 20000]范围内。
+    // 进阶：
+
+    // 如果不得使用临时缓冲区，该怎么解决？
+    /**
+     * @param {ListNode} head
+     * @return {ListNode}
+     */
+
+    // 方法1:哈希表存储出现过的节点值，如果当前节点出现过，就删掉。
+    // 时间复杂度：O(n)O(n)
+    const removeDuplicateNodes = (head) => {
+      if (head == null) {
+        return head;
+      }
+      const set = new Set();
+      set.add(head.val);
+
+      let prev = head; // head是存在的，赋给prev
+      let cur = head.next; // head是存在的，它的next赋给cur
+
+      while (cur) {
+        if (set.has(cur.val)) { // 如果当前节点是重复的
+          prev.next = cur.next; // 让prev的next直接指向cur的next，完成删除
+          cur = cur.next; // 更新一下cur
+        } else {
+          set.add(cur.val); // 当前节点是第一次出现，存储一下
+          prev = prev.next; // prev和cur都更新一下，跳到下一个
+          cur = cur.next;
+        }
+      }
+      return head; // 返回删除重复节点后的链表
+    };
+
+    //方法2:固定p指针，右侧q指针扫描，然后移动p，指针q再次扫描 不使用缓冲区
+    // 时间复杂度 O(n^2)O(n2)，不太理想。
+    const removeDuplicateNodes = (head) => {
+      let p = head;
+      while (p) {
+        let q = p;
+        while (q.next) {
+          if (q.next.val == p.val) {
+            q.next = q.next.next;
+          } else {
+            q = q.next;
+          }
+        }
+        p = p.next;
+      }
+      return head;
+    };
   </script>
 </body>
 
