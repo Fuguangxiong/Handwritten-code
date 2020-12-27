@@ -13427,6 +13427,34 @@
       return head;
     };
 
+    // 删除排序链表中的重复元素
+    // 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
+
+    // 示例 1:
+
+    // 输入: 1->1->2
+    // 输出: 1->2
+    // 示例 2:
+
+    // 输入: 1->1->2->3->3
+    // 输出: 1->2->3
+    /**
+     * @param {ListNode} head
+     * @return {ListNode}
+     */
+    var deleteDuplicates = function (head) {
+      var cur = head;
+      while (cur && cur.next) {
+        if (cur.val == cur.next.val) {
+          cur.next = cur.next.next;
+        } else {
+          cur = cur.next;
+        }
+      }
+      return head;
+    };
+
+
     // 面试题 02.05. 链表求和
     // 给定两个用链表表示的整数，每个节点包含一个数位。
 
