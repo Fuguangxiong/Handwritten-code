@@ -5397,7 +5397,30 @@
     // 解题思路
     // 老方法：p,q两个指针，让p先走k步，然后p,q一起走，直到p为null
 
-    // 代码
+    /**
+     * @param {ListNode} head
+     * @param {number} k
+     * @return {ListNode}
+     */
+    var getKthFromEnd = function (head, k) {
+      let length = 0;
+      let node = head;
+      while (node) {
+        ++length;
+        node = node.next;
+      }
+
+      if (k > length) {
+        return null;
+      }
+
+      node = head;
+      let offset = length - k;
+      for (let i = 0; i < offset; ++i) {
+        node = node.next;
+      }
+      return node;
+    };
 
     var getKthFromEnd = function (head, k) {
       let p = head,
