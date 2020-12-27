@@ -6208,6 +6208,40 @@
       return head;
     };
 
+    /**
+     * @param {ListNode} head
+     * @param {number} k
+     * @return {ListNode}
+     */
+    var reverseKGroup = function (head, k) {
+      let stack = [];
+      let preHead = new ListNode(0);
+      let pre = preHead;
+      // 循环链接后续反转链表
+      while (true) {
+        let count = 0;
+        let tmp = head;
+        while (tmp && count < k) {
+          stack.push(tmp);
+          tmp = tmp.next;
+          count++;
+        }
+        // 不够k个，直接链接剩下链表返回
+        if (count != k) {
+          pre.next = head;
+          break;
+        }
+        // 出栈即是反转
+        while (stack.length > 0) {
+          pre.next = stack.pop();
+          pre = pre.next;
+        }
+        pre.next = tmp;
+        head = tmp;
+      }
+      return preHead.next;
+    };
+
     //如何模拟实现 Array.prototype.splice
 
     //有序数组中的单一元素
@@ -13531,6 +13565,74 @@
       }
       return head.next;
     };
+
+    // 左旋转字符串
+    // 字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+
+    // 示例 1：
+
+    // 输入: s = "abcdefg", k = 2
+    // 输出: "cdefgab"
+    // 示例 2：
+
+    // 输入: s = "lrloseumgh", k = 6
+    // 输出: "umghlrlose"
+
+    // 限制：
+
+    // 1 <= k < s.length <= 10000
+    var reverseLeftWords = function (s, n) {
+      return s.substring(n) + s.substring(n, 0);
+    };
+
+    var reverseLeftWords = function (s, n) {
+      return s.slice(n) + s.slice(0, n);
+    };
+
+    var reverseLeftWords = function (s, n) {
+      return s.substr(n, s.length - n) + s.substr(0, n);
+    };
+
+    //     旋转链表
+    // 给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+
+    // 示例 1:
+
+    // 输入: 1->2->3->4->5->NULL, k = 2
+    // 输出: 4->5->1->2->3->NULL
+    // 解释:
+    // 向右旋转 1 步: 5->1->2->3->4->NULL
+    // 向右旋转 2 步: 4->5->1->2->3->NULL
+    // 示例 2:
+
+    // 输入: 0->1->2->NULL, k = 4
+    // 输出: 2->0->1->NULL
+    // 解释:
+    // 向右旋转 1 步: 2->0->1->NULL
+    // 向右旋转 2 步: 1->2->0->NULL
+    // 向右旋转 3 步: 0->1->2->NULL
+    // 向右旋转 4 步: 2->0->1->NULL
+    // 遍历链表，获取链表长度 n
+    // 对 k 取余进行去重
+    // 循环 k 次，每次把最后一项移动到第一项
+    const rotateRight = (head, k) => {
+      if (!head || !head.next) return head
+      let curr = head,
+        n = 0
+      // 遍历链表计算其长度
+      while (++n && curr.next) curr = curr.next
+      k = k % n // 去重
+      // 链表右移
+      while (k--) {
+        curr = head
+        while (curr.next.next) curr = curr.next
+        // 这里curr是链表的打断位置，即倒数第二项
+        curr.next.next = head // 链表最后一项指向头部形成环
+        head = curr.next // 定位新的头节点
+        curr.next = null // 打断链表环
+      }
+      return head
+    }
   </script>
 </body>
 
