@@ -9380,6 +9380,28 @@
     console.log(proxy.a === 2) // true
     console.log(proxy.a === 3) // true
 
+    var a = {
+      num: 1,
+      toString: function () {
+        return a.num++;
+      }
+    }
+    if (a == 1 && a == 2 && a == 3) {
+      console.log("恭喜答对啦！");
+    } else {
+      console.log("还是错了小子！");
+    }
+
+    //请看这句话 a.join=a.shift， 他的意思是当数组调用toString()方法而间接调用join方法时，shift()方法替代了join方法，这样就相当于每次从a数组中截取第一个元素返回。
+    var a = [1, 2, 3, 4];
+    a.join = a.shift;
+    if (a == 1 && a == 2 && a == 3) {
+      console.log("恭喜答对啦！");
+    } else {
+      console.log("还是错了小子！");
+    }
+
+
     // 530. 二叉搜索树的最小绝对差
     // 给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
     // 示例：
