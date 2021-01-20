@@ -13865,6 +13865,7 @@
 
     // 方案二：Text -> Blob -> ObjectURL
     const url = URL.createObjectURL(new Blob(str.split('')))
+    //const url = URL.createObjectURL(new Blob([str], {type : 'application/json'}))
     download(url, 'demo1.json')
   </script>
 </body>
